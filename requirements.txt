@@ -1,0 +1,5 @@
+Django==2.2.12
+Pillow==7.1.2
+pytz==2020.1
+setuptools==20.7.0
+uWSGI==2.0.18
