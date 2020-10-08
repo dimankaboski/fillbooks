@@ -1,5 +1,13 @@
 Django==2.2.12
+django-appconf==1.0.4
+django-compressor==2.4
 Pillow==7.1.2
+pip==20.2.3
 pytz==2020.1
+rcssmin==1.0.6
+rjsmin==1.1.0
 setuptools==20.7.0
+six==1.15.0
+sqlparse==0.4.1
 uWSGI==2.0.18
+wheel==0.35.1
