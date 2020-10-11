@@ -130,3 +130,8 @@ dmypy.json
 .pyre/
 
 *.pyc
+
+# uwsgi
+mysite_uwsgi.ini
+wsgi_dev.py
+*.conf

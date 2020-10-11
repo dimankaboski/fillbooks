@@ -30,7 +30,7 @@ SECRET_KEY = 'i___+56-k$)5o_tl+l$j++fgp2^e1&wi%7qv#_#ihg+$%5km+8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['83.220.171.51', 'dev.83.220.171.51', 'dev2.83.220.171.51', 'localhost', '127.0.0.1' ]
+ALLOWED_HOSTS = ['83.220.171.51', 'dev.dimankab.fvds.ru', 'dev2.dimankab.fvds.ru', 'localhost', '127.0.0.1' ]
 
 
 # Application definition
