@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import User
+from accounts.models import User, Branch
 from main.const import *
 from django.core.validators import RegexValidator
 
@@ -87,7 +87,7 @@ class Goods(models.Model):
     model = models.ForeignKey(GoodsModel, verbose_name="Модель", on_delete=models.CASCADE)
     user = models.ForeignKey(User, verbose_name="Добавивший пользователь", on_delete=models.CASCADE)
     customer = models.ForeignKey(Customers, verbose_name="Клиент", on_delete=models.CASCADE)
-    branch = models.CharField(verbose_name="Филиал", max_length=50)
+    branch = models.ForeignKey(Branch, verbose_name="Филиал", on_delete=models.CASCADE)
     price = models.CharField(verbose_name="Цена", max_length=10, blank=True, default='')
     status = models.CharField(verbose_name="Статус", max_length=20, choices=GOOD_STATUS_CHOICES, default=GOOD_STATUS_AWAIT)
     property_block = models.ManyToManyField(PropertyBlock, verbose_name="Блоки характеристик")
