@@ -8,9 +8,10 @@ class UserAdmin(BaseUserAdmin):
     form = AdminUserChangeForm
     add_form = AdminUserAddForm
     list_display = ('username','first_name', 'last_name', 'position', 'branch')
+    readonly_fields =('last_login', 'date_joined')
     search_fields = ('username', 'first_name', 'last_name', 'email', 'branch', 'position')
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
+        (None, {'fields': ['username']}),
         (('Personal info'), {'fields': (
             'first_name',
             'last_name',
