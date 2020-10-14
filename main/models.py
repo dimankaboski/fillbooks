@@ -91,6 +91,7 @@ class Goods(models.Model):
     price = models.CharField(verbose_name="Цена", max_length=10, blank=True, default='')
     status = models.CharField(verbose_name="Статус", max_length=20, choices=GOOD_STATUS_CHOICES, default=GOOD_STATUS_AWAIT)
     property_block = models.ManyToManyField(PropertyBlock, verbose_name="Блоки характеристик")
+    description = models.TextField(verbose_name="Описание", blank=True, default='')
 
     class Meta:
         verbose_name = ("Товар")
