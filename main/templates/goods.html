@@ -1,18 +1,12 @@
 {% extends "global.html" %} {% load compress %} {% block content %}
+
 <div class="container bg_white">
     <div class="titleh1">
         <h1>Список товаров</h1>
     </div>
     <div class="main">
         <section class="main-block">
-            <div class="filtres">
-                <div class="filtres__title">
-                    Фильтры
-                </div>
-                <div class="filtres__main">
 
-                </div>
-            </div>
             <div class="goods-wrapper">
                 <div class="good-item">
                     <div class="good-item-image">
@@ -20,7 +14,7 @@
                     </div>
                     <div class="good-item-info">
                         <div class="good-item-info__model">
-                            Acer Aspire 3 A317-32-P6WW 
+                            Acer Aspire 3 A317-32-P6WW
                         </div>
                         <div class="good-item-info__branch">
                             MSC-001
@@ -41,7 +35,7 @@
                     </div>
                     <div class="good-item-info">
                         <div class="good-item-info__model">
-                            Acer Aspire 3 A317-32-P6WW 
+                            Acer Aspire 3 A317-32-P6WW
                         </div>
                         <div class="good-item-info__branch">
                             MSC-001
@@ -62,7 +56,7 @@
                     </div>
                     <div class="good-item-info">
                         <div class="good-item-info__model">
-                            Acer Aspire 3 A317-32-P6WW 
+                            Acer Aspire 3 A317-32-P6WW
                         </div>
                         <div class="good-item-info__branch">
                             MSC-001
@@ -91,34 +85,56 @@
                     <div class="branches_wrapper-item__info">
 
                     </div>
-                    
+
                 </div>
                 <div class="branches_wrapper-item">
                     <div class="branches_wrapper-item__title">
                         <i class="fas fa-caret-right"></i> Москва
                     </div>
                     <div class="branches_wrapper-item__info">
-                        
+
                     </div>
-                    
+
                 </div>
                 <div class="branches_wrapper-item">
                     <div class="branches_wrapper-item__title">
                         <i class="fas fa-caret-right"></i> Нижний Новгород
                     </div>
                     <div class="branches_wrapper-item__info">
-                        
+
                     </div>
-                    
+
                 </div>
                 <div class="branches_wrapper-item">
                     <div class="branches_wrapper-item__title">
                         <i class="fas fa-caret-right"></i> Украина
                     </div>
                     <div class="branches_wrapper-item__info">
-                        
+
                     </div>
-                    
+
+                </div>
+            </div>
+            <div class="filtres">
+                <div class="filtres__title">
+                    Фильтры
+                </div>
+                <div class="filtres__main">
+                    <div class="filtres__main-item">
+                        <div class="filtres__main-item__title">
+                            Производитель
+                        </div>
+                        <div class="filtres__main-item__checks">
+                            <input type="checkbox" class="form-check-input" id="Acer">
+                            <label class="form-check-label" for="Acer">Acer</label>
+                            <br>
+                            <input type="checkbox" class="form-check-input" id="Asus">
+                            <label class="form-check-label" for="Asus">Asus</label>
+                            <br>
+                            <input type="checkbox" class="form-check-input" id="HP">
+                            <label class="form-check-label" for="HP">HP</label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

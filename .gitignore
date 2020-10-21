@@ -134,4 +134,5 @@ dmypy.json
 # uwsgi
 mysite_uwsgi.ini
 wsgi_dev.py
+settings_dev.py
 *.conf
