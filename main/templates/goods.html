@@ -1,0 +1,128 @@
+{% extends "global.html" %} {% load compress %} {% block content %}
+<div class="container bg_white">
+    <div class="titleh1">
+        <h1>Список товаров</h1>
+    </div>
+    <div class="main">
+        <section class="main-block">
+            <div class="filtres">
+                <div class="filtres__title">
+                    Фильтры
+                </div>
+                <div class="filtres__main">
+
+                </div>
+            </div>
+            <div class="goods-wrapper">
+                <div class="good-item">
+                    <div class="good-item-image">
+                        <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
+                    </div>
+                    <div class="good-item-info">
+                        <div class="good-item-info__model">
+                            Acer Aspire 3 A317-32-P6WW 
+                        </div>
+                        <div class="good-item-info__branch">
+                            MSC-001
+                        </div>
+                    </div>
+                    <div class="good-item-info-add">
+                        <div class="good-item-info-add__status">
+                            На оценке
+                        </div>
+                        <div class="good-item-info-add__same">
+                            <span class="color_light_gr">Похожие:</span> 5
+                        </div>
+                    </div>
+                </div>
+                <div class="good-item">
+                    <div class="good-item-image">
+                        <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
+                    </div>
+                    <div class="good-item-info">
+                        <div class="good-item-info__model">
+                            Acer Aspire 3 A317-32-P6WW 
+                        </div>
+                        <div class="good-item-info__branch">
+                            MSC-001
+                        </div>
+                    </div>
+                    <div class="good-item-info-add">
+                        <div class="good-item-info-add__status">
+                            На оценке
+                        </div>
+                        <div class="good-item-info-add__same">
+                            <span class="color_light_gr">Похожие:</span> 5
+                        </div>
+                    </div>
+                </div>
+                <div class="good-item">
+                    <div class="good-item-image">
+                        <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
+                    </div>
+                    <div class="good-item-info">
+                        <div class="good-item-info__model">
+                            Acer Aspire 3 A317-32-P6WW 
+                        </div>
+                        <div class="good-item-info__branch">
+                            MSC-001
+                        </div>
+                    </div>
+                    <div class="good-item-info-add">
+                        <div class="good-item-info-add__status">
+                            На оценке
+                        </div>
+                        <div class="good-item-info-add__same">
+                            <span class="color_light_gr">Похожие:</span> 5
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="main-block ">
+            <div class="titleh1">
+                <h1>Информация о филиалах</h1>
+            </div>
+            <div class="branches_wrapper">
+                <div class="branches_wrapper-item">
+                    <div class="branches_wrapper-item__title">
+                        <i class="fas fa-caret-right"></i> Санкт-Петербург
+                    </div>
+                    <div class="branches_wrapper-item__info">
+
+                    </div>
+                    
+                </div>
+                <div class="branches_wrapper-item">
+                    <div class="branches_wrapper-item__title">
+                        <i class="fas fa-caret-right"></i> Москва
+                    </div>
+                    <div class="branches_wrapper-item__info">
+                        
+                    </div>
+                    
+                </div>
+                <div class="branches_wrapper-item">
+                    <div class="branches_wrapper-item__title">
+                        <i class="fas fa-caret-right"></i> Нижний Новгород
+                    </div>
+                    <div class="branches_wrapper-item__info">
+                        
+                    </div>
+                    
+                </div>
+                <div class="branches_wrapper-item">
+                    <div class="branches_wrapper-item__title">
+                        <i class="fas fa-caret-right"></i> Украина
+                    </div>
+                    <div class="branches_wrapper-item__info">
+                        
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+    </div>
+
+</div>
+{%csrf_token%} {% endblock content %}

@@ -1,0 +1,17 @@
+{% extends "login_template.html" %} {% load compress %} {% block content %}
+<div class="login_bg__main">
+    <div class="login_bg__main-header">
+        <div class="login_bg__main-header__title">
+            Войти в аккаунт
+        </div>
+        <div class="login_bg__main-header__logo">
+            <img src="{{ STATIC_URL }}images/goose.png" width="80px" alt="">
+        </div>
+    </div>
+    <div class="login_bg__main-form">
+        <input type="text" name="login" class="login_input" placeholder="Логин">
+        <input type="text" name="password" class="login_input" placeholder="Пароль">
+        <button class="login_btn">Авторизация</button>
+    </div>
+</div>
+{%csrf_token%} {% endblock content %}

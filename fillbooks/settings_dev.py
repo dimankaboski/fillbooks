@@ -172,7 +172,7 @@ STATICFILES_FINDERS = (
 )
 COMPRESS_ENABLED = True
 COMPRESS_URL = MEDIA_URL
-COMPRESS_CSSTIDY_BINARY = '/home/sammy/fillbooks/media/CACHE/css'
+COMPRESS_CSSTIDY_BINARY = '/home/dimadev/fillbooks/media/CACHE/css'
 COMPRESS_CSSTIDY_ARGUMENTS = '--template=highest --sort_properties=false --sort_selectors=false --merge_selectors=1'
 
 
