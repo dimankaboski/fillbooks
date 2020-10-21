@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView
-from main.models import Goods
+from main.models import Goods, GoodsBrand, GoodsModel
 
 
 # Create your views here.
@@ -18,15 +18,18 @@ class GoodsListView(ListView):
     def get_queryset(self):
         if self.request.GET:
             queryset = Goods.objects.all()
-            brand = self.request.GET.get["brand"].split('-')
-            model = self.request.GET.get["model"].split('-')
-            status = self.request.GET.get["status"].split('-')
+
+            brand = self.request.GET.get("brand")
+            model = self.request.GET.get("model")
+            status = self.request.GET.get("status")
             if brand:
+                brand = GoodsBrand.objects.filter(name__in=brand.split('-'))
                 queryset = queryset.filter(brand__in=brand)
             if model:
+                model = GoodsModel.objects.filter(name__in=model.split('-'))
                 queryset = queryset.filter(model__in=model)
             if status:
-                queryset = queryset.filter(status__in=status)
+                queryset = queryset.filter(status__in=status.split('-'))
             return queryset
         return super(GoodsListView, self).get_queryset()
     
