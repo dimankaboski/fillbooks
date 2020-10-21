@@ -1,0 +1,43 @@
+// main: style.less
+
+.titlePropertyBlock(@col) {
+    display: inline-block;
+    background-color: @col;
+    border-radius: 0px 5px 5px 0px;
+    padding: 10px 30px;
+    min-width: 250px;
+    font-size: 18px;
+    font-family: @fontUbuntuM;
+    font-weight: 500;
+}
+
+.def_btn(@color,@height,@width,@fsize) {
+    background-color: @color;
+    height: @height;
+    width: @width;
+    & when(lightness(@color) > 60) {
+        color: @black;
+    }
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    font-size: @fsize;
+    cursor: pointer;
+    transition: .2s linear;
+    font-family: inherit;
+    &:hover {
+        background-color: darken(@color, 10%);
+    }
+}
+
+.def_input(@fs) {
+    border: none;
+    border-bottom: 1px solid @boloto;
+    padding-left: 15px;
+    color: @black;
+    height: 30px;
+    outline:none;
+    font-size: @fs;
+    font-weight: bold;
+    font-family: inherit;
+}

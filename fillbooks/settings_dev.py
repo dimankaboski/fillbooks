@@ -133,6 +133,7 @@ STATIC_ROOT = rel_home('media', 'static')
 MEDIA_URL = '/m/'
 STATIC_URL = '/m/static/'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -171,6 +172,7 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 COMPRESS_ENABLED = True
+
 COMPRESS_URL = MEDIA_URL
 COMPRESS_CSSTIDY_BINARY = '/home/dimadev/fillbooks/media/CACHE/css'
 COMPRESS_CSSTIDY_ARGUMENTS = '--template=highest --sort_properties=false --sort_selectors=false --merge_selectors=1'

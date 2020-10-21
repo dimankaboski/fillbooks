@@ -1,0 +1,10 @@
+.font(@fontName; @urlName: @fontName; @weight: 500; @style: normal) {
+    font-family: '@{fontName}';
+    src: url('../fonts/@{urlName}.ttf') format('truetype');
+    font-weight: @weight;
+    font-style: @style;
+  }
+  @fontRegular: 'Ubuntu-Medium';
+  @font-face {
+    .font(@fontRegular);
+}
