@@ -118,8 +118,12 @@
             type: 'GET',
             url: '/goods',
             data: { 'brand': brand_list.join('-') },
+            async: false,
             dataType: 'text',
-            success: function (data) { console.log(data); }, // обработка ответа от сервера
+            success: function (data) { 
+                console.log(this.url);
+                window.location = this.url;
+             }, // обработка ответа от сервера
             error: function (jqXHR) { console.log('Ошибка выполнения'); },
             complete: function () { console.log('Завершение выполнения'); }
         });
