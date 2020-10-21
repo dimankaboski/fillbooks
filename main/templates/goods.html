@@ -8,69 +8,29 @@
         <section class="main-block">
 
             <div class="goods-wrapper">
+                {% for good in object_list %}
                 <div class="good-item">
                     <div class="good-item-image">
                         <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
                     </div>
                     <div class="good-item-info">
                         <div class="good-item-info__model">
-                            Acer Aspire 3 A317-32-P6WW
+                            {{good.brand}} {{good.model}}
                         </div>
                         <div class="good-item-info__branch">
-                            MSC-001
+                            {{good.branch}}
                         </div>
                     </div>
                     <div class="good-item-info-add">
                         <div class="good-item-info-add__status">
-                            На оценке
+                            {{good.status}}
                         </div>
                         <div class="good-item-info-add__same">
                             <span class="color_light_gr">Похожие:</span> 5
                         </div>
                     </div>
                 </div>
-                <div class="good-item">
-                    <div class="good-item-image">
-                        <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
-                    </div>
-                    <div class="good-item-info">
-                        <div class="good-item-info__model">
-                            Acer Aspire 3 A317-32-P6WW
-                        </div>
-                        <div class="good-item-info__branch">
-                            MSC-001
-                        </div>
-                    </div>
-                    <div class="good-item-info-add">
-                        <div class="good-item-info-add__status">
-                            На оценке
-                        </div>
-                        <div class="good-item-info-add__same">
-                            <span class="color_light_gr">Похожие:</span> 5
-                        </div>
-                    </div>
-                </div>
-                <div class="good-item">
-                    <div class="good-item-image">
-                        <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
-                    </div>
-                    <div class="good-item-info">
-                        <div class="good-item-info__model">
-                            Acer Aspire 3 A317-32-P6WW
-                        </div>
-                        <div class="good-item-info__branch">
-                            MSC-001
-                        </div>
-                    </div>
-                    <div class="good-item-info-add">
-                        <div class="good-item-info-add__status">
-                            На оценке
-                        </div>
-                        <div class="good-item-info-add__same">
-                            <span class="color_light_gr">Похожие:</span> 5
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </section>
         <section class="main-block ">
@@ -120,25 +80,50 @@
                     Фильтры
                 </div>
                 <div class="filtres__main">
-                    <div class="filtres__main-item">
-                        <div class="filtres__main-item__title">
-                            Производитель
+                    <form name="filtres_form">
+                        <div class="filtres__main-item">
+                            <div class="filtres__main-item__title">
+                                Производитель
+                            </div>
+                            <div class="filtres__main-item__checks brand_filter_item">
+                                <input type="checkbox" class="form-check-input" id="Acer" value="Acer">
+                                <label class="form-check-label" for="Acer" >Acer</label>
+                                <br>
+                                <input type="checkbox" class="form-check-input" id="Asus" value="Asus">
+                                <label class="form-check-label" for="Asus" >Asus</label>
+                                <br>
+                                <input type="checkbox" class="form-check-input" id="HP" value="HP">
+                                <label class="form-check-label" for="HP" >HP</label>
+                            </div>
                         </div>
-                        <div class="filtres__main-item__checks">
-                            <input type="checkbox" class="form-check-input" id="Acer">
-                            <label class="form-check-label" for="Acer">Acer</label>
-                            <br>
-                            <input type="checkbox" class="form-check-input" id="Asus">
-                            <label class="form-check-label" for="Asus">Asus</label>
-                            <br>
-                            <input type="checkbox" class="form-check-input" id="HP">
-                            <label class="form-check-label" for="HP">HP</label>
-                        </div>
-                    </div>
+                        <button id="filtres_submit">Применить</button>
+                    </form>
                 </div>
             </div>
         </section>
     </div>
 
 </div>
-{%csrf_token%} {% endblock content %}
+{%csrf_token%}
+{% endblock content %}
+{% block scripts %}
+<script>
+    $('#filtres_submit').click(function () {
+        var brand_list = []
+        $('.brand_filter_item input[type="checkbox"]:checked').each(function(){
+            brand_list.push($(this).val());
+        })
+
+        $.ajax({
+            type: 'GET',
+            url: '/goods',
+            data: { 'brand': brand_list.join('-') },
+            dataType: 'text',
+            success: function (data) { console.log(data); }, // обработка ответа от сервера
+            error: function (jqXHR) { console.log('Ошибка выполнения'); },
+            complete: function () { console.log('Завершение выполнения'); }
+        });
+    })
+
+</script>
+{% endblock scripts %}
