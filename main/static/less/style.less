@@ -262,8 +262,21 @@ header {
     }
     &__main {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: wrap;
         height: 140px;
+        &-item {
+            display: flex;
+            flex-direction: column;
+            padding: 7px;
+            width: 150px;
+            &__checks {
+                border: 1px solid #E6E4E7;
+                border-radius: 5px;
+                padding: 5px;
+                font-size: 14px;
+            }
+        }
     }
 }
 .goods-wrapper {

@@ -10,13 +10,14 @@
     <link rel="shortcut icon" href="{{ STATIC_URL }}images/goose.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/abfe5ab3ea.js" crossorigin="anonymous"></script>
+
     {% endblock %}
     {% block title %}
     <title>fillbooks</title>
     {% endblock%}
 </head>
 
-<body>
+<body data-ng-app="fillbooks_app" data-ng-controller="fillbooks_controller">
     <div class="all_content">
         <div class="overlay_dark">
 
@@ -92,6 +93,8 @@
     {% endblock scripts %}
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="{{ STATIC_URL }}js/angularjs/angular.js"></script>
+    <script src="{{ STATIC_URL }}js/fillbooks_angular.js"></script>
     <script src="{{ STATIC_URL }}js/main.js"></script>
 </body>
 
