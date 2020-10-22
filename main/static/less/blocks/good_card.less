@@ -1,0 +1,102 @@
+// main: style.less
+
+.titleh1_w_text {
+    margin: 35px 0px 0px 0px;
+    display: inline-block;
+    background-color: @light_green;
+    border-radius: 0px 5px 5px 0px;
+    padding: 15px 30px;
+    min-width: 550px;
+    h1 {
+        font-size: 24px;
+        margin: 0;
+        font-weight: normal;
+    }
+}
+.h1_text {
+    padding-left: 30px;
+}
+
+.card-photos {
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-left: 20px;
+    }
+    &__original {
+
+        padding: 10px;
+    }
+    &__other {
+        overflow-x: auto;
+        &__list {
+            display: inline-flex;
+            padding: 10px;
+        }
+        &-photo {
+            padding: 5px;
+            width: 120px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            &:hover {
+                border: 2px solid @light_blue;
+                border-radius: 5px;
+                transition: .4s;
+            }
+        }
+    }
+}
+.active-photo {
+    border: 2px solid @light_green;
+    border-radius: 5px;
+}
+.card-main-info {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    &__title {
+        margin: 35px 0px 0px 0px;
+        display: inline-block;
+        padding: 15px 30px;
+        min-width: 550px;
+        h1 {
+            font-size: 36px;
+            margin: 0;
+            font-weight: normal;
+        }
+    }
+    &__seller-name {
+        padding: 5px 30px;
+        font-size: 18px;    
+    }
+    &__seller-phone {
+        padding: 5px 30px;
+        font-size: 24px; 
+    }
+    &__msg-block {
+        display: flex;
+        justify-content: space-between;
+    }
+    &__input-block {
+        padding: 30px;
+        width: 50%;
+    }
+}
+.card-input {
+    .def_input(18px);
+    font-weight: 400;
+}
+.card_textarea {
+    margin-top: 5px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 40%;
+    border: 1px solid @boloto;
+    border-radius: 10px;
+}
+.register-input {
+    .def_input(18px);
+    font-weight: 400;
+}
