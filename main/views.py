@@ -36,3 +36,9 @@ class GoodsListView(ListView):
 
 def login(request):
     return render(request, 'login.html', context={})
+
+def good_card(request):
+    return render(request, 'good_card.html', context={})
+
+def register(request):
+    return render(request, 'register.html', context={})

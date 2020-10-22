@@ -1,0 +1,92 @@
+{% extends "global.html" %} {% load compress %} {% block content %}
+
+<div class="container bg_white">
+    <div class="titleh1">
+        <h1>Добавление пользователя</h1>
+    </div>
+    <div class="main">
+        <section class="main-block">
+            <div class="propertyblock__prop">
+                <div class="propertyblock__prop__key">
+                    Имя
+                </div>
+                <input type="text" name="first_name" class="register-input">
+            </div>
+            <div class="propertyblock__prop">
+                <div class="propertyblock__prop__key">
+                    Отчество
+                </div>
+                <input type="text" name="middle_name" class="register-input">
+            </div>
+            <div class="propertyblock__prop">
+                <div class="propertyblock__prop__key">
+                    Фамилия
+                </div>
+                <input type="text" name="last_name" class="register-input">
+            </div>
+            <div class="propertyblock__prop">
+                <div class="propertyblock__prop__key">
+                    Филиал
+                </div>
+                <input type="text" name="branch" class="register-input">
+            </div>
+            <div class="propertyblock__prop">
+                <div class="propertyblock__prop__key">
+                    Должность
+                </div>
+                <input type="text" name="work" class="register-input">
+            </div>
+            <div class="propertyblock__prop">
+                <div class="propertyblock__prop__key">
+                    Права администратора
+                </div>
+                <input type="text" name="isAdmin" class="register-input">
+            </div>
+            <div class="propertyblock__prop">
+                <div class="propertyblock__prop__key">
+                    Email
+                </div>
+                <input type="text" name="email" class="register-input">
+            </div>
+            <div class="propertyblock__prop">
+                <div class="propertyblock__prop__key">
+                    Номер телефона
+                </div>
+                <input type="text" name="phone" class="register-input">
+            </div>
+            <div class="propertyblock__prop">
+                <div class="propertyblock__prop__key">
+                    Логин
+                </div>
+                <input type="text" name="login" class="register-input">
+            </div>
+            <div class="propertyblock__prop">
+                <div class="propertyblock__prop__key">
+                    Пароль
+                </div>
+                <input type="text" name="password" class="register-input">
+            </div>
+            <div class="propertyblock__prop">
+                <div class="propertyblock__prop__key">
+                    Повторите пароль
+                </div>
+                <input type="text" name="password_again" class="register-input">
+            </div>
+            <div class="propertyblock__btn">
+                <button class="def_btn">Зарегистрировать</button>
+            </div>
+        </section>
+        <section class="main-block ">
+
+
+        </section>
+    </div>
+
+</div>
+{%csrf_token%}
+{% endblock content %}
+{% block scripts %}
+<script>
+
+</script>
+{% endblock scripts %}

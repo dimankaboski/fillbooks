@@ -10,4 +10,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('goods', GoodsListView.as_view(), name='goods'),
     path('login', views.login, name='login'),
+    path('good_card', views.good_card, name='good_card'),
+    path('register', views.register, name='register'),
 ]
