@@ -1,82 +1,36 @@
 {% extends "global.html" %} {% load compress %} {% block content %}
+
 <div class="container bg_white">
     <div class="titleh1">
         <h1>Список товаров</h1>
     </div>
     <div class="main">
         <section class="main-block">
-            <div class="filtres">
-                <div class="filtres__title">
-                    Фильтры
-                </div>
-                <div class="filtres__main">
 
-                </div>
-            </div>
             <div class="goods-wrapper">
+                {% for good in object_list %}
                 <div class="good-item">
                     <div class="good-item-image">
                         <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
                     </div>
                     <div class="good-item-info">
                         <div class="good-item-info__model">
-                            Acer Aspire 3 A317-32-P6WW 
+                            {{good.brand}} {{good.model}}
                         </div>
                         <div class="good-item-info__branch">
-                            MSC-001
+                            {{good.branch}}
                         </div>
                     </div>
                     <div class="good-item-info-add">
                         <div class="good-item-info-add__status">
-                            На оценке
+                            {{good.status}}
                         </div>
                         <div class="good-item-info-add__same">
                             <span class="color_light_gr">Похожие:</span> 5
                         </div>
                     </div>
                 </div>
-                <div class="good-item">
-                    <div class="good-item-image">
-                        <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
-                    </div>
-                    <div class="good-item-info">
-                        <div class="good-item-info__model">
-                            Acer Aspire 3 A317-32-P6WW 
-                        </div>
-                        <div class="good-item-info__branch">
-                            MSC-001
-                        </div>
-                    </div>
-                    <div class="good-item-info-add">
-                        <div class="good-item-info-add__status">
-                            На оценке
-                        </div>
-                        <div class="good-item-info-add__same">
-                            <span class="color_light_gr">Похожие:</span> 5
-                        </div>
-                    </div>
-                </div>
-                <div class="good-item">
-                    <div class="good-item-image">
-                        <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
-                    </div>
-                    <div class="good-item-info">
-                        <div class="good-item-info__model">
-                            Acer Aspire 3 A317-32-P6WW 
-                        </div>
-                        <div class="good-item-info__branch">
-                            MSC-001
-                        </div>
-                    </div>
-                    <div class="good-item-info-add">
-                        <div class="good-item-info-add__status">
-                            На оценке
-                        </div>
-                        <div class="good-item-info-add__same">
-                            <span class="color_light_gr">Похожие:</span> 5
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </section>
         <section class="main-block ">
@@ -85,44 +39,162 @@
             </div>
             <div class="branches_wrapper">
                 <div class="branches_wrapper-item">
-                    <div class="branches_wrapper-item__title">
-                        <i class="fas fa-caret-right"></i> Санкт-Петербург
-                    </div>
-                    <div class="branches_wrapper-item__info">
-
-                    </div>
-                    
+                    <details>
+                        <summary>Санкт-Петербург</summary>
+                        <div class="branches_wrapper-item__spoiler-text">
+                            <div class="branches_wrapper-item__spoiler-text__status">
+                                Ожидает оценки: 3 <br> Отказ: 1 <br> Приобретен: 5 <br> Оценен: 10
+                            </div>
+                            <div class="branches_wrapper-item__spoiler-text__balance">
+                                Баланс: 115 000.00 руб <br> Работяг: 2
+                            </div>
+                        </div>
+                    </details>
                 </div>
                 <div class="branches_wrapper-item">
-                    <div class="branches_wrapper-item__title">
-                        <i class="fas fa-caret-right"></i> Москва
-                    </div>
-                    <div class="branches_wrapper-item__info">
-                        
-                    </div>
-                    
+                    <details>
+                        <summary>Москва</summary>
+                        <div class="branches_wrapper-item__spoiler-text">
+                            <div class="branches_wrapper-item__spoiler-text__status">
+                                Ожидает оценки: 3 <br> Отказ: 1 <br> Приобретен: 5 <br> Оценен: 10
+                            </div>
+                            <div class="branches_wrapper-item__spoiler-text__balance">
+                                Баланс: 115 000.00 руб <br> Работяг: 2
+                            </div>
+                        </div>
+                    </details>
                 </div>
                 <div class="branches_wrapper-item">
-                    <div class="branches_wrapper-item__title">
-                        <i class="fas fa-caret-right"></i> Нижний Новгород
-                    </div>
-                    <div class="branches_wrapper-item__info">
-                        
-                    </div>
-                    
+                    <details>
+                        <summary>Нижний Новгород</summary>
+                        <div class="branches_wrapper-item__spoiler-text">
+                            <div class="branches_wrapper-item__spoiler-text__status">
+                                Ожидает оценки: 3 <br> Отказ: 1 <br> Приобретен: 5 <br> Оценен: 10
+                            </div>
+                            <div class="branches_wrapper-item__spoiler-text__balance">
+                                Баланс: 115 000.00 руб <br> Работяг: 2
+                            </div>
+                        </div>
+                    </details>
                 </div>
                 <div class="branches_wrapper-item">
-                    <div class="branches_wrapper-item__title">
-                        <i class="fas fa-caret-right"></i> Украина
-                    </div>
-                    <div class="branches_wrapper-item__info">
-                        
-                    </div>
-                    
+                    <details>
+                        <summary>Украина</summary>
+                        <div class="branches_wrapper-item__spoiler-text">
+                            <div class="branches_wrapper-item__spoiler-text__status">
+                                Ожидает оценки: 3 <br> Отказ: 1 <br> Приобретен: 5 <br> Оценен: 10
+                            </div>
+                            <div class="branches_wrapper-item__spoiler-text__balance">
+                                Баланс: 115 000.00 руб <br> Работяг: 2
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+            <div class="filtres">
+                <div class="filtres__title">
+                    Фильтры
+                </div>
+                <div class="filtres__main">
+                    <form name="filtres_form" id="filtres_form">
+                        <div class="filtres__main-item">
+                            <div class="filtres__main-item__title">
+                                Производитель
+                            </div>
+                            <div class="filtres__main-item__checks brand_filter_item">
+                                <input type="checkbox" class="form-check-input" id="Acer" name="brand" value="Acer">
+                                <label class="form-check-label" for="Acer">Acer</label>
+                                <br>
+                                <input type="checkbox" class="form-check-input" id="Asus" name="brand" value="Asus">
+                                <label class="form-check-label" for="Asus">Asus</label>
+                                <br>
+                                <input type="checkbox" class="form-check-input" id="HP" name="brand" value="HP">
+                                <label class="form-check-label" for="HP">HP</label>
+                            </div>
+                        </div>
+                        <div class="filtres__main-item">
+                            <div class="filtres__main-item__title">
+                                Модель
+                            </div>
+                            <div class="filtres__main-item__checks model_filter_item">
+                                <input type="checkbox" class="form-check-input" id="Model1" value="Model1">
+                                <label class="form-check-label" for="Model1">Model1</label>
+                                <br>
+                                <input type="checkbox" class="form-check-input" id="Model2" value="Model2">
+                                <label class="form-check-label" for="Model2">Model2</label>
+                                <br>
+                                <input type="checkbox" class="form-check-input" id="Model3" value="Model3">
+                                <label class="form-check-label" for="Model3">Model3</label>
+                            </div>
+                        </div>
+                        <div class="filtres__main-item">
+                            <div class="filtres__main-item__title">
+                                Статус
+                            </div>
+                            <div class="filtres__main-item__checks status_filter_item">
+                                <input type="checkbox" class="form-check-input" id="Ожидает оценки"
+                                    value="Ожидает оценки">
+                                <label class="form-check-label" for="Ожидает оценки">Ожидает оценки</label>
+                                <br>
+                                <input type="checkbox" class="form-check-input" id="Отказ" value="Отказ">
+                                <label class="form-check-label" for="Отказ">Отказ</label>
+                                <br>
+                                <input type="checkbox" class="form-check-input" id="Приобретен" value="Приобретен">
+                                <label class="form-check-label" for="Приобретен">Приобретен</label>
+                                <br>
+                                <input type="checkbox" class="form-check-input" id="Оценен" value="Оценен">
+                                <label class="form-check-label" for="Оценен">Оценен</label>
+                            </div>
+                        </div>
+                    </form>
+                    <button id="filtres_submit" form="filtres_form">Применить</button>
                 </div>
             </div>
         </section>
     </div>
 
 </div>
-{%csrf_token%} {% endblock content %}
+{%csrf_token%}
+{% endblock content %}
+{% block scripts %}
+<script>
+    function setCheckboxesState(group, params) {
+        $('.' + group + '_filter_item input[type="checkbox"]').each(function () {
+            let params_list = params.get(group).split('-');
+            if (params_list.includes($(this).val())) {
+                $(this).attr('checked', 'checked');
+            }
+        })
+    }
+    function updateFiltresState() {
+        let params = (new URL(document.location)).searchParams;
+        if (params.has('brand') || params.has('model') || params.has('status')) {
+            setCheckboxesState('model', params)
+            setCheckboxesState('brand', params)
+            setCheckboxesState('status', params)
+        }
+    }
+
+    updateFiltresState()
+
+    function getCheckboxesValue(group) {
+        let list = []
+        $('.' + group + '_filter_item input[type="checkbox"]:checked').each(function () {
+            list.push($(this).val());
+        })
+        return list;
+    }
+
+    let form = document.forms.filtres_form;
+    form.onsubmit = function () {
+        var brand_params = getCheckboxesValue('brand').join('-')
+        var model_params = getCheckboxesValue('model').join('-')
+        var status_params = getCheckboxesValue('status').join('-')
+
+        let url = `/goods?brand=${brand_params}&model=${model_params}&status=${status_params}`;
+
+        window.location = url;
+    }
+
+</script>
+{% endblock scripts %}

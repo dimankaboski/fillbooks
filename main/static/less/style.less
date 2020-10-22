@@ -16,6 +16,7 @@ html {
 body {
     background-color: @bg_color;
     margin: 0;
+    color: @black;
 }
 header {
     background-color: @header_bg;
@@ -32,12 +33,20 @@ header {
 }
 //Blocks
 @import 'blocks/modal';
-
+@import 'blocks/good_card';
+textarea:focus, input:focus {
+    outline: none;
+}
 .good_description {
-    width: 60%;
-    margin: 20px;
+    width: 80%;
+    max-width: 90%;
+    min-width: 30%;
+    margin: 10px 30px;
     border: 1px solid @boloto;
     border-radius: 10px;
+}
+.good_description:focus {
+    outline: none;
 }
 .flex-row-wrapper {
     display: flex;
@@ -261,9 +270,25 @@ header {
         .titlePropertyBlock(@light_blue);
     }
     &__main {
-        display: flex;
-        flex-direction: column;
-        height: 140px;
+
+        form {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 400px;
+        }
+        &-item {
+            display: flex;
+            flex-direction: column;
+            padding: 7px;
+            width: 150px;
+            &__checks {
+                border: 1px solid #E6E4E7;
+                border-radius: 5px;
+                padding: 5px;
+                font-size: 14px;
+            }
+        }
     }
 }
 .goods-wrapper {
@@ -305,6 +330,41 @@ header {
     &-item {
         font-size: 16px;
         margin: 10px;
+
+        summary {
+            width: fit-content;
+            padding: 3px;
+            cursor: pointer;
+            transition: .1s;
+        }
+
+        summary:focus {
+            outline: none!important;
+            transition: .1s;
+        }
+        details[open] &__spoiler-text {
+            animation: spoiler .4s;
+        }
+        @keyframes spoiler {
+            0%   {opacity: 0;}
+            100% {opacity: 1;}
+          }
+        &__spoiler-text {
+            padding: 5px;
+            font-weight: 400;
+            font-size: 14px;
+            border: 1px solid @light_grey;
+            border-radius: 3px;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            &__status {
+                padding-left: 15px;
+            }
+            &__balance {
+                padding-left: 15px;
+            }
+        }
     }
 }
 
