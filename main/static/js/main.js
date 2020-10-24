@@ -1,6 +1,13 @@
-// $('.all_content').addClass('overlay_blur');
-// $('.overlay_dark').css('display', 'block');
-
+function openModalProp() {
+    $('.all_content').addClass('overlay_blur');
+    $('.overlay_dark').css('display', 'block');
+    $('.modal').css('display', 'block');
+}
+function closeModalProp() {
+    $('.all_content').removeClass('overlay_blur');
+    $('.overlay_dark').css('display', 'none');
+    $('.modal').css('display', 'none');
+}
 function getCookie(name) {
     var cookie = " " + document.cookie;
     var search = " " + name + "=";
