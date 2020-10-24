@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, View
 from main.models import Goods, GoodsBrand, GoodsModel
+from accounts.models import Branch, User
 from django.http import HttpResponse, JsonResponse
 from main.const import *
 
@@ -73,6 +74,7 @@ class GoodsListView(ListView):
     
 
 class CheckBrand(View):
+
     def post(self, request, *args, **kwargs):
         if request.POST:
             brand_id = request.POST.get('brandID')
@@ -87,6 +89,7 @@ class CheckBrand(View):
 
 
 class CheckStatus(View):
+
     def post(self, request, *args, **kwargs):
         goods = Goods.objects.all()
         if request.POST:
@@ -103,6 +106,7 @@ class CheckStatus(View):
 
 
 class CheckBranch(View):
+
     def post(self, request, *args, **kwargs):
         goods = Goods.objects.all()
         if request.POST:
@@ -117,6 +121,37 @@ class CheckBranch(View):
         context= {'brands':list(brands)}
         context.update(check_status(goods))
         return JsonResponse(context, safe=False)
+
+class BranchInfo(View):
+
+    def post(self, request, *args, **kwargs):
+        
+        if request.POST:
+            branch_id = request.POST.get('branch_id')
+            try:
+                branch = Branch.objects.get(pk=branch_id)
+            except Branch.DoesNotExist:
+                branch = None
+            if branch:
+                goods = Goods.objects.filter(branch=branch)
+                balance = branch.balance
+                goods_await = goods.filter(status=GOOD_STATUS_AWAIT).count()
+                goods_reject = goods.filter(status=GOOD_STATUS_REJECT).count()
+                goods_purchase = goods.filter(status=GOOD_STATUS_PURCHASE).count()
+                goods_priced = goods.filter(status=GOOD_STATUS_PRICED).count()
+                users = User.objects.filter(branch=branch).count
+                context = {
+                    'balance': balance,
+                    'goods_await': goods_await,
+                    'goods_reject': goods_reject,
+                    'goods_purchase': goods_purchase,
+                    'goods_priced': goods_priced,
+                    'users': list(users)
+                }
+                return JsonResponse(context, safe=False)
+            HttpResponse(status=400, context='Нет филиала ID %s' % branch_id)
+        HttpResponse(status=400, context='Пустой запрос')
+
 
 def login(request):
     return render(request, 'login.html', context={})
