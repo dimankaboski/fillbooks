@@ -4,7 +4,7 @@ from main.models import Goods, GoodsBrand, GoodsModel
 from accounts.models import Branch, User
 from django.http import HttpResponse, JsonResponse
 from main.const import *
-
+import json
 
 # Create your views here.
 def index(request):
@@ -77,13 +77,14 @@ class CheckBrand(View):
 
     def post(self, request, *args, **kwargs):
         if request.POST:
-            brand_id = request.POST.get('brandID')
+            json_string = json.loads(request.POST['json'])
+            brand_id = json_string['brandID']
             models = GoodsModel.objects.filter(brand__pk__in=brand_id)
             goods = Goods.objects.filter(brand__pk__in=brand_id)
             branchs = goods.values('branch')
-            context={'models': list(models)}
+            context={'models': list(models.values('name'))}
             context.update(check_status(goods))
-            context.update({'branchs': branchs})
+            context.update({'branchs': list(branchs)})
             return JsonResponse(context, safe=False)
         return JsonResponse('', safe=False)
 
@@ -93,7 +94,8 @@ class CheckStatus(View):
     def post(self, request, *args, **kwargs):
         goods = Goods.objects.all()
         if request.POST:
-            status = request.POST.get('status')
+            json_string = json.loads(request.POST['json'])
+            status = json_string['status']
             goods = goods.filter(status__in=status).values('brand')
             brands = goods.values('brand')
             branchs = goods.values('branch')
@@ -110,7 +112,8 @@ class CheckBranch(View):
     def post(self, request, *args, **kwargs):
         goods = Goods.objects.all()
         if request.POST:
-            branch = request.POST.get('branch')
+            json_string = json.loads(request.POST['json'])
+            branch = json_string['branch']
             goods = goods.filter(branch__pk__in=branch)
             brands = goods.values('brand')
             check_status(goods) 
@@ -139,18 +142,18 @@ class BranchInfo(View):
                 goods_reject = goods.filter(status=GOOD_STATUS_REJECT).count()
                 goods_purchase = goods.filter(status=GOOD_STATUS_PURCHASE).count()
                 goods_priced = goods.filter(status=GOOD_STATUS_PRICED).count()
-                users = User.objects.filter(branch=branch).count
+                users = User.objects.filter(branch=branch).count()
                 context = {
                     'balance': balance,
                     'goods_await': goods_await,
                     'goods_reject': goods_reject,
                     'goods_purchase': goods_purchase,
                     'goods_priced': goods_priced,
-                    'users': list(users)
+                    'users': users
                 }
                 return JsonResponse(context, safe=False)
-            HttpResponse(status=400, context='Нет филиала ID %s' % branch_id)
-        HttpResponse(status=400, context='Пустой запрос')
+            return HttpResponse('Branch ID not found', status=400)
+        return HttpResponse('Blank query', status=400)
 
 
 def login(request):

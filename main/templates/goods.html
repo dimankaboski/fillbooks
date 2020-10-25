@@ -1,4 +1,4 @@
-{% extends "global.html" %} {% load compress %} {% block content %}
+{% extends "global.html" %} {% load compress filtres %} {% block content %}
 
 <div class="container bg_white">
     <div class="titleh1">
@@ -38,7 +38,7 @@
                 <h1>Информация о филиалах</h1>
             </div>
             <div class="branches_wrapper">
-                <div class="branches_wrapper-item">
+                <div class="branches_wrapper-item" id="testclick">
                     <details>
                         <summary>Санкт-Петербург</summary>
                         <div class="branches_wrapper-item__spoiler-text">
@@ -99,17 +99,31 @@
                     <form name="filtres_form" id="filtres_form">
                         <div class="filtres__main-item">
                             <div class="filtres__main-item__title">
+                                Филиал
+                            </div>
+                            <div class="filtres__main-item__checks branch_filter_item">
+                                {% get_branchs as branchs %}
+                                {% for branch in branchs %}
+                                <input type="checkbox" class="form-check-input" id="{{branch.name}}"
+                                    value="{{branch.name}}" data-id="{{branch.pk}}">
+                                <label class="form-check-label" for="{{branch.name}}">{{branch.name}}</label>
+                                <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="filtres__main-item">
+                            <div class="filtres__main-item__title">
                                 Производитель
                             </div>
+
                             <div class="filtres__main-item__checks brand_filter_item">
-                                <input type="checkbox" class="form-check-input" id="Acer" name="brand" value="Acer">
-                                <label class="form-check-label" for="Acer">Acer</label>
+                                {% get_brands as brands %}
+                                {% for brand in brands %}
+                                <input type="checkbox" class="form-check-input" id="{{brand.name}}" name="brand"
+                                    value="{{brand.name}}" data-id="{{brand.pk}}">
+                                <label class="form-check-label" for="{{brand.name}}">{{brand.name}}</label>
                                 <br>
-                                <input type="checkbox" class="form-check-input" id="Asus" name="brand" value="Asus">
-                                <label class="form-check-label" for="Asus">Asus</label>
-                                <br>
-                                <input type="checkbox" class="form-check-input" id="HP" name="brand" value="HP">
-                                <label class="form-check-label" for="HP">HP</label>
+                                {% endfor %}
                             </div>
                         </div>
                         <div class="filtres__main-item">
@@ -117,14 +131,7 @@
                                 Модель
                             </div>
                             <div class="filtres__main-item__checks model_filter_item">
-                                <input type="checkbox" class="form-check-input" id="Model1" value="Model1">
-                                <label class="form-check-label" for="Model1">Model1</label>
-                                <br>
-                                <input type="checkbox" class="form-check-input" id="Model2" value="Model2">
-                                <label class="form-check-label" for="Model2">Model2</label>
-                                <br>
-                                <input type="checkbox" class="form-check-input" id="Model3" value="Model3">
-                                <label class="form-check-label" for="Model3">Model3</label>
+                                <span style="color: #afafaf;">Выберите производителя</span>
                             </div>
                         </div>
                         <div class="filtres__main-item">
@@ -132,18 +139,12 @@
                                 Статус
                             </div>
                             <div class="filtres__main-item__checks status_filter_item">
-                                <input type="checkbox" class="form-check-input" id="Ожидает оценки"
-                                    value="Ожидает оценки">
-                                <label class="form-check-label" for="Ожидает оценки">Ожидает оценки</label>
+                                {% get_status as statuses %}
+                                {% for status in statuses %}
+                                <input type="checkbox" class="form-check-input" id="{{status}}" value="{{status}}">
+                                <label class="form-check-label" for="{{status}}">{{status}}</label>
                                 <br>
-                                <input type="checkbox" class="form-check-input" id="Отказ" value="Отказ">
-                                <label class="form-check-label" for="Отказ">Отказ</label>
-                                <br>
-                                <input type="checkbox" class="form-check-input" id="Приобретен" value="Приобретен">
-                                <label class="form-check-label" for="Приобретен">Приобретен</label>
-                                <br>
-                                <input type="checkbox" class="form-check-input" id="Оценен" value="Оценен">
-                                <label class="form-check-label" for="Оценен">Оценен</label>
+                                {% endfor %}
                             </div>
                         </div>
                     </form>
@@ -174,7 +175,23 @@
             setCheckboxesState('status', params)
         }
     }
-
+    function setStatusState(data) {
+        $('.status_filter_item input').each(function(){
+            $(this).prop('disabled', false);
+            if(data.is_await == false && $(this).val() == 'Ожидает оценки') {
+                $(this).prop('disabled', true);
+            }
+            if(data.is_priced == false && $(this).val() == 'Оценен') {
+                $(this).prop('disabled', true);
+            }            
+            if(data.is_purchase == false && $(this).val() == 'Приобретен') {
+                $(this).prop('disabled', true);
+            }            
+            if(data.is_reject == false && $(this).val() == 'Отказ') {
+                $(this).prop('disabled', true);
+            }
+        })
+    }
     updateFiltresState()
 
     function getCheckboxesValue(group) {
@@ -195,6 +212,96 @@
 
         window.location = url;
     }
+    $('#testclick').click(function (e) {
+        var myData = {};
+        myData.branch_id = 2;
+        let csrftoken = getCookie('csrftoken');
+        console.log(myData);
+        var data = new FormData();
+        // data.append("json", JSON.stringify(myData));
+        data.append("branch_id", 2);
+        console.log(data)
+        fetch("/api/branch_info", {
+            method: "POST",
+            body: data,
+            headers: { 'X-CSRFToken': csrftoken }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (data) {
 
+            console.log(data);
+        });
+    })
+
+    $('#filtres_form input').click(function () {
+        var myData = {};
+        var $parent_item = $(this).parent()
+        if ($parent_item.hasClass('brand_filter_item')) {
+            myData.brandID = [];
+            $parent_item.children('input[type="checkbox"]:checked').each(function () {
+                myData.brandID.push(this.getAttribute('data-id'))
+            })
+            var data = new FormData();
+            data.append("json", JSON.stringify(myData));
+            console.log(data)
+            fetch("/api/check_brand", {
+                method: "POST",
+                body: data,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+
+                console.log(data.models);
+                let items = '';
+                for (var i in data.models) {
+                    items += `<input type="checkbox" class="form-check-input" id="${data.models[i].name}" value="${data.models[i].name}">
+                                <label class="form-check-label" for="${data.models[i].name}">${data.models[i].name}</label>
+                                <br>`;
+                }
+                $('.model_filter_item').html(items);
+            });
+        }
+        if ($parent_item.hasClass('branch_filter_item')) {
+            myData.branch = [];
+            $parent_item.children('input[type="checkbox"]:checked').each(function () {
+                myData.branch.push(this.getAttribute('data-id'))
+            })
+            var data = new FormData();
+            data.append("json", JSON.stringify(myData));
+            console.log(data)
+            fetch("/api/check_branch", {
+                method: "POST",
+                body: data,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                setStatusState(data)
+                console.log(data);
+
+            });
+        }
+        if ($parent_item.hasClass('status_filter_item')) {
+            myData.status = [];
+            $parent_item.children('input[type="checkbox"]:checked').each(function () {
+                myData.status.push($(this).val())
+            })
+            var data = new FormData();
+            data.append("json", JSON.stringify(myData));
+            console.log(data)
+            fetch("/api/check_status", {
+                method: "POST",
+                body: data,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                let unique = [...new Set(data.branchs.map(li => li.branch))]
+                console.log(unique);
+            });
+        }
+
+    })
 </script>
 {% endblock scripts %}

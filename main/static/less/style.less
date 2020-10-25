@@ -332,18 +332,23 @@ textarea:focus, input:focus {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            width: 400px;
         }
         &-item {
             display: flex;
             flex-direction: column;
             padding: 7px;
-            width: 150px;
+            min-width: 200px;
+            max-width: 300px;
+            max-height: 200px;
+            
             &__checks {
-                border: 1px solid #E6E4E7;
+                border: 1px solid @boloto;
                 border-radius: 5px;
                 padding: 5px;
                 font-size: 14px;
+                overflow-y: auto;
+                overflow-x: hidden;
+                min-height: 150px;
             }
         }
     }
@@ -480,4 +485,7 @@ textarea:focus, input:focus {
             }
         }
     }
+}
+.disabled_input {
+    color: #b8b8b8;
 }
