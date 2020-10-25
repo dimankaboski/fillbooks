@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from django.views.generic import ListView, View
+from django.views.generic import ListView, View, TemplateView
 from main.models import Goods, GoodsBrand, GoodsModel
 from accounts.models import Branch, User
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from main.const import *
 import json
 
@@ -20,6 +20,21 @@ def check_status(goods):
     is_priced = True if goods.filter(status=GOOD_STATUS_PRICED) else False
     return {'is_await': is_await, 'is_reject':is_reject, 'is_purchase':is_purchase, 'is_priced':is_priced}
 
+class GoodView(TemplateView):
+    template_name = 'good_card.html'
+
+    def get_context_data(self, **kwargs):
+
+        good_id = self.kwargs.get('good_id')
+        try:
+            good = Goods.objects.get(good_id=good_id)
+        except Goods.DoesNotExist:
+            raise Http404('Товар с ID %s не найден' % good_id)
+        context = super(GoodView, self).get_context_data(**kwargs)
+        context.update({
+            'good': good
+        })
+        return context
 
 class GoodsListView(ListView):
 
@@ -82,9 +97,12 @@ class CheckBrand(View):
             models = GoodsModel.objects.filter(brand__pk__in=brand_id)
             goods = Goods.objects.filter(brand__pk__in=brand_id)
             branchs = goods.values('branch')
+            if branchs:
+                branchs = Branch.objects.filter(pk__in=branchs).values('name')
             context={'models': list(models.values('name'))}
             context.update(check_status(goods))
             context.update({'branchs': list(branchs)})
+            
             return JsonResponse(context, safe=False)
         return JsonResponse('', safe=False)
 
@@ -96,9 +114,13 @@ class CheckStatus(View):
         if request.POST:
             json_string = json.loads(request.POST['json'])
             status = json_string['status']
-            goods = goods.filter(status__in=status).values('brand')
+            goods = goods.filter(status__in=status)
             brands = goods.values('brand')
+            if brands:
+                brands = GoodsBrand.objects.filter(pk__in=brands).values('name')
             branchs = goods.values('branch')
+            if branchs:
+                branchs = Branch.objects.filter(pk__in=branchs).values('name')
             context = {'brands': list(brands), 'branchs': list(branchs)}
             return JsonResponse(context, safe=False)
         brands = goods.values('brand')
@@ -116,6 +138,8 @@ class CheckBranch(View):
             branch = json_string['branch']
             goods = goods.filter(branch__pk__in=branch)
             brands = goods.values('brand')
+            if brands:
+                brands = GoodsBrand.objects.filter(pk__in=brands).values('name')
             check_status(goods) 
             context = {'brands': list(brands)}
             context.update(check_status(goods))
