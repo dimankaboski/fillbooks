@@ -4,10 +4,10 @@
     <div class="main">
         <section class="main-block">
             <div class="titleh1_w_text">
-                <h1>Оценка товара #124564</h1>
+                <h1>Оценка товара #{{good.good_id}}</h1>
             </div>
             <br>
-            <span class="h1_text">Филиал: Санкт Петербург, Работник121</span>
+            <span class="h1_text">Филиал: {{good.branch.name}}, {{good.user.get_full_name}}</span>
             <div class="card-photos__wrapper">
                 <div class="card-photos__original">
                     <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
@@ -39,7 +39,7 @@
                                 Производитель
                             </div>
                             <div class="propertyblock__prop__val">
-                                Acer
+                                {{good.brand.name}}
                             </div>
                         </div>
                         <div class="propertyblock__prop">
@@ -47,7 +47,7 @@
                                 Модель
                             </div>
                             <div class="propertyblock__prop__val">
-                                Aspire 3 A317-32-P6WW
+                                {{good.model.name}}
                             </div>
                         </div>
                     </div>
@@ -118,7 +118,7 @@
                                 Имя
                             </div>
                             <div class="propertyblock_rev__prop__val">
-                                Валентина Петровна
+                                {{good.customer.name}}
                             </div>
                         </div>
                         <div class="propertyblock_rev__prop">
@@ -126,7 +126,7 @@
                                 Номер телефона
                             </div>
                             <div class="propertyblock_rev__prop__val">
-                                7 920 145 78 98
+                                {{good.customer.phone_number}}
                             </div>
                         </div>
                     </div>
@@ -190,18 +190,18 @@
         <section class="main-block">
             <div class="card-main-info">
                 <div class="card-main-info__title">
-                    <h1>Acer Aspire 3 A317-32-P6WW</h1>
+                    <h1>{{good.brand.name}} {{good.model.name}}</h1>
                 </div>
                 <div class="card-main-info__seller-name">
-                    Валентина Петровна
+                    {{good.customer.name}}
                 </div>
                 <div class="card-main-info__seller-phone">
-                    7 920 145 78 98
+                    {{good.customer.phone_number}}
                 </div>
                 <div class="propertyblock">
                     <div class="propertyblock__description">
                         <textarea name="" class="good_description" id="" cols="30" rows="10"
-                            placeholder="Введите описание..."></textarea>
+                            placeholder="Введите описание..." readonly>{{good.description}}</textarea>
                     </div>
                     <div class="card-main-info__msg-block">
                         <div class="card-main-info__input-block">
