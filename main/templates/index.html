@@ -65,7 +65,12 @@
                             </div>
                         </div>
                         <div class="propertyblock__prop-add">
+                            <div class="propertyblock__prop-add__text">
+                                Добавить характеристику
+                            </div>
+                            <div class="propertyblock__prop-add__icon">
 
+                            </div>
                         </div>
                     </div>
                     <div class="propertyblock">
@@ -81,7 +86,12 @@
                             </div>
                         </div>
                         <div class="propertyblock__prop-add">
+                            <div class="propertyblock__prop-add__text">
+                                Добавить характеристику
+                            </div>
+                            <div class="propertyblock__prop-add__icon">
 
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -159,6 +169,14 @@
                                 NVIDIA GeForce GTX 1650 — 4096 Мб
                             </div>
                         </div>
+                        <div class="propertyblock__prop-add" onclick="openModalProp()">
+                            <div class="propertyblock__prop-add__text">
+                                Добавить характеристику
+                            </div>
+                            <div class="propertyblock__prop-add__icon">
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -170,11 +188,9 @@
                     Фото внешний вид
                 </div>
                 <div class="photo_view__img-wrapper">
-                    <div class="photo_view__img-wrapper__photo">
-
-                    </div>
-                    <div class="photo_view__img-wrapper__new">
-
+                    <div class="photo_view__img-wrapper__new" id="view_photo_new">
+                        <input type="file" name="view_photos[]" id="file_views" class="inputfile" multiple />
+                        <label for="file_views"> <i class="fas fa-camera fa-3x"></i></label>
                     </div>
                 </div>
 
@@ -184,11 +200,10 @@
                     Фото тестов ноутбука
                 </div>
                 <div class="photo_view__img-wrapper">
-                    <div class="photo_view__img-wrapper__photo">
-
-                    </div>
-                    <div class="photo_view__img-wrapper__new">
-
+                    <div class="photo_view__img-wrapper__new" id="test_photo_new">
+                        <input type="file" name="tests_photos" id="file_tests" class="inputfile" onChange="myFunc(this)"
+                            multiple />
+                        <label for="file_tests"> <i class="fas fa-camera fa-3x"></i></label>
                     </div>
                 </div>
 
@@ -198,7 +213,8 @@
                     Описание товара
                 </div>
                 <div class="propertyblock__description">
-                    <textarea name="" class="good_description" id="" cols="30" rows="10" placeholder="Введите описание..."></textarea>
+                    <textarea name="" class="good_description" id="" cols="30" rows="10"
+                        placeholder="Введите описание..."></textarea>
                 </div>
                 <div class="propertyblock__btn">
                     <button class="def_btn">Отправить</button>
@@ -208,4 +224,27 @@
     </div>
 
 </div>
-{%csrf_token%} {% endblock content %}
+
+{%csrf_token%}
+{% endblock content %}
+{% block scripts %}
+<script>
+    function readURL(input, group) {
+        $(input.files).each(function (i, el) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('<div class="photo_view__img-wrapper__photo"><img src="' + e.target.result + '" class="img_def"></div>').insertBefore('#' + group);
+                // $('<img>').attr('src', e.target.result)
+            };
+            reader.readAsDataURL(input.files[i]);
+        });
+    }
+
+    $("#file_tests").change(function () {
+        readURL(this, 'test_photo_new');
+    });
+    $("#file_views").change(function () {
+        readURL(this, 'view_photo_new');
+    });
+</script>
+{% endblock scripts %}

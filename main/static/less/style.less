@@ -99,6 +99,30 @@ textarea:focus, input:focus {
             padding-bottom: 5px;
             border-bottom: 1px solid @light_green;
         }
+        &-add {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 30px;
+            padding: 10px 5px;
+            border: 1px dashed #9CBDD0;
+            transition: .2s;
+            cursor: pointer;
+            &__text {
+                font-size: 18px;
+                color: #898989;
+            }
+            &__icon {
+                font-size: 24px;
+                width: 30px;
+                height: 30px;
+                padding: 5px;
+                border: 1px dashed #9CBDD0;
+            }
+            &:hover {
+                border: 1px dashed rgb(125, 174, 202);
+            }
+        }
         & + & {
             
         }
@@ -163,18 +187,50 @@ textarea:focus, input:focus {
         padding: 10px 20px 10px 10px;
         display: flex;
         justify-content: flex-start;
+        flex-wrap: wrap;
         &__photo {
             border: 1px dashed #9CBDD0;
+            border-radius: 5px;
             width: 100px;
             height: 100px;
             margin: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         &__new {
             border: 1px dashed #9CBDD0;
+            border-radius: 5px;
             width: 100px;
             height: 100px;
             margin: 10px;
-            background: url('../images/add_photo.png') no-repeat center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            // background: url('../images/add_photo.png') no-repeat center;
+            .inputfile {
+                width: 0.1px;
+                height: 0.1px;
+                opacity: 0;
+                overflow: hidden;
+                position: absolute;
+                z-index: -1;
+
+            }
+            .inputfile + label {
+                font-size: 14px;
+                font-weight: 400;
+                display: inline-block;
+                cursor: pointer;
+                text-align: center;
+                transition: .4s;
+                // background: url('../images/add_photo.png') no-repeat center;
+            }
+            
+            .inputfile:focus + label,
+            .inputfile + label:hover {
+                color: darken(@light_blue, 20%);
+            }
         }
 
     }
@@ -183,7 +239,8 @@ textarea:focus, input:focus {
     }
 }
 .img_def {
-    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
     border-radius: 5px;
 }
 .container {
@@ -231,6 +288,7 @@ textarea:focus, input:focus {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            
             &__photo {
                 width: 35px;
                 height: 35px;
@@ -240,8 +298,53 @@ textarea:focus, input:focus {
                 width: 100%;
                 border-radius: 50%;
             }
+            &__name {
+                cursor: pointer;
+            }
             &__modal {
                 margin-left: 15px;
+                position: relative;
+                display: inline-block;
+                &-content {
+                    display: none;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    position: absolute;
+                    left: -220px;
+                    top: 30px;
+                    min-width: 240px;
+                    overflow: auto;
+                    background: #FFFFFF;
+                    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+                    border-radius: 0px 0px 10px 10px;
+                    padding: 5px;
+                    z-index: 1;
+                    a {
+                        color: @black;
+                        text-decoration: none;
+                        padding: 1px 0;
+                        transition: .4s;
+                        &:hover {
+                            color: darken(@light_blue, 20%);
+                        }
+                    }
+                }
+                hr {
+                    border-top: 1px solid @light_blue;
+                    width: 90%;
+                }
+                .profile-menu__branch {
+                    font-weight: 400;
+                    font-size: 12px;
+                    color: #898989;
+                }
+                .profile-menu__branch__balance {
+                    padding-top: 3px;
+                    font-weight: 400;
+                    font-size: 14px;
+                    color: #898989;
+                }
             }
         }
     }
@@ -275,18 +378,23 @@ textarea:focus, input:focus {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            width: 400px;
         }
         &-item {
             display: flex;
             flex-direction: column;
             padding: 7px;
-            width: 150px;
+            min-width: 200px;
+            max-width: 300px;
+            max-height: 200px;
+            
             &__checks {
-                border: 1px solid #E6E4E7;
+                border: 1px solid @boloto;
                 border-radius: 5px;
                 padding: 5px;
                 font-size: 14px;
+                overflow-y: auto;
+                overflow-x: hidden;
+                min-height: 150px;
             }
         }
     }
@@ -423,4 +531,10 @@ textarea:focus, input:focus {
             }
         }
     }
+}
+.disabled_input {
+    color: #b8b8b8;
+}
+.show {
+    display: flex;
 }

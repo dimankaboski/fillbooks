@@ -54,7 +54,20 @@
                                     <img src="{{ STATIC_URL }}images/andrdiva.jpg" class="profile_avatar" alt="">
                                 </div>
                                 <div class="header__menu__profile__name">Максим Жирцепс</div>
-                                <div class="header__menu__profile__modal"><i class="fas fa-angle-down"></i></div>
+                                <div class="header__menu__profile__modal">
+                                    <i class="fas fa-angle-down"></i>
+                                    <div class="header__menu__profile__modal-content">
+                                        <span class="profile-menu__branch">Санкт-Петербург</span>
+                                        <span class="profile-menu__branch__balance">Баланс филиала: 1 234 000.00
+                                            руб</span>
+                                        <hr>
+                                        <a href="#">Список товаров</a>
+                                        <a href="#">Товары на оценке</a>
+                                        <a href="#">Отгрузка товара</a>
+                                        <hr>
+                                        <a href="#">Выход</a>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
@@ -73,7 +86,10 @@
         </main>
     </div>
     <div class="modal">
-        <div class="modal__close"><i class="fas fa-times fa-2x"></i></div>
+        <div class="modal__close">
+            <div class="modal__title">Добавление характеристики</div>
+            <i class="fas fa-times fa-2x" onclick="closeModalProp()"></i>
+        </div>
         <div class="modal__data">
             <div class="modal__data__title">
                 Характеристика
@@ -94,6 +110,16 @@
     <script src="{{ STATIC_URL }}js/angularjs/angular.js"></script>
     <script src="{{ STATIC_URL }}js/fillbooks_angular.js"></script>
     <script src="{{ STATIC_URL }}js/main.js"></script>
+    <script>
+        function myFunction() {
+            document.getElementsByClassName("header__menu__profile__modal-content")[0].classList.toggle("show");
+        }
+        var profile_block = document.getElementsByClassName('header__menu__profile__name')[0];
+        console.log(profile_block);
+        profile_block.onclick = function () {
+            myFunction();
+        };
+    </script>
     {% block scripts %}
 
     {% endblock scripts %}
