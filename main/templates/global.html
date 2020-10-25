@@ -47,7 +47,7 @@
                                 </div>
                             </div>
                             <div class="header__menu__addGood">
-                                <div class="add_btn">Добавить товар</div>
+                                <div class="add_btn" id="add_new_good">Добавить товар</div>
                             </div>
                             <div class="header__menu__profile">
                                 <div class="header__menu__profile__photo">
@@ -119,6 +119,40 @@
         profile_block.onclick = function () {
             myFunction();
         };
+        $('#add_new_good').click(function () {
+            var json = []
+            json.push({
+                'name': 'Экран ноутбука',
+                'propertys': {
+                    'Диагональ экрана': '17.3 "',
+                    'Разрешение экрана': '1600×900',
+                    'Частота обновления': '144 Гц',
+                    'Тип матрицы': 'IPS',
+                },
+            })
+            json.push({
+                'name': 'Конфигурация ноутбука',
+                'propertys': {
+                    'Процессор': 'Intel Core i5 9300H',
+                    'Частота процессора': '2.4 ГГц (4.1 ГГц, в режиме Turbo)',
+                    'Количество ядер': 'четырехъядерный',
+                },
+            })
+            console.log(json);
+            var data = new FormData();
+            data.append("propertyBlocks", JSON.stringify(json));
+            console.log(data);
+            fetch("/good_create", {
+                method: "POST",
+                body: data,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+
+
+            });
+        })
     </script>
     {% block scripts %}
 

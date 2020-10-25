@@ -178,9 +178,19 @@
                             </div>
                         </div>
                     </div>
+
+                </div>
+
+            </div>
+            <hr>
+            <div class="blockPropertys-add" onclick="openModalProp()">
+                <div class="blockPropertys-add__text">
+                    Добавить блок характеристик
+                </div>
+                <div class="blockPropertys-add__icon">
+
                 </div>
             </div>
-
         </section>
         <section class="main-block">
             <div class="photo_view">
@@ -246,5 +256,7 @@
     $("#file_views").change(function () {
         readURL(this, 'view_photo_new');
     });
+
+
 </script>
 {% endblock scripts %}
