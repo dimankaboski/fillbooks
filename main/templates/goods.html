@@ -26,7 +26,7 @@
                             {{good.status}}
                         </div>
                         <div class="good-item-info-add__same">
-                            <span class="color_light_gr">Похожие:</span> 5
+                            
                         </div>
                     </div>
                 </div>
@@ -298,7 +298,7 @@
                 return response.json();
             }).then(function (data) {
                 let unique = [...new Set(data.branchs.map(li => li.branch))]
-                console.log(unique);
+                console.log(data);
             });
         }
 

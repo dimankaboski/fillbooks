@@ -96,7 +96,7 @@ class CheckStatus(View):
         if request.POST:
             json_string = json.loads(request.POST['json'])
             status = json_string['status']
-            goods = goods.filter(status__in=status).values('brand')
+            goods = goods.filter(status__in=status)
             brands = goods.values('brand')
             branchs = goods.values('branch')
             context = {'brands': list(brands), 'branchs': list(branchs)}

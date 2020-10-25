@@ -288,6 +288,7 @@ textarea:focus, input:focus {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            
             &__photo {
                 width: 35px;
                 height: 35px;
@@ -297,8 +298,53 @@ textarea:focus, input:focus {
                 width: 100%;
                 border-radius: 50%;
             }
+            &__name {
+                cursor: pointer;
+            }
             &__modal {
                 margin-left: 15px;
+                position: relative;
+                display: inline-block;
+                &-content {
+                    display: none;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    position: absolute;
+                    left: -220px;
+                    top: 30px;
+                    min-width: 240px;
+                    overflow: auto;
+                    background: #FFFFFF;
+                    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+                    border-radius: 0px 0px 10px 10px;
+                    padding: 5px;
+                    z-index: 1;
+                    a {
+                        color: @black;
+                        text-decoration: none;
+                        padding: 1px 0;
+                        transition: .4s;
+                        &:hover {
+                            color: darken(@light_blue, 20%);
+                        }
+                    }
+                }
+                hr {
+                    border-top: 1px solid @light_blue;
+                    width: 90%;
+                }
+                .profile-menu__branch {
+                    font-weight: 400;
+                    font-size: 12px;
+                    color: #898989;
+                }
+                .profile-menu__branch__balance {
+                    padding-top: 3px;
+                    font-weight: 400;
+                    font-size: 14px;
+                    color: #898989;
+                }
             }
         }
     }
@@ -488,4 +534,7 @@ textarea:focus, input:focus {
 }
 .disabled_input {
     color: #b8b8b8;
+}
+.show {
+    display: flex;
 }
