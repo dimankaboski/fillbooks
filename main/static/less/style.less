@@ -86,8 +86,29 @@ textarea:focus, input:focus {
         display: flex;
         flex-direction: column;
         padding: 10px 30px;
-        
         font-size: 18px;
+        
+        &-key__input {
+            font-family: inherit;
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid @light_grey;
+            color: #898989;
+            font-size: 18px;
+            padding-top: 10px;
+            padding-bottom: 5px;
+        }
+        &-value__input {
+            font-size: 18px;
+            font-family: inherit;
+            background-color: transparent;
+            border: none;
+            color: @black;
+            padding-left: 15px;
+            padding-top: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid @light_green;
+        }
         &__key {
             color: @light_grey;
             

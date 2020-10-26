@@ -6,7 +6,7 @@
     <div class="main">
         <section class="main-block">
             <div class="flex-row-wrapper">
-                <div class="flex-row-wrapper-block">
+                <div class="flex-row-wrapper-block" id="propertiesBlock_list">
                     <div class="propertyblock">
                         <div class="propertyblock__title">
                             Модель ноутбука
@@ -64,7 +64,11 @@
                                 IPS
                             </div>
                         </div>
-                        <div class="propertyblock__prop-add">
+                        <div class="propertyblock__prop">
+                            <input type="text" class="propertyblock__prop-key__input">
+                            <input type="text" class="propertyblock__prop-value__input">
+                        </div>
+                        <div class="propertyblock__prop-add" onclick="addPropertyInputs(this)">
                             <div class="propertyblock__prop-add__text">
                                 Добавить характеристику
                             </div>
@@ -85,7 +89,7 @@
                                 512 Гб
                             </div>
                         </div>
-                        <div class="propertyblock__prop-add">
+                        <div class="propertyblock__prop-add" onclick="addPropertyInputs(this)">
                             <div class="propertyblock__prop-add__text">
                                 Добавить характеристику
                             </div>
@@ -95,7 +99,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex-row-wrapper-block">
+                <div class="flex-row-wrapper-block" id="propertiesBlock_list_rev">
                     <div class="propertyblock_rev">
                         <div class="propertyblock_rev__title">
                             Продавец
@@ -169,7 +173,7 @@
                                 NVIDIA GeForce GTX 1650 — 4096 Мб
                             </div>
                         </div>
-                        <div class="propertyblock__prop-add" onclick="openModalProp()">
+                        <div class="propertyblock__prop-add" onclick="addPropertyInputs(this)">
                             <div class="propertyblock__prop-add__text">
                                 Добавить характеристику
                             </div>
@@ -183,7 +187,7 @@
 
             </div>
             <hr>
-            <div class="blockPropertys-add" onclick="openModalProp()">
+            <div class="blockPropertys-add" onclick="openModalPropBlock()">
                 <div class="blockPropertys-add__text">
                     Добавить блок характеристик
                 </div>
@@ -239,6 +243,13 @@
 {% endblock content %}
 {% block scripts %}
 <script>
+    function addPropertyInputs(element) {
+        console.log(element)
+        $(element).before(`<div class="propertyblock__prop">
+                            <input type="text" class="propertyblock__prop-key__input">
+                            <input type="text" class="propertyblock__prop-value__input">
+                        </div>`);
+    }
     function readURL(input, group) {
         $(input.files).each(function (i, el) {
             var reader = new FileReader();
