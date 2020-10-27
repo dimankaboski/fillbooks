@@ -1,17 +1,16 @@
 from django.shortcuts import render
 from django.views.generic import ListView, View, TemplateView
-from main.models import Goods, GoodsBrand, GoodsModel
+from main.models import Goods, GoodsBrand, GoodsModel, PropertyBlock, Property, PropertyValue, PropertyBlockName, PropertyName
 from accounts.models import Branch, User
-from django.http import HttpResponse, JsonResponse, Http404
+from django.http import HttpResponse, JsonResponse, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from main.const import *
 import json
-
+import random
+import string
+import datetime
+from django.urls import reverse_lazy
 # Create your views here.
-def index(request):
-    return render(request, 'index.html', context={})
 
-def goods(request):
-    return render(request, 'goods.html', context={})
 
 def check_status(goods):
     is_await = True if goods.filter(status=GOOD_STATUS_AWAIT) else False
@@ -20,9 +19,23 @@ def check_status(goods):
     is_priced = True if goods.filter(status=GOOD_STATUS_PRICED) else False
     return {'is_await': is_await, 'is_reject':is_reject, 'is_purchase':is_purchase, 'is_priced':is_priced}
 
+def generate_id():
+    good_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+    try:
+        is_exist = Goods.objects.get(good_id=good_id)
+    except Goods.DoesNotExist:
+
+        return good_id
+    generate_id()
+
 class GoodView(TemplateView):
     template_name = 'good_card.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponsePermanentRedirect(reverse_lazy('login'))
+        return super().dispatch(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
 
         good_id = self.kwargs.get('good_id')
@@ -40,7 +53,12 @@ class GoodsListView(ListView):
 
     template_name = 'goods.html'
     model = Goods
-    
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponsePermanentRedirect(reverse_lazy('login'))
+        return super().dispatch(request, *args, **kwargs)
+
     def get_queryset(self):
         if self.request.GET:
             queryset = Goods.objects.all()
@@ -180,11 +198,36 @@ class BranchInfo(View):
         return HttpResponse('Blank query', status=400)
 
 
-def login(request):
-    return render(request, 'login.html', context={})
+class GoodCreateView(View):
+    template_name = 'index.html'
 
-def good_card(request):
-    return render(request, 'good_card.html', context={})
 
-def register(request):
-    return render(request, 'register.html', context={})
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponsePermanentRedirect(reverse_lazy('login'))
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, context={})
+
+    def post(self, request, *args, **kwargs):
+        if request.POST:
+            q = datetime.datetime.now()
+            json_string = json.loads(request.POST['propertyBlocks'])
+            for property_block in json_string:
+                prop_list = []
+                block_name, block_name_created = PropertyBlockName.objects.get_or_create(name=property_block['name'])
+                for properties_key in property_block['propertys']:
+                    property_name, property_name_created = PropertyName.objects.get_or_create(name=properties_key)
+                    property_value, property_value_created = PropertyValue.objects.get_or_create(value=property_block['propertys'][properties_key])
+                    properti, properti_created = Property.objects.get_or_create(name=property_name, value=property_value)
+                    prop_list.append(properti)
+                block = PropertyBlock.objects.create(name=block_name)
+                block.properties.add(*prop_list)
+                block.save()
+            good_id = generate_id()
+            q2 = datetime.datetime.now()
+            print(good_id, q2-q)
+            return HttpResponseRedirect('goods')
+        return HttpResponse('Пустая форма', status=400)
+

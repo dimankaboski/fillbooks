@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from accounts.models import *
-from accounts.forms import AdminUserChangeForm, AdminUserAddForm
+from accounts.forms import AdminUserChangeForm, RegisterUserForm
 # Register your models here.
 
 class UserAdmin(BaseUserAdmin):
     form = AdminUserChangeForm
-    add_form = AdminUserAddForm
+    add_form = RegisterUserForm
     list_display = ('username','first_name', 'last_name', 'position', 'branch')
     readonly_fields =('last_login', 'date_joined')
     search_fields = ('username', 'first_name', 'last_name', 'email', 'branch', 'position')
@@ -19,7 +19,7 @@ class UserAdmin(BaseUserAdmin):
             'email',
             'position', 
             'branch',
-            'is_admin'
+            'is_staff'
         )}),
         # (('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
         #                                'groups', 'user_permissions')}),

@@ -86,8 +86,29 @@ textarea:focus, input:focus {
         display: flex;
         flex-direction: column;
         padding: 10px 30px;
-        
         font-size: 18px;
+        
+        &-key__input {
+            font-family: inherit;
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid @light_grey;
+            color: #898989;
+            font-size: 18px;
+            padding-top: 10px;
+            padding-bottom: 5px;
+        }
+        &-value__input {
+            font-size: 18px;
+            font-family: inherit;
+            background-color: transparent;
+            border: none;
+            color: @black;
+            padding-left: 15px;
+            padding-top: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid @light_green;
+        }
         &__key {
             color: @light_grey;
             
@@ -170,8 +191,19 @@ textarea:focus, input:focus {
             
         }
     }
+    input {
+        text-align: right;
+    }
     & + & {
         margin-top: 15px;
+    }
+    .propertyblock__prop-add {
+        &__text {
+            order: 2;
+        }
+        &__icon {
+            order: 1;
+        }
     }
 }
 .photo_view {
@@ -264,6 +296,7 @@ textarea:focus, input:focus {
         &__notification {
             text-align: center;
             position: relative;
+            cursor: pointer;
             &__count {
                 display: flex;
                 justify-content: center;
@@ -277,6 +310,34 @@ textarea:focus, input:focus {
                 width: 16px;
                 height: 16px;
                 background-color: #D65252;
+            }
+
+            &__modal-content {
+                display: none;
+                flex-direction: column;
+                justify-content: flex-start;
+                position: absolute;
+                margin-left: -100px;
+                text-align: center;
+                top: 60px;
+                min-width: 240px;
+                max-height: 200px;
+                overflow: auto;
+                background: #FFFFFF;
+                color: @black;
+                box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+                border-radius: 0px 0px 10px 10px;
+                padding: 5px;
+                z-index: 1;
+                hr {
+                    border-top: 1px solid @light_blue;
+                    width: 90%;
+                }
+            }
+            &__modal-item {
+                display: flex;
+                justify-content: center;
+                
             }
         }
         &__addGood {
@@ -532,9 +593,105 @@ textarea:focus, input:focus {
         }
     }
 }
+.blockPropertys {
+    &-add {
+        display: inline-block;
+        background-color: @light_green;
+        border-radius: 0px 5px 5px 0px;
+        padding: 10px 30px;
+        min-width: 250px;
+        font-size: 18px;
+        font-weight: 500;
+    }
+}
 .disabled_input {
     color: #b8b8b8;
 }
 .show {
     display: flex;
+}
+.description_notebook {
+    &__title {
+        display: inline-block;
+        background-color: @boloto;
+        border-radius: 0px 5px 5px 0px;
+        padding: 10px 30px;
+        min-width: 250px;
+        font-size: 18px;
+        font-weight: 500;
+    }
+    &__prop {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 30px;
+        font-size: 18px;
+        
+        &-key__input {
+            font-family: inherit;
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid @light_grey;
+            color: #898989;
+            font-size: 18px;
+            padding-top: 10px;
+            padding-bottom: 5px;
+        }
+        &-value__input {
+            font-size: 18px;
+            font-family: inherit;
+            background-color: transparent;
+            border: none;
+            color: @black;
+            padding-left: 15px;
+            padding-top: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid @light_green;
+        }
+        &__key {
+            color: @light_grey;
+            
+        }
+        &__val {
+            color: @black;
+            padding-left: 15px;
+            padding-top: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid @light_green;
+        }
+        &-add {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 30px;
+            padding: 10px 5px;
+            border: 1px dashed #9CBDD0;
+            transition: .2s;
+            cursor: pointer;
+            &__text {
+                font-size: 18px;
+                color: #898989;
+            }
+            &__icon {
+                font-size: 24px;
+                width: 30px;
+                height: 30px;
+                padding: 5px;
+                border: 1px dashed #9CBDD0;
+            }
+            &:hover {
+                border: 1px dashed rgb(125, 174, 202);
+            }
+        }
+        & + & {
+            
+        }
+    }
+    &__btn {
+        float: right;
+        padding-top: 10px;
+        padding-right: 30px;
+    }
+    & + & {
+        margin-top: 15px;
+    }
 }

@@ -1,0 +1,21 @@
+{% extends "login_template.html" %} {% load compress %} {% block content %}
+<div class="login_bg__main">
+    <div class="login_bg__main-header">
+        <div class="login_bg__main-header__title">
+            Войти в аккаунт
+        </div>
+        <div class="login_bg__main-header__logo">
+            <img src="{{ STATIC_URL }}images/goose.png" width="80px" alt="">
+        </div>
+    </div>
+    <form action='login' method='POST'>
+        {% csrf_token %}
+        <div class="login_bg__main-form">
+            {% for field in form %}
+                {{ field }}
+            {% endfor %}
+            <button type='submit' class="login_btn">Авторизация</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}
