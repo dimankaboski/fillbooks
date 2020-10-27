@@ -2,18 +2,15 @@ from django.shortcuts import render
 from django.views.generic import ListView, View, TemplateView
 from main.models import Goods, GoodsBrand, GoodsModel, PropertyBlock, Property, PropertyValue, PropertyBlockName, PropertyName
 from accounts.models import Branch, User
-from django.http import HttpResponse, JsonResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, JsonResponse, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from main.const import *
 import json
 import random
 import string
 import datetime
+from django.urls import reverse_lazy
 # Create your views here.
-def index(request):
-    return render(request, 'index.html', context={})
 
-def goods(request):
-    return render(request, 'goods.html', context={})
 
 def check_status(goods):
     is_await = True if goods.filter(status=GOOD_STATUS_AWAIT) else False
@@ -34,6 +31,11 @@ def generate_id():
 class GoodView(TemplateView):
     template_name = 'good_card.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponsePermanentRedirect(reverse_lazy('login'))
+        return super().dispatch(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
 
         good_id = self.kwargs.get('good_id')
@@ -51,7 +53,12 @@ class GoodsListView(ListView):
 
     template_name = 'goods.html'
     model = Goods
-    
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponsePermanentRedirect(reverse_lazy('login'))
+        return super().dispatch(request, *args, **kwargs)
+
     def get_queryset(self):
         if self.request.GET:
             queryset = Goods.objects.all()
@@ -193,9 +200,11 @@ class BranchInfo(View):
 
 class GoodCreateView(View):
     template_name = 'index.html'
+
+
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            raise Http404('Сначала авторзируйтесь')
+            return HttpResponsePermanentRedirect(reverse_lazy('login'))
         return super().dispatch(request, *args, **kwargs)
     
     def get(self, request, *args, **kwargs):
@@ -222,11 +231,3 @@ class GoodCreateView(View):
             return HttpResponseRedirect('goods')
         return HttpResponse('Пустая форма', status=400)
 
-def login(request):
-    return render(request, 'login.html', context={})
-
-def good_card(request):
-    return render(request, 'good_card.html', context={})
-
-def register(request):
-    return render(request, 'register.html', context={})
