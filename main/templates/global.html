@@ -192,7 +192,7 @@
         }
         function propertyInput_string(name, rev = false) {
             if (rev == true) {
-                return `<div class="propertyblock_rev">
+                return `<div class="propertyblock_rev prop_block">
                     <div class="propertyblock_rev__title">
                         ${name}
                     </div>
@@ -208,7 +208,7 @@
             }
             else {
                 return `
-                    <div class="propertyblock">
+                    <div class="propertyblock prop_block">
                         <div class="propertyblock__title">
                             ${name}
                         </div>
