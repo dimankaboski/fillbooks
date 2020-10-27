@@ -122,16 +122,16 @@
 
         let propertyBlocks = document.getElementsByClassName('prop_block')
 
-        json['propertyBlocks'] = {}
+        json['propertyBlocks'] = []
         $(propertyBlocks).each(function () {
             let propertiesList = {};
             $(this).children('.propertyblock__prop').each(function () {
                 propertiesList[this.childNodes[1].value] = this.childNodes[3].value
             });
-            json['propertyBlocks'] = {
+            json['propertyBlocks'].push({
                 'name': this.childNodes[1].innerText,
                 'properties': propertiesList,
-            }
+            })
         })
         console.log(json)
         data.append("propertyBlocks", JSON.stringify(json));
