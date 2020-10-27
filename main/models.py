@@ -40,30 +40,46 @@ class PropertyValue(models.Model):
     def __str__(self):
         return self.value
 
+class PropertyName(models.Model):
+    name = models.CharField(verbose_name="Характеристка", max_length=50, unique=True)
+    class Meta:
+        verbose_name = ("Название характеристик")
+        verbose_name_plural = ("Список названий характеристик")
+
+    def __str__(self):
+        return self.name
 
 class Property(models.Model):
 
-    name = models.CharField(verbose_name="Характеристка", max_length=50, unique=True)
+    name = models.ForeignKey(PropertyName, on_delete=models.CASCADE)
     value = models.ForeignKey(PropertyValue, on_delete = models.CASCADE, blank=True, null=True)
     class Meta:
         verbose_name = ("Характеристика")
         verbose_name_plural = ("Список характеристик")
 
     def __str__(self):
+        return self.name.name
+
+
+class PropertyBlockName(models.Model):
+    name = models.CharField(verbose_name="Блок характеристик", max_length=50, unique=True)
+    class Meta:
+        verbose_name = ("Название блока характеристик")
+        verbose_name_plural = ("Список названий блоков характеристик")
+
+    def __str__(self):
         return self.name
-
-
 
 class PropertyBlock(models.Model):
 
-    name = models.CharField(verbose_name="Блок характеристик", max_length=50, unique=True)
+    name = models.ForeignKey(PropertyBlockName, on_delete=models.CASCADE)
     properties = models.ManyToManyField(Property, verbose_name="Характеристики")
     class Meta:
         verbose_name = ("Блок характеристик")
         verbose_name_plural = ("Список блоков характеристик")
 
     def __str__(self):
-        return self.name
+        return self.name.name
 
 
 class Customers(models.Model):
@@ -82,7 +98,7 @@ class Customers(models.Model):
 
 
 class Goods(models.Model):
-    good_id = models.CharField(verbose_name="ID товара", max_length=16, unique=True)
+    good_id = models.CharField(verbose_name="ID товара", max_length=6, unique=True)
     brand = models.ForeignKey(GoodsBrand, verbose_name="Производитель", on_delete=models.CASCADE)
     model = models.ForeignKey(GoodsModel, verbose_name="Модель", on_delete=models.CASCADE)
     user = models.ForeignKey(User, verbose_name="Добавивший пользователь", on_delete=models.CASCADE)
@@ -99,3 +115,4 @@ class Goods(models.Model):
 
     def __str__(self):
         return self.good_id
+
