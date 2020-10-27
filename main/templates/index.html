@@ -61,35 +61,22 @@
         <section class="main-block">
             <div class="photo_view">
                 <div class="photo_view__title">
-                    Фото внешний вид
+                    Фото внешнего вида и тестов ноутбука
                 </div>
                 <div class="photo_view__img-wrapper">
                     <div class="photo_view__img-wrapper__new" id="view_photo_new">
-                        <input type="file" name="view_photos[]" id="file_views" class="inputfile" multiple />
+                        <input type="file" name="view_photos" id="file_views" class="inputfile" multiple />
                         <label for="file_views"> <i class="fas fa-camera fa-3x"></i></label>
                     </div>
                 </div>
-
             </div>
-            <div class="photo_view">
-                <div class="photo_view__title">
-                    Фото тестов ноутбука
-                </div>
-                <div class="photo_view__img-wrapper">
-                    <div class="photo_view__img-wrapper__new" id="test_photo_new">
-                        <input type="file" name="tests_photos" id="file_tests" class="inputfile" onChange="myFunc(this)"
-                            multiple />
-                        <label for="file_tests"> <i class="fas fa-camera fa-3x"></i></label>
-                    </div>
-                </div>
 
-            </div>
             <div class="description_notebook">
                 <div class="description_notebook__title">
                     Описание товара
                 </div>
                 <div class="description_notebook__description">
-                    <textarea name="" class="good_description" id="" cols="30" rows="10"
+                    <textarea name="notebook_description" class="good_description" id="" cols="30" rows="10"
                         placeholder="Введите описание..."></textarea>
                 </div>
                 <div class="description_notebook__btn">
@@ -116,7 +103,7 @@
         $(input.files).each(function (i, el) {
             var reader = new FileReader();
             reader.onload = function (e) {
-                $('<div class="photo_view__img-wrapper__photo"><img src="' + e.target.result + '" class="img_def"></div>').insertBefore('#' + group)д;
+                $('<div class="photo_view__img-wrapper__photo"><img src="' + e.target.result + '" class="img_def"></div>').insertBefore('#' + group);
             };
             reader.readAsDataURL(input.files[i]);
         });
@@ -131,12 +118,14 @@
 
     $('#post_new_notebook').click(function () {
         json = {}
+        var data = new FormData();
+
         let propertyBlocks = document.getElementsByClassName('prop_block')
-        console.log(propertyBlocks)
+
         json['propertyBlocks'] = []
         $(propertyBlocks).each(function () {
             let propertiesList = {};
-            $(this).children('.propertyblock__prop').each(function(){
+            $(this).children('.propertyblock__prop').each(function () {
                 propertiesList[this.childNodes[1].value] = this.childNodes[3].value
             });
             json['propertyBlocks'].push({
@@ -144,7 +133,23 @@
                 'properties': propertiesList,
             })
         })
-        console.log(json)
+        data.append("propertyBlocks", JSON.stringify(json));
+        data.append("notebook_brand", document.getElementsByName('notebook_brand')[0].value);
+        data.append("notebook_model", document.getElementsByName('notebook_model')[0].value);
+        data.append("seller_name", document.getElementsByName('seller_name')[0].value);
+        data.append("seller_phone", document.getElementsByName('seller_phone')[0].value);
+        data.append("notebook_description", document.getElementsByName('notebook_description')[0].value);
+        data.append('notebook_images', document.getElementsByName('view_photos')[0].files);
+
+        fetch("/good_create", {
+            method: "POST",
+            body: data,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (data) {
+
+        });
 
     })
 </script>

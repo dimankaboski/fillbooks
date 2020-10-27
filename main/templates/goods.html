@@ -215,7 +215,6 @@
     $('#testclick').click(function (e) {
         var myData = {};
         myData.branch_id = 2;
-        let csrftoken = getCookie('csrftoken');
         console.log(myData);
         var data = new FormData();
         // data.append("json", JSON.stringify(myData));
@@ -224,7 +223,7 @@
         fetch("/api/branch_info", {
             method: "POST",
             body: data,
-            headers: { 'X-CSRFToken': csrftoken }
+            headers: { 'X-CSRFToken': getCookie('csrftoken') }
         }).then(function (response) {
             return response.json();
         }).then(function (data) {

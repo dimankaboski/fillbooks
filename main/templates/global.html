@@ -46,6 +46,38 @@
                                     3
                                 </div>
                             </div>
+                            <div class="header__menu__notification__modal-content">
+                                <div class="header__menu__notification__modal-item">
+                                    <i class="fas fa-exclamation" style="width: 10%; color: rgb(221, 85, 85);"></i>
+                                    <span style="width: 90%; font-size: 12px;">Notification 1</span>
+                                </div>
+                                <hr>
+                                <div class="header__menu__notification__modal-item">
+                                    <i class="fas fa-exclamation" style="width: 10%; color: rgb(221, 85, 85);"></i>
+                                    <span style="width: 90%; font-size: 12px;">Notification 2</span>
+                                </div>
+                                <hr>
+                                <div class="header__menu__notification__modal-item">
+                                    <i class="fas fa-exclamation" style="width: 10%; color: rgb(221, 85, 85);"></i>
+                                    <span style="width: 90%; font-size: 12px;">Notification 2</span>
+                                </div>
+                                <hr>
+                                <div class="header__menu__notification__modal-item">
+                                    <i class="fas fa-exclamation" style="width: 10%; color: rgb(221, 85, 85);"></i>
+                                    <span style="width: 90%; font-size: 12px;">Notification 2</span>
+                                </div>
+                                <hr>
+                                <div class="header__menu__notification__modal-item">
+                                    <i class="fas fa-exclamation" style="width: 10%; color: rgb(221, 85, 85);"></i>
+                                    <span style="width: 90%; font-size: 12px;">Notification 2</span>
+                                </div>
+                                <hr>
+                                <div class="header__menu__notification__modal-item">
+                                    <i class="fas fa-exclamation" style="width: 10%; color: rgb(221, 85, 85);"></i>
+                                    <span style="width: 90%; font-size: 12px;">Notification 2</span>
+                                </div>
+                                <hr>
+                            </div>
                             <div class="header__menu__addGood">
                                 <div class="add_btn" id="add_new_good">Добавить товар</div>
                             </div>
@@ -123,13 +155,20 @@
     <script src="{{ STATIC_URL }}js/fillbooks_angular.js"></script>
     <script src="{{ STATIC_URL }}js/main.js"></script>
     <script>
-        function myFunction() {
+        function open_info_spoiler_profileMenu() {
             document.getElementsByClassName("header__menu__profile__modal-content")[0].classList.toggle("show");
         }
+        function open_info_spoiler_notification() {
+            document.getElementsByClassName("header__menu__notification__modal-content")[0].classList.toggle("show");
+        }
         var profile_block = document.getElementsByClassName('header__menu__profile__name')[0];
-        console.log(profile_block);
+        var notificate_block = document.getElementsByClassName('header__menu__notification')[0];
+
         profile_block.onclick = function () {
-            myFunction();
+            open_info_spoiler_profileMenu();
+        };
+        notificate_block.onclick = function () {
+            open_info_spoiler_notification();
         };
         $('#add_new_good').click(function () {
             var json = []
@@ -187,9 +226,7 @@
             $('.overlay_dark').css('display', 'none');
             $('#propertyBlock-modal').css('display', 'none');
         }
-        function test() {
-            return `test`;
-        }
+
         function propertyInput_string(name, rev = false) {
             if (rev == true) {
                 return `<div class="propertyblock_rev prop_block">
