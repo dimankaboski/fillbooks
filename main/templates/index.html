@@ -134,13 +134,18 @@
             })
         })
         console.log(json)
+        var files = document.getElementsByName('view_photos')[0].files;
         data.append("propertyBlocks", JSON.stringify(json));
         data.append("notebook_brand", document.getElementsByName('notebook_brand')[0].value);
         data.append("notebook_model", document.getElementsByName('notebook_model')[0].value);
         data.append("seller_name", document.getElementsByName('seller_name')[0].value);
         data.append("seller_phone", document.getElementsByName('seller_phone')[0].value);
         data.append("notebook_description", document.getElementsByName('notebook_description')[0].value);
-        data.append('notebook_images', document.getElementsByName('view_photos')[0].files);
+
+        for(var i=0; i<files.length; i++){
+            data.append("file_"+i, files[i]);
+            console.log(files[i]);
+        }
 
         fetch("/good_create", {
             method: "POST",
