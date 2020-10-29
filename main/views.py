@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView, View, TemplateView
-from main.models import Goods, GoodsBrand, GoodsModel, PropertyBlock, Property, PropertyValue, PropertyBlockName, PropertyName
+from main.models import Goods, GoodsBrand, GoodsModel, PropertyBlock, Property, PropertyValue, PropertyBlockName, PropertyName, Customers, Images
 from accounts.models import Branch, User
 from django.http import HttpResponse, JsonResponse, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from main.const import *
@@ -9,6 +9,9 @@ import random
 import string
 import datetime
 from django.urls import reverse_lazy
+# from pytils import translit
+import os
+from django.conf import settings
 # Create your views here.
 
 
@@ -61,8 +64,7 @@ class GoodsListView(ListView):
 
     def get_queryset(self):
         if self.request.GET:
-            queryset = Goods.objects.all()
-
+            queryset = Goods.objects.all().order_by('-create_time')
             brand = self.request.GET.get("brand")
             model = self.request.GET.get("model")
             status = self.request.GET.get("status")
@@ -84,6 +86,7 @@ class GoodsListView(ListView):
         """Get the context for this view."""
         queryset = object_list if object_list is not None else self.object_list
         page_size = self.get_paginate_by(queryset)
+        queryset = queryset.order_by('-pk')
         context_object_name = self.get_context_object_name(queryset)
         if page_size:
             paginator, page, queryset, is_paginated = self.paginate_queryset(queryset, page_size)
@@ -103,7 +106,7 @@ class GoodsListView(ListView):
         if context_object_name is not None:
             context[context_object_name] = queryset
         context.update(kwargs)
-        return super().get_context_data(**context)
+        return context
     
 
 class CheckBrand(View):
@@ -200,8 +203,7 @@ class BranchInfo(View):
 
 class GoodCreateView(View):
     template_name = 'index.html'
-
-
+        
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponsePermanentRedirect(reverse_lazy('login'))
@@ -212,22 +214,93 @@ class GoodCreateView(View):
 
     def post(self, request, *args, **kwargs):
         if request.POST:
-            q = datetime.datetime.now()
+            saved_images = []
             json_string = json.loads(request.POST['propertyBlocks'])
-            for property_block in json_string:
+            try:
+                brand_name = request.POST.get('notebook_brand').capitalize()
+                model_name = request.POST.get('notebook_model').capitalize()
+                customer_name = request.POST.get('seller_name').capitalize()
+                customer_phone = request.POST.get('seller_phone')
+            except:
+                return HttpResponse('Пустая форма', status=400)
+            good_description = request.POST.get('notebook_description')
+            block_list = []
+            for property_block in json_string['propertyBlocks']:
                 prop_list = []
                 block_name, block_name_created = PropertyBlockName.objects.get_or_create(name=property_block['name'])
-                for properties_key in property_block['propertys']:
+                for properties_key in property_block['properties']:
                     property_name, property_name_created = PropertyName.objects.get_or_create(name=properties_key)
-                    property_value, property_value_created = PropertyValue.objects.get_or_create(value=property_block['propertys'][properties_key])
+                    property_value, property_value_created = PropertyValue.objects.get_or_create(value=property_block['properties'][properties_key])
                     properti, properti_created = Property.objects.get_or_create(name=property_name, value=property_value)
                     prop_list.append(properti)
                 block = PropertyBlock.objects.create(name=block_name)
                 block.properties.add(*prop_list)
                 block.save()
+                block_list.append(block)
             good_id = generate_id()
-            q2 = datetime.datetime.now()
-            print(good_id, q2-q)
-            return HttpResponseRedirect('goods')
+            brand, brand_created = GoodsBrand.objects.get_or_create(name=brand_name)
+            model, model_created = GoodsModel.objects.get_or_create(name=model_name, brand=brand)
+            customer, customer_created = Customers.objects.get_or_create(name=customer_name, phone_number=customer_phone)
+            good = Goods.objects.create(
+                    good_id=good_id,
+                    brand=brand, model=model,
+                    user=request.user,
+                    customer=customer,
+                    branch=request.user.branch
+                )
+            if request.FILES:
+                for image in request.FILES.items():
+                    print(image)
+                    Images.objects.create(image=SaveImage(image[1], template_name=('{0}_{1}'.format(good.brand, good_id))).filename_root, good=good)      
+            good.property_block.add(*block_list)
+            good.description = good_description
+            good.save()    
+            return HttpResponse('success', status=200)
         return HttpResponse('Пустая форма', status=400)
+
+class SaveImage:
+    upload = None
+    template_name = None
+    filename = None
+    filename_root = None
+    filename_url = None
+
+    def __init__(self, upload, template_name=None):
+        self.upload = upload
+        self.template_name = template_name
+        self.response()
+        
+    def get_upload_path(self):
+        images_folder = os.path.join(settings.MEDIA_ROOT, 'images')
+        if self.template_name:
+            upload_path = os.path.join(settings.MEDIA_ROOT, os.path.join(images_folder, self.template_name))
+        else:
+            upload_path = os.path.join(settings.MEDIA_ROOT, 'trash')
+        if not os.path.exists(upload_path):
+            os.makedirs(upload_path)
+        return (self.upload.name, os.path.join(upload_path, self.upload.name), settings.MEDIA_URL + self.upload.name)
+
+    def save(self):
+        self.filename, self.filename_root, self.filename_url = self.get_upload_path()
+        with open(self.filename_root, 'wb+') as out:
+            for chunk in self.upload.chunks():
+                out.write(chunk)
+        out.close()
+
+    def response(self):
+        self.save()
+        return {'filename': self.filename, 'filename_root': self.filename_root, 'filename_url': self.filename_url}
+
+# class UploadImage(View):
+
+#     http_method_names = ['post']
+#     def dispatch(self, request, *args, **kwargs):
+#         if not request.user:
+#             raise Http404('Сначала авторизутесь')
+#         return super(UploadImage, self).dispatch(request, *args, **kwargs)
+
+    
+
+#     def post(self, request, *args, **kwargs):
+        
 

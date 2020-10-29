@@ -15,6 +15,10 @@ class GoodsBrand(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        self.name = self.name.capitalize()
+        return super(GoodsBrand, self).save(*args, **kwargs)
 
 
 class GoodsModel(models.Model):
@@ -28,6 +32,10 @@ class GoodsModel(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        self.name = self.name.capitalize()
+        return super(GoodsModel, self).save(*args, **kwargs)
+
 
 class PropertyValue(models.Model):
 
@@ -40,6 +48,10 @@ class PropertyValue(models.Model):
     def __str__(self):
         return self.value
 
+    def save(self, *args, **kwargs):
+        self.value = self.value.capitalize()
+        return super(PropertyValue, self).save(*args, **kwargs)
+
 class PropertyName(models.Model):
     name = models.CharField(verbose_name="Характеристка", max_length=50, unique=True)
     class Meta:
@@ -48,6 +60,11 @@ class PropertyName(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.name = self.name.capitalize()
+        return super(PropertyName, self).save(*args, **kwargs)
+
 
 class Property(models.Model):
 
@@ -69,6 +86,10 @@ class PropertyBlockName(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.name = self.name.capitalize()
+        return super(PropertyBlockName, self).save(*args, **kwargs)
 
 class PropertyBlock(models.Model):
 
@@ -96,6 +117,10 @@ class Customers(models.Model):
     def __str__(self):
         return self.phone_number
 
+    def save(self, *args, **kwargs):
+        self.name = self.name.capitalize()
+        return super(Customers, self).save(*args, **kwargs)
+
 
 class Goods(models.Model):
     good_id = models.CharField(verbose_name="ID товара", max_length=6, unique=True)
@@ -109,10 +134,15 @@ class Goods(models.Model):
     property_block = models.ManyToManyField(PropertyBlock, verbose_name="Блоки характеристик")
     description = models.TextField(verbose_name="Описание", blank=True, default='')
 
+
     class Meta:
         verbose_name = ("Товар")
         verbose_name_plural = ("Список товаров")
 
     def __str__(self):
         return self.good_id
+
+class Images(models.Model):
+    image = models.ImageField()
+    good = models.ForeignKey(Goods, on_delete=models.CASCADE, related_name='images')
 
