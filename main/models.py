@@ -2,6 +2,7 @@ from django.db import models
 from accounts.models import User, Branch
 from main.const import *
 from django.core.validators import RegexValidator
+from django.conf import settings
 
 # Create your models here.
 
@@ -142,7 +143,17 @@ class Goods(models.Model):
     def __str__(self):
         return self.good_id
 
+    def get_one_image(self):
+        try:
+            return self.images.all()[0]
+        except:
+            return None
+
 class Images(models.Model):
     image = models.ImageField()
     good = models.ForeignKey(Goods, on_delete=models.CASCADE, related_name='images')
 
+    def get_filename_url(self):
+        url = self.image.name.split('media/')
+        filename_url = settings.MEDIA_URL + url[1]
+        return filename_url

@@ -28,6 +28,9 @@
     &:hover {
         background-color: darken(@color, 10%);
     }
+    &:active {
+        box-shadow: 0px 0px 15px -7px #000000 inset;
+    }
 }
 
 .def_input(@fs) {
@@ -38,6 +41,5 @@
     height: 30px;
     outline:none;
     font-size: @fs;
-    font-weight: bold;
     font-family: inherit;
 }

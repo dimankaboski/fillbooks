@@ -15,13 +15,15 @@
                             <div class="propertyblock__prop__key">
                                 Производитель
                             </div>
-                            <input type="text" name="notebook_brand" class="propertyblock__prop-value__input">
+                            <input type="text" required name="notebook_brand" id="notebook_brand"
+                                class="propertyblock__prop-value__input">
                         </div>
                         <div class="propertyblock__prop">
                             <div class="propertyblock__prop__key">
                                 Модель
                             </div>
-                            <input type="text" name="notebook_model" class="propertyblock__prop-value__input">
+                            <input type="text" required name="notebook_model" id="notebook_model"
+                                class="propertyblock__prop-value__input">
                         </div>
                     </div>
 
@@ -33,18 +35,21 @@
                         </div>
                         <div class="propertyblock_rev__prop">
                             <div class="propertyblock_rev__prop__key">
-                                Имя
+                                Имя <i class="fas fa-exclamation-circle" style="color: rgb(207, 34, 34);"></i>
                             </div>
-                            <input type="text" name="seller_name" class="propertyblock__prop-value__input">
+                            
+                            <input type="text" required name="seller_name" id="seller_name"
+                                class="propertyblock__prop-value__input">
+                            
                         </div>
                         <div class="propertyblock_rev__prop">
                             <div class="propertyblock_rev__prop__key">
                                 Номер телефона
                             </div>
-                            <input type="text" name="seller_phone" class="propertyblock__prop-value__input">
+                            <input type="text" required name="seller_phone" id="seller_phone"
+                                class="propertyblock__prop-value__input">
                         </div>
                     </div>
-
                 </div>
 
             </div>
@@ -92,8 +97,18 @@
 {% endblock content %}
 {% block scripts %}
 <script>
+    $('#seller_phone').mask('+00000000000');
+    function validateInputs() {
+        is_valid = true;
+        if (!document.getElementById('notebook_brand').validity.valid) {
+            $(document.getElementById('notebook_brand')).css('border-bottom', '1px solid red')
+            is_valid = false;
+        }
+        return is_valid
+    }
     function addPropertyInputs(element) {
         console.log(element)
+
         $(element).before(`<div class="propertyblock__prop">
                             <input type="text" class="propertyblock__prop-key__input">
                             <input type="text" class="propertyblock__prop-value__input">
@@ -118,44 +133,51 @@
 
     $('#post_new_notebook').click(function () {
         json = {}
-        var data = new FormData();
+        is_valid = validateInputs();
+        if (is_valid) {
+            var data = new FormData();
 
-        let propertyBlocks = document.getElementsByClassName('prop_block')
+            let propertyBlocks = document.getElementsByClassName('prop_block')
 
-        json['propertyBlocks'] = []
-        $(propertyBlocks).each(function () {
-            let propertiesList = {};
-            $(this).children('.propertyblock__prop').each(function () {
-                propertiesList[this.childNodes[1].value] = this.childNodes[3].value
-            });
-            json['propertyBlocks'].push({
-                'name': this.childNodes[1].innerText,
-                'properties': propertiesList,
+            json['propertyBlocks'] = []
+            $(propertyBlocks).each(function () {
+                let propertiesList = {};
+                $(this).children('.propertyblock__prop').each(function () {
+                    propertiesList[this.childNodes[1].value] = this.childNodes[3].value
+                });
+                json['propertyBlocks'].push({
+                    'name': this.childNodes[1].innerText,
+                    'properties': propertiesList,
+                })
             })
-        })
-        console.log(json)
-        var files = document.getElementsByName('view_photos')[0].files;
-        data.append("propertyBlocks", JSON.stringify(json));
-        data.append("notebook_brand", document.getElementsByName('notebook_brand')[0].value);
-        data.append("notebook_model", document.getElementsByName('notebook_model')[0].value);
-        data.append("seller_name", document.getElementsByName('seller_name')[0].value);
-        data.append("seller_phone", document.getElementsByName('seller_phone')[0].value);
-        data.append("notebook_description", document.getElementsByName('notebook_description')[0].value);
 
-        for(var i=0; i<files.length; i++){
-            data.append("file_"+i, files[i]);
-            console.log(files[i]);
+            var files = document.getElementsByName('view_photos')[0].files;
+            data.append("propertyBlocks", JSON.stringify(json));
+            data.append("notebook_brand", document.getElementsByName('notebook_brand')[0].value);
+            data.append("notebook_model", document.getElementsByName('notebook_model')[0].value);
+            data.append("seller_name", document.getElementsByName('seller_name')[0].value);
+            data.append("seller_phone", document.getElementsByName('seller_phone')[0].value);
+            data.append("notebook_description", document.getElementsByName('notebook_description')[0].value);
+
+            for (var i = 0; i < files.length; i++) {
+                data.append("file_" + i, files[i]);
+                console.log(files[i]);
+            }
+            console.log(document.getElementsByName('seller_phone')[0].value)
+            // fetch("/good_create", {
+            //     method: "POST",
+            //     body: data,
+            //     headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            // }).then(function (response) {
+            //     return response.json();
+            // }).then(function (data) {
+
+            // });
+        }
+        else {
+            return false;
         }
 
-        fetch("/good_create", {
-            method: "POST",
-            body: data,
-            headers: { 'X-CSRFToken': getCookie('csrftoken') }
-        }).then(function (response) {
-            return response.json();
-        }).then(function (data) {
-
-        });
 
     })
 </script>

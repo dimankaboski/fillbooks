@@ -250,7 +250,6 @@ class GoodCreateView(View):
                 )
             if request.FILES:
                 for image in request.FILES.items():
-                    print(image)
                     Images.objects.create(image=SaveImage(image[1], template_name=('{0}_{1}'.format(good.brand, good_id))).filename_root, good=good)      
             good.property_block.add(*block_list)
             good.description = good_description

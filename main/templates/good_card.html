@@ -1,4 +1,4 @@
-{% extends "global.html" %} {% load compress %} {% block content %}
+{% extends "global.html" %} {% load compress filtres %} {% block content %}
 <div class="container bg_white">
 
     <div class="main">
@@ -7,22 +7,26 @@
                 <h1>Оценка товара #{{good.good_id}}</h1>
             </div>
             <br>
+            {% get_images good.good_id as images %}
+            
+            
+            
             <span class="h1_text">Филиал: {{good.branch.name}}, {{good.user.get_full_name}}</span>
             <div class="card-photos__wrapper">
                 <div class="card-photos__original">
-                    <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
+                    {% if good.get_one_image %}
+                    <img src=" {{good.get_one_image.get_filename_url}}" class="img_def" id="showimg" alt="">
+                    {% else %}
+                    <img src="{{ STATIC_URL }}images/no-image-box.jpeg" class="img_def" alt="">
+                    {% endif %}
                 </div>
                 <div class="card-photos__other">
                     <div class="card-photos__other__list">
-                        <div class="card-photos__other-photo active-photo">
-                            <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
-                        </div>
+                        {% for image in images %}
                         <div class="card-photos__other-photo">
-                            <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
+                            <img src="{{image.get_filename_url}}" class="img_def" alt="">
                         </div>
-                        <div class="card-photos__other-photo">
-                            <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
-                        </div>
+                        {% endfor %}
 
                     </div>
 
@@ -160,4 +164,18 @@
     </div>
 
 </div>
-{%csrf_token%} {% endblock content %}
+{%csrf_token%} 
+{% endblock content %}
+{% block scripts %}
+<script>
+$('.card-photos__other__list').find('img').click(function(){
+    var new_src = $(this).attr('src')
+    $('#showimg').attr('src', new_src);
+    $('.card-photos__other__list').find('.card-photos__other-photo').each(function(){
+        $(this).removeClass('active-photo');
+    })
+    $(this).parent().addClass('active-photo')
+})
+
+</script>
+{% endblock scripts %}

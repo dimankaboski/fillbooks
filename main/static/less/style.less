@@ -21,6 +21,14 @@ body {
 header {
     background-color: @header_bg;
 }
+footer {
+    background-color: @header_bg;
+    width: 100%;
+    height: 70px;
+}
+main {
+    min-height: 900px;
+}
 .overlay_blur {
     filter: blur(8px);
 }
@@ -144,9 +152,7 @@ textarea:focus, input:focus {
                 border: 1px dashed rgb(125, 174, 202);
             }
         }
-        & + & {
-            
-        }
+
     }
     &__btn {
         float: right;
@@ -187,9 +193,7 @@ textarea:focus, input:focus {
             padding-bottom: 5px;
             border-bottom: 1px solid @light_green;
         }
-        & + & {
-            
-        }
+
     }
     input {
         text-align: right;
@@ -281,6 +285,7 @@ textarea:focus, input:focus {
 }
 .bg_white {
     background-color: @white;
+    padding-bottom: 70px;
 }
 .header {
     height: 75px;
@@ -341,10 +346,15 @@ textarea:focus, input:focus {
             }
         }
         &__addGood {
+
             .add_btn {
-                .def_btn(@light_green, 21px, 120px, 12px);
+                .def_btn(@light_green, 40px, 140px, 12px);
+                padding: 5px 10px;
+                text-decoration: none;
             }
+
         }
+        
         &__profile {
             display: flex;
             justify-content: space-between;
@@ -474,6 +484,21 @@ textarea:focus, input:focus {
         &-image {
             border-radius: 5px;
             width: 30%;
+            height: 150px;
+            text-align: center;
+            position: relative;
+            img {
+                max-height: 100%;
+                max-width: 100%;
+                width: auto;
+                height: auto;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+            }
         }
         &-info {
             padding: 6px;
@@ -481,6 +506,11 @@ textarea:focus, input:focus {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            &__model {
+                font-size: 20px;
+                color: @black;
+                text-decoration: none;
+            }
         }
         &-info-add {
             padding: 6px;
@@ -489,6 +519,13 @@ textarea:focus, input:focus {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            &__status {
+                
+            }
+            &__same {
+                color: #898989;
+                font-size: 14px;
+            }
         }
         & + & {
             margin-top: 15px;
@@ -496,6 +533,7 @@ textarea:focus, input:focus {
     }
 }
 .branches_wrapper {
+    padding-bottom: 40px;
     &-item {
         font-size: 16px;
         margin: 10px;
@@ -584,11 +622,21 @@ textarea:focus, input:focus {
             }
             .login_input {
                 margin-top: 20px;
+                font-weight: 400;
                 .def_input(14px);
                 &::placeholder {
                     color: #898989;
                     font-weight: 300;
                 }
+            }
+            &__reset_pwd {
+                color: #898989;
+                font-size: 12px;
+                padding-top: 5px;
+                text-decoration: none;
+            }
+            &__title {
+                font-size: 18px;
             }
         }
     }
@@ -602,6 +650,7 @@ textarea:focus, input:focus {
         min-width: 250px;
         font-size: 18px;
         font-weight: 500;
+        cursor: pointer;
     }
 }
 .disabled_input {
@@ -682,9 +731,7 @@ textarea:focus, input:focus {
                 border: 1px dashed rgb(125, 174, 202);
             }
         }
-        & + & {
-            
-        }
+
     }
     &__btn {
         float: right;

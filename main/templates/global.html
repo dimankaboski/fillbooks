@@ -79,7 +79,7 @@
                                 <hr>
                             </div>
                             <div class="header__menu__addGood">
-                                <div class="add_btn" id="add_new_good">Добавить товар</div>
+                                <a href="/good_create" class="add_btn">Добавить товар</a>
                             </div>
                             <div class="header__menu__profile">
                                 <div class="header__menu__profile__photo">
@@ -93,11 +93,11 @@
                                         <span class="profile-menu__branch__balance">Баланс филиала: 1 234 000.00
                                             руб</span>
                                         <hr>
-                                        <a href="#">Список товаров</a>
+                                        <a href="/goods">Список товаров</a>
                                         <a href="#">Товары на оценке</a>
                                         <a href="#">Отгрузка товара</a>
                                         <hr>
-                                        <a href="#">Выход</a>
+                                        <a href="/accounts/logout">Выход</a>
                                     </div>
                                 </div>
 
@@ -159,6 +159,7 @@
     <script src="{{ STATIC_URL }}js/angularjs/angular.js"></script>
     <script src="{{ STATIC_URL }}js/fillbooks_angular.js"></script>
     <script src="{{ STATIC_URL }}js/main.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.mask.min.js"></script>
     <script>
         function open_info_spoiler_profileMenu() {
             document.getElementsByClassName("header__menu__profile__modal-content")[0].classList.toggle("show");
@@ -269,20 +270,18 @@
 
         }
         $('#addPropertyBlock').click(function () {
+            
             var propertyBlockName = $('#propertyBlock_input-id').val();
             var properties_list = document.getElementById('propertiesBlock_list')
             var properties_list_rev = document.getElementById('propertiesBlock_list_rev')
-            // json.push({ 'name': propertyBlockName })
-
             closeModalPropBlock();
-
             if (properties_list.getElementsByClassName('propertyblock').length < properties_list_rev.getElementsByClassName('propertyblock_rev').length) {
                 $('#propertiesBlock_list').append(propertyInput_string(propertyBlockName));
             }
             else {
                 $('#propertiesBlock_list_rev').append(propertyInput_string(propertyBlockName, true));
             }
-
+            $('#propertyBlock_input-id').val('');
         })
     </script>
     {% block scripts %}
