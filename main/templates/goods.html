@@ -18,7 +18,7 @@
                         <img src="{{ STATIC_URL }}images/no-image-box.jpeg" class="img_def" alt="">
                         {% endif %}
                     </a>
-                   
+
                     <div class="good-item-info">
                         <a href="/good_card/{{good.good_id}}" class="good-item-info__model">
                             {{good.brand}} {{good.model}}
@@ -150,7 +150,9 @@
             let params_list = params.get(group).split('-');
             if (params_list.includes($(this).val())) {
                 $(this).attr('checked', 'checked');
-                checked_brand_pk.push($(this).attr('data-id'));
+                if (group == 'brand') {
+                    checked_brand_pk.push(parseInt($(this).attr('data-id')));
+                }
             }
         })
         if (group == 'brand') {
@@ -167,16 +169,10 @@
             }).then(function (data) {
                 let items = '';
                 for (var i in data.models) {
-                    if(checked_brand_pk.includes(data.models[i].pk)) {
-                        items += `<input type="checkbox" checked class="form-check-input" id="${data.models[i].name}" value="${data.models[i].name}">
-                                <label class="form-check-label" for="${data.models[i].name}">${data.models[i].name}</label>
-                                <br>`;
-                    }
-                    else {
-                        items += `<input type="checkbox" class="form-check-input" id="${data.models[i].name}" value="${data.models[i].name}">
-                                <label class="form-check-label" for="${data.models[i].name}">${data.models[i].name}</label>
-                                <br>`;
-                    }
+                    console.log(data.models[i].pk)
+                    items += `<input type="checkbox" class="form-check-input" data-id="${data.models[i].pk}" name="model" id="${data.models[i].name}" value="${data.models[i].name}">
+                            <label class="form-check-label" for="${data.models[i].name}">${data.models[i].name}</label>
+                            <br>`;
                 }
                 $('.model_filter_item').html(items);
             });
@@ -184,10 +180,11 @@
     }
     function updateFiltresState() {
         let params = (new URL(document.location)).searchParams;
-        if (params.has('brand') || params.has('model') || params.has('status')) {
-            setCheckboxesState('model', params)
+        if (params.has('brand') || params.has('model') || params.has('status') || params.has('branch')) {
             setCheckboxesState('brand', params)
             setCheckboxesState('status', params)
+            setCheckboxesState('model', params)
+            setCheckboxesState('branch', params)
         }
     }
     function setStatusState(data) {
@@ -219,11 +216,12 @@
 
     let form = document.forms.filtres_form;
     form.onsubmit = function () {
-        var brand_params = getCheckboxesValue('brand').join('-')
-        var model_params = getCheckboxesValue('model').join('-')
-        var status_params = getCheckboxesValue('status').join('-')
+        var brand_params = getCheckboxesValue('brand').join('+')
+        var model_params = getCheckboxesValue('model').join('+')
+        var status_params = getCheckboxesValue('status').join('+')
+        var branch_params = getCheckboxesValue('branch').join('+')
 
-        let url = `/goods?brand=${brand_params}&model=${model_params}&status=${status_params}`;
+        let url = `/goods?brand=${brand_params}&model=${model_params}&status=${status_params}&branch=${branch_params}`;
 
         window.location = url;
     }
@@ -272,7 +270,7 @@
                 console.log(data.models);
                 let items = '';
                 for (var i in data.models) {
-                    items += `<input type="checkbox" class="form-check-input" id="${data.models[i].name}" value="${data.models[i].name}">
+                    items += `<input type="checkbox" class="form-check-input" data-id="${data.models[i].pk}" id="${data.models[i].name}" value="${data.models[i].name}">
                                 <label class="form-check-label" for="${data.models[i].name}">${data.models[i].name}</label>
                                 <br>`;
                 }
