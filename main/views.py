@@ -66,21 +66,21 @@ class GoodsListView(ListView):
 
     def get_queryset(self):
         if self.request.GET:
-            queryset = Goods.objects.all().order_by('-create_time')
+            queryset = Goods.objects.all()
             brand = self.request.GET.get("brand")
             model = self.request.GET.get("model")
             status = self.request.GET.get("status")
             branch = self.request.GET.get("branch")
             if brand:
-                brand = GoodsBrand.objects.filter(name__in=brand.split('-'))
+                brand = GoodsBrand.objects.filter(name__in=brand.split('+'))
                 queryset = queryset.filter(brand__in=brand)
             if model:
-                model = GoodsModel.objects.filter(name__in=model.split('-'))
+                model = GoodsModel.objects.filter(name__in=model.split('+'))
                 queryset = queryset.filter(model__in=model)
             if status:
-                queryset = queryset.filter(status__in=status.split('-'))
+                queryset = queryset.filter(status__in=status.split('+'))
             if branch:
-                queryset = queryset.filter(branch__in=status.split('-'))
+                queryset = queryset.filter(branch__in=status.split('+'))
             return queryset
         return super(GoodsListView, self).get_queryset()
     
