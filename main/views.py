@@ -33,7 +33,7 @@ def generate_id():
 
 class GoodView(TemplateView):
     template_name = 'good_card.html'
-
+    
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponsePermanentRedirect(reverse_lazy('login'))
@@ -46,9 +46,11 @@ class GoodView(TemplateView):
             good = Goods.objects.get(good_id=good_id)
         except Goods.DoesNotExist:
             raise Http404('Товар с ID %s не найден' % good_id)
+        good_message = 'Уважаемый(ая) {0}, ваш товар {1} оценен в {2}'.format(good.customer.name, good_id, good.price)
         context = super(GoodView, self).get_context_data(**kwargs)
         context.update({
-            'good': good
+            'good': good,
+            'message': good_message
         })
         return context
 
@@ -120,7 +122,9 @@ class CheckBrand(View):
             branchs = goods.values('branch')
             if branchs:
                 branchs = Branch.objects.filter(pk__in=branchs).values('name')
-            context={'models': list(models.values('name'))}
+            context={
+                'models': list(models.values('name', 'pk'))
+            }
             context.update(check_status(goods))
             context.update({'branchs': list(branchs)})
             
@@ -303,3 +307,46 @@ class SaveImage:
 #     def post(self, request, *args, **kwargs):
         
 
+class GoodPriced(View):
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            raise Http404('Сначала авторизуйтесь')
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if request.POST:
+            message = request.POST.get('message')
+            price = request.POST.get('price')
+            good_id = request.POST.get('good_id')
+            try:
+                good = Goods.objects.get(good_id=good_id)
+            except Goods.DoesNotExist:
+                return HttpResponse('Товар с ID {0} не найден'.format(good_id), status=400)
+            good.price = price
+            good.status = GOOD_STATUS_PRICED
+            good.save()
+            return HttpResponse('success', status=200)
+        return HttpResponse('Пустой запрос', status=400)
+
+class CustomerChoice(View):
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            raise Http404('Сначала авторизуйтесь')
+        return super().dispatch(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        if request.POST:
+            customer_choice = request.POST.get('choice')
+            good_id = request.POST.get('good_id')
+            try:
+                good = Goods.objects.get(good_id=good_id)
+            except Goods.DoesNotExist:
+                return HttpResponse('Товар с ID {0} не найден'.format(good_id), status=400)
+            if customer_choice and customer_choice == 'purchase':
+                good.status = GOOD_STATUS_PURCHASE
+            elif customer_choice and customer_choice == 'reject':
+                good.status = GOOD_STATUS_REJECT
+            return HttpResponse('success', status=200)
+        return HttpResponse('Пустой запрос', status=400)
