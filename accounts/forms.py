@@ -60,6 +60,7 @@ class AdminUserChangeForm(UserChangeForm):
 class LoginUserForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(LoginUserForm, self).__init__(*args, **kwargs)
+        print('da')
         self.fields['username'].label = 'Логин'
         self.fields['username'].widget.attrs['class'] = 'login_input'
         self.fields['username'].widget.attrs['placeholder'] = 'Введите логин'
@@ -85,7 +86,7 @@ class CustomPasswordResetForm(PasswordResetForm):
         super(CustomPasswordResetForm, self).__init__(*args, **kwargs)
         self.fields['email'].label = 'e-mail'
         self.fields['email'].widget.attrs['class'] = 'login_input'
-        self.fields['email'].widget.attrs['placeholder'] = 'Введите email для отправки кода'
+        self.fields['email'].widget.attrs['placeholder'] = 'email для восстановления'
 
 class CustomSetPasswordForm(SetPasswordForm):
     def __init__(self, *args, **kwargs):

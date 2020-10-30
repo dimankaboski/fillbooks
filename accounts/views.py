@@ -12,6 +12,7 @@ class Login(LoginView):
     authentication_form = LoginUserForm
     template_name = 'login.html'
 
+
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated and not request.user.is_staff:
             return HttpResponsePermanentRedirect(reverse_lazy('goods'))
@@ -44,7 +45,7 @@ class PasswordChangeDone(PasswordChangeDoneView):
 
 class PasswordChange(PasswordChangeView):
     template_name = 'password_change.html'
-    class_form = CustomPasswordChangeForm
+    form_class = CustomPasswordChangeForm
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponsePermanentRedirect(reverse_lazy('login'))
@@ -52,7 +53,7 @@ class PasswordChange(PasswordChangeView):
 
 class PasswordReset(PasswordResetView):
     template_name = 'password_reset.html'
-    class_form = CustomPasswordResetForm
+    form_class = CustomPasswordResetForm
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponsePermanentRedirect(reverse_lazy('login'))
@@ -63,7 +64,7 @@ class PasswordResetDone(PasswordResetDoneView):
 
 class PasswordResetConfirm(PasswordResetConfirmView):
     template_name = 'password_reset_confirm.html'
-    class_form = CustomSetPasswordForm
+    form_class = CustomSetPasswordForm
 
 class PasswordResetComplete(PasswordResetCompleteView):
     template_name = 'password_reset_complite.html'
