@@ -1,6 +1,6 @@
 from accounts.models import User
 from django import forms
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 
 
 
@@ -66,3 +66,33 @@ class LoginUserForm(AuthenticationForm):
         self.fields['password'].label = 'Пароль'
         self.fields['password'].widget.attrs['class'] = 'login_input'
         self.fields['password'].widget.attrs['placeholder'] = 'Введите пароль'
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomPasswordChangeForm, self).__init__(*args, **kwargs)
+        self.fields['old_password'].label = 'Старый пароль'
+        self.fields['old_password'].widget.attrs['class'] = 'login_input'
+        self.fields['old_password'].widget.attrs['placeholder'] = 'Введите старый пароль'
+        self.fields['new_password1'].label = 'Новый Пароль'
+        self.fields['new_password1'].widget.attrs['class'] = 'login_input'
+        self.fields['new_password1'].widget.attrs['placeholder'] = 'Введите новый пароль'
+        self.fields['new_password2'].label = 'Новый пароль еще раз'
+        self.fields['new_password2'].widget.attrs['class'] = 'login_input'
+        self.fields['new_password2'].widget.attrs['placeholder'] = 'Введите новый пароль'
+
+class CustomPasswordResetForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomPasswordResetForm, self).__init__(*args, **kwargs)
+        self.fields['email'].label = 'e-mail'
+        self.fields['email'].widget.attrs['class'] = 'login_input'
+        self.fields['email'].widget.attrs['placeholder'] = 'Введите email для отправки кода'
+
+class CustomSetPasswordForm(SetPasswordForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomSetPasswordForm, self).__init__(*args, **kwargs)
+        self.fields['new_password1'].label = 'Новый Пароль'
+        self.fields['new_password1'].widget.attrs['class'] = 'login_input'
+        self.fields['new_password1'].widget.attrs['placeholder'] = 'Введите новый пароль'
+        self.fields['new_password2'].label = 'Новый пароль еще раз'
+        self.fields['new_password2'].widget.attrs['class'] = 'login_input'
+        self.fields['new_password2'].widget.attrs['placeholder'] = 'Введите новый пароль'
