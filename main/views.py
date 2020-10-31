@@ -378,6 +378,7 @@ class Notifications(View):
 class SearchByQuery(View):
     query = ''
     brand = ''
+    list_types = ['brand_name', 'model_name', 'block_name', 'property_name', 'property_value']
     context = {}
     def dispatch(self, request, *args, **kwargs):
         if not request.user and request.user.is_authenticated:
@@ -385,7 +386,7 @@ class SearchByQuery(View):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        if request.POST and request.POST.get('query') and  request.POST.get('type_query') in self.request_query.keys():
+        if request.POST and request.POST.get('query') and request.POST.get('type_query') in self.list_types:
             self.query = request.POST.get('query')
             if request.POST.get('brand'):
                 self.brand = request.POST.get('brand')
@@ -404,7 +405,7 @@ class SearchByQuery(View):
         return type_query[request.POST.get('type_query')]
 
     def search_by_brand_name(self):
-        brands = GoodsBrand.objects.filter(name_icontains=self.query).values('name')
+        brands = GoodsBrand.objects.filter(name__icontains=self.query).values('name')
         self.context.update({'result':  brands if brands else ''})
 
     def search_by_model_name(self):

@@ -37,10 +37,10 @@
                             <div class="propertyblock_rev__prop__key">
                                 Имя <i class="fas fa-exclamation-circle" style="color: rgb(207, 34, 34);"></i>
                             </div>
-                            
+
                             <input type="text" required name="seller_name" id="seller_name"
                                 class="propertyblock__prop-value__input">
-                            
+
                         </div>
                         <div class="propertyblock_rev__prop">
                             <div class="propertyblock_rev__prop__key">
@@ -178,5 +178,35 @@
 
 
     })
+    $('#notebook_brand').keyup(function () {
+        var data = new FormData();
+        data.append('query', this.val);
+        data.append('type_query', 'brand_name');
+        fetch("/api/search_by_query", {
+            method: "POST",
+            body: data,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (data) {
+            console.log(data);
+        });
+    })
+    $('#notebook_model').keyup(function () {
+        var data = new FormData();
+        data.append('query', this.val);
+        data.append('brand', $('#notebook_brand').val);
+        data.append('type_query', 'model_name');
+        fetch("/api/search_by_query", {
+            method: "POST",
+            body: data,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (data) {
+            console.log(data);
+        });
+    })
+
 </script>
 {% endblock scripts %}
