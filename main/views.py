@@ -54,6 +54,7 @@ class GoodView(TemplateView):
         })
         return context
 
+
 class GoodsListView(ListView):
 
     template_name = 'goods.html'
@@ -174,6 +175,7 @@ class CheckBranch(View):
         context.update(check_status(goods))
         return JsonResponse(context, safe=False)
 
+
 class BranchInfo(View):
 
     def post(self, request, *args, **kwargs):
@@ -261,6 +263,7 @@ class GoodCreateView(View):
             return HttpResponse('success', status=200)
         return HttpResponse('Пустая форма', status=400)
 
+
 class SaveImage:
     upload = None
     template_name = None
@@ -329,6 +332,7 @@ class GoodPriced(View):
             return HttpResponse('success', status=200)
         return HttpResponse('Пустой запрос', status=400)
 
+
 class CustomerChoice(View):
 
     def dispatch(self, request, *args, **kwargs):
@@ -350,3 +354,21 @@ class CustomerChoice(View):
                 good.status = GOOD_STATUS_REJECT
             return HttpResponse('success', status=200)
         return HttpResponse('Пустой запрос', status=400)
+
+
+class Notifications(View):
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user and request.user.is_authenticated:
+            raise Http404('Сначала авторизуйтесь')
+        return super().dispatch(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        goods = Goods.objects.filter(status=GOOD_STATUS_AWAIT)
+        context = {
+            'goods_notification': list(goods.values('brand', 'model', 'user', 'branch')),
+            'count_notiification': goods.count()
+        }
+        return JsonResponse(context, safe=False)
+
+# class SearchByBrandName()

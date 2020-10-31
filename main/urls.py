@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
-from main.views import GoodsListView, CheckBrand, CheckStatus, CheckBranch, BranchInfo, GoodView, GoodCreateView, GoodPriced, CustomerChoice
+from main.views import GoodsListView, CheckBrand, CheckStatus, CheckBranch, BranchInfo, GoodView, GoodCreateView, GoodPriced, CustomerChoice, Notifications
 from . import views
 
 
@@ -16,4 +16,5 @@ urlpatterns = [
     path('api/branch_info', BranchInfo.as_view(), name='branch_info'),
     path('api/good_priced', GoodPriced.as_view(), name='good_priced'),
     path('api/customer_choice', CustomerChoice.as_view(), name='customer_choice'),
+    path('api/get_notifications', Notifications.as_view(), name='get_notifications'),
 ]
