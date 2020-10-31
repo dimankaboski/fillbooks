@@ -72,15 +72,16 @@ class GoodsListView(ListView):
             status = self.request.GET.get("status")
             branch = self.request.GET.get("branch")
             if brand:
-                brand = GoodsBrand.objects.filter(name__in=brand.split('+'))
+                brand = GoodsBrand.objects.filter(name__in=brand.split('--'))
                 queryset = queryset.filter(brand__in=brand)
             if model:
-                model = GoodsModel.objects.filter(name__in=model.split('+'))
+                model = GoodsModel.objects.filter(name__in=model.split('--'))
                 queryset = queryset.filter(model__in=model)
             if status:
-                queryset = queryset.filter(status__in=status.split('+'))
+                queryset = queryset.filter(status__in=status.split('--'))
             if branch:
-                queryset = queryset.filter(branch__in=status.split('+'))
+                branch = Branch.objects.filter(name__in=branch.split('--'))
+                queryset = queryset.filter(branch__in=branch)
             return queryset
         return super(GoodsListView, self).get_queryset()
     

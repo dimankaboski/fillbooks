@@ -104,7 +104,7 @@
                             <div class="filtres__main-item__checks brand_filter_item">
                                 {% get_brands as brands %}
                                 {% for brand in brands %}
-                                <input type="checkbox" class="form-check-input" id="{{brand.name}}" name="brand"
+                                <input type="checkbox" class="form-check-input" id="{{brand.name}}"
                                     value="{{brand.name}}" data-id="{{brand.pk}}">
                                 <label class="form-check-label" for="{{brand.name}}">{{brand.name}}</label>
                                 <br>
@@ -133,7 +133,7 @@
                             </div>
                         </div>
                     </form>
-                    <button id="filtres_submit" form="filtres_form">Применить</button>
+                    <button id="filtres_submit">Применить</button>
                 </div>
             </div>
         </section>
@@ -145,9 +145,9 @@
 {% block scripts %}
 <script>
     function setCheckboxesState(group, params) {
-        var checked_brand_pk = []
+        var checked_brand_pk = [];
         $('.' + group + '_filter_item input[type="checkbox"]').each(function () {
-            let params_list = params.get(group).split('-');
+            let params_list = params.get(group).split('--');
             if (params_list.includes($(this).val())) {
                 $(this).attr('checked', 'checked');
                 if (group == 'brand') {
@@ -156,6 +156,7 @@
             }
         })
         if (group == 'brand') {
+            let params = (new URL(document.location)).searchParams;
             var myData = {}
             myData.brandID = checked_brand_pk;
             var data = new FormData();
@@ -169,10 +170,17 @@
             }).then(function (data) {
                 let items = '';
                 for (var i in data.models) {
-                    console.log(data.models[i].pk)
-                    items += `<input type="checkbox" class="form-check-input" data-id="${data.models[i].pk}" name="model" id="${data.models[i].name}" value="${data.models[i].name}">
+                    if (params.get('model').split('--').includes(data.models[i].name)) {
+                        items += `<input type="checkbox" checked class="form-check-input" data-id="${data.models[i].pk}" name="model" id="${data.models[i].name}" value="${data.models[i].name}">
                             <label class="form-check-label" for="${data.models[i].name}">${data.models[i].name}</label>
                             <br>`;
+                    }
+                    else {
+                        items += `<input type="checkbox" class="form-check-input" data-id="${data.models[i].pk}" name="model" id="${data.models[i].name}" value="${data.models[i].name}">
+                            <label class="form-check-label" for="${data.models[i].name}">${data.models[i].name}</label>
+                            <br>`;
+                    }
+
                 }
                 $('.model_filter_item').html(items);
             });
@@ -183,48 +191,29 @@
         if (params.has('brand') || params.has('model') || params.has('status') || params.has('branch')) {
             setCheckboxesState('brand', params)
             setCheckboxesState('status', params)
-            setCheckboxesState('model', params)
             setCheckboxesState('branch', params)
         }
     }
-    function setStatusState(data) {
-        $('.status_filter_item input').each(function () {
-            $(this).prop('disabled', false);
-            if (data.is_await == false && $(this).val() == 'Ожидает оценки') {
-                $(this).prop('disabled', true);
-            }
-            if (data.is_priced == false && $(this).val() == 'Оценен') {
-                $(this).prop('disabled', true);
-            }
-            if (data.is_purchase == false && $(this).val() == 'Приобретен') {
-                $(this).prop('disabled', true);
-            }
-            if (data.is_reject == false && $(this).val() == 'Отказ') {
-                $(this).prop('disabled', true);
-            }
-        })
-    }
+
     updateFiltresState()
 
     function getCheckboxesValue(group) {
-        let list = []
+        let list = [];
         $('.' + group + '_filter_item input[type="checkbox"]:checked').each(function () {
             list.push($(this).val());
         })
         return list;
     }
 
-    let form = document.forms.filtres_form;
-    form.onsubmit = function () {
-        var brand_params = getCheckboxesValue('brand').join('+')
-        var model_params = getCheckboxesValue('model').join('+')
-        var status_params = getCheckboxesValue('status').join('+')
-        var branch_params = getCheckboxesValue('branch').join('+')
-
+    $('#filtres_submit').click(function () {
+        var brand_params = getCheckboxesValue('brand').join('--');
+        var model_params = getCheckboxesValue('model').join('--');
+        var status_params = getCheckboxesValue('status').join('--');
+        var branch_params = getCheckboxesValue('branch').join('--');
         let url = `/goods?brand=${brand_params}&model=${model_params}&status=${status_params}&branch=${branch_params}`;
-
         window.location = url;
-    }
+    })
+
     $('#testclick').click(function (e) {
         let curr_el = this;
         var data = new FormData();
@@ -258,7 +247,7 @@
             })
             var data = new FormData();
             data.append("json", JSON.stringify(myData));
-            console.log(data)
+
             fetch("/api/check_brand", {
                 method: "POST",
                 body: data,
@@ -266,8 +255,6 @@
             }).then(function (response) {
                 return response.json();
             }).then(function (data) {
-
-                console.log(data.models);
                 let items = '';
                 for (var i in data.models) {
                     items += `<input type="checkbox" class="form-check-input" data-id="${data.models[i].pk}" id="${data.models[i].name}" value="${data.models[i].name}">
@@ -284,7 +271,7 @@
             })
             var data = new FormData();
             data.append("json", JSON.stringify(myData));
-            console.log(data)
+
             fetch("/api/check_branch", {
                 method: "POST",
                 body: data,
@@ -292,8 +279,6 @@
             }).then(function (response) {
                 return response.json();
             }).then(function (data) {
-                setStatusState(data)
-                console.log(data);
 
             });
         }
@@ -304,7 +289,7 @@
             })
             var data = new FormData();
             data.append("json", JSON.stringify(myData));
-            console.log(data)
+
             fetch("/api/check_status", {
                 method: "POST",
                 body: data,
@@ -313,7 +298,6 @@
                 return response.json();
             }).then(function (data) {
                 let unique = [...new Set(data.branchs.map(li => li.branch))]
-                console.log(data);
             });
         }
 
