@@ -375,4 +375,53 @@ class Notifications(View):
         }
         return JsonResponse(context, safe=False)
 
-# class SearchByBrandName()
+class SearchByQuery(View):
+    query = ''
+    brand = ''
+    context = {}
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user and request.user.is_authenticated:
+            raise Http404('Сначала авторизуйтесь')
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if request.POST and request.POST.get('query') and  request.POST.get('type_query') in self.request_query.keys():
+            self.query = request.POST.get('query')
+            if request.POST.get('brand'):
+                self.brand = request.POST.get('brand')
+            self.search_by(request)
+            return JsonResponse(self.context, safe=False)
+        return HttpResponse('bad request', status=400)
+
+    def search_by(self, request):
+        type_query = {
+            'brand_name': self.search_by_brand_name(),
+            'model_name': self.search_by_model_name(),
+            'block_name': self.search_by_block_name(),
+            'property_name': self.search_by_property_name(),
+            'property_value': self.search_by_property_value(),
+        }
+        return type_query[request.POST.get('type_query')]
+
+    def search_by_brand_name(self):
+        brands = GoodsBrand.objects.filter(name_icontains=self.query).values('name')
+        self.context.update({'result':  brands if brands else ''})
+
+    def search_by_model_name(self):
+        if self.brand:
+            models = GoodsModel.objects.filter(name_icontains=self.query, brand__name=self.brand).values('name')
+        else:
+            models = GoodsModel.objects.filter(name_icontains=self.query).values('name')
+        self.context.update({'result': models if models else ''})
+
+    def search_by_block_name(self):
+        block_names = PropertyBlockName.objects.filter(name_icontains=self.query).values('name')
+        self.context.update({'result': block_names if block_names else ''})
+
+    def search_by_property_name(self):
+        property_names = PropertyName.objects.filter(name_icontains=self.query).values('name')
+        self.context.update({'result': property_names if property_names else ''})
+    
+    def search_by_property_value(self):
+        property_values = PropertyValue.objects.filter(value_icontains=self.query).values('value')
+        self.context.update({'result': property_values if property_values else ''})
