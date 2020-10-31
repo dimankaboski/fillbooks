@@ -17,6 +17,8 @@
                             </div>
                             <input type="text" required name="notebook_brand" id="notebook_brand"
                                 class="propertyblock__prop-value__input">
+                            <ul class="input__help-text">
+                            </ul>
                         </div>
                         <div class="propertyblock__prop">
                             <div class="propertyblock__prop__key">
@@ -24,6 +26,8 @@
                             </div>
                             <input type="text" required name="notebook_model" id="notebook_model"
                                 class="propertyblock__prop-value__input">
+                            <ul class="input__help-text">
+                            </ul>
                         </div>
                     </div>
 
@@ -111,8 +115,66 @@
 
         $(element).before(`<div class="propertyblock__prop">
                             <input type="text" class="propertyblock__prop-key__input">
+                            <ul class="input__help-text">
+                            </ul>
                             <input type="text" class="propertyblock__prop-value__input">
+                            <ul class="input__help-text">
+                            </ul>
                         </div>`);
+        $('.propertyblock__prop-key__input').keyup(function () {
+
+            var data = new FormData();
+            var inp = this;
+            data.append('query', this.value);
+            data.append('type_query', 'property_name');
+            fetch("/api/search_by_query", {
+                method: "POST",
+                body: data,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                var items = '';
+                for (var i in data.result) {
+                    items += `<li>${data.result[i].name}</li>`;
+                }
+
+                $(inp).next().html(items);
+                $('.input__help-text').find('li').click(function () {
+                    $(this).parent().prev().val(this.innerText);
+                    $(this).parent().find('li').each(function () {
+                        $(this).remove();
+                    })
+                })
+            });
+        })
+        $('.propertyblock__prop-value__input').keyup(function () {
+
+            var data = new FormData();
+            var inp = this;
+            data.append('query', this.value);
+            data.append('type_query', 'property_value');
+            fetch("/api/search_by_query", {
+                method: "POST",
+                body: data,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                var items = '';
+                for (var i in data.result) {
+                    items += `<li>${data.result[i].value}</li>`;
+                }
+
+                $(inp).next().html(items);
+                $('.input__help-text').find('li').click(function () {
+                    $(this).parent().prev().val(this.innerText);
+                    $(this).parent().find('li').each(function () {
+                        $(this).remove();
+                    })
+                })
+            });
+        })
     }
     function readURL(input, group) {
         $(input.files).each(function (i, el) {
@@ -178,9 +240,11 @@
 
 
     })
+
     $('#notebook_brand').keyup(function () {
         var data = new FormData();
-        data.append('query', this.val);
+        var inp = this;
+        data.append('query', this.value);
         data.append('type_query', 'brand_name');
         fetch("/api/search_by_query", {
             method: "POST",
@@ -189,13 +253,25 @@
         }).then(function (response) {
             return response.json();
         }).then(function (data) {
-            console.log(data);
+            var items = '';
+            for (var i in data.result) {
+                items += `<li>${data.result[i].name}</li>`;
+            }
+
+            $(inp).next().html(items);
+            $('.input__help-text').find('li').click(function () {
+                $(this).parent().prev().val(this.innerText);
+                $(this).parent().find('li').each(function () {
+                    $(this).remove();
+                })
+            })
         });
     })
     $('#notebook_model').keyup(function () {
         var data = new FormData();
-        data.append('query', this.val);
-        data.append('brand', $('#notebook_brand').val);
+        var inp = this;
+        data.append('query', this.value);
+        data.append('brand', $('#notebook_brand').val());
         data.append('type_query', 'model_name');
         fetch("/api/search_by_query", {
             method: "POST",
@@ -204,9 +280,47 @@
         }).then(function (response) {
             return response.json();
         }).then(function (data) {
-            console.log(data);
+            var items = '';
+            for (var i in data.result) {
+                items += `<li>${data.result[i].name}</li>`;
+            }
+
+            $(inp).next().html(items);
+            $('.input__help-text').find('li').click(function () {
+                $(this).parent().prev().val(this.innerText);
+                $(this).parent().find('li').each(function () {
+                    $(this).remove();
+                })
+            })
         });
     })
+    $('#propertyBlock_input-id').keyup(function () {
+        var data = new FormData();
+        var inp = this;
+        data.append('query', this.value);
+        data.append('type_query', 'block_name');
+        fetch("/api/search_by_query", {
+            method: "POST",
+            body: data,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (data) {
+            var items = '';
+            for (var i in data.result) {
+                items += `<li>${data.result[i].name}</li>`;
+            }
+
+            $(inp).next().html(items);
+            $('.input__help-text').find('li').click(function () {
+                $(this).parent().prev().val(this.innerText);
+                $(this).parent().find('li').each(function () {
+                    $(this).remove();
+                })
+            })
+        });
+    })
+
 
 </script>
 {% endblock scripts %}
