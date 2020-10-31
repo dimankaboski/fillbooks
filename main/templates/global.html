@@ -42,40 +42,11 @@
                             <div class="header__menu__notification">
                                 <img src="{{ STATIC_URL }}images/mail.svg" alt="">
                                 <div class="header__menu__notification__count">
-                                    3
+
                                 </div>
                             </div>
                             <div class="header__menu__notification__modal-content">
-                                <div class="header__menu__notification__modal-item">
-                                    <i class="fas fa-exclamation" style="width: 10%; color: rgb(221, 85, 85);"></i>
-                                    <span style="width: 90%; font-size: 12px;">Notification 1</span>
-                                </div>
-                                <hr>
-                                <div class="header__menu__notification__modal-item">
-                                    <i class="fas fa-exclamation" style="width: 10%; color: rgb(221, 85, 85);"></i>
-                                    <span style="width: 90%; font-size: 12px;">Notification 2</span>
-                                </div>
-                                <hr>
-                                <div class="header__menu__notification__modal-item">
-                                    <i class="fas fa-exclamation" style="width: 10%; color: rgb(221, 85, 85);"></i>
-                                    <span style="width: 90%; font-size: 12px;">Notification 2</span>
-                                </div>
-                                <hr>
-                                <div class="header__menu__notification__modal-item">
-                                    <i class="fas fa-exclamation" style="width: 10%; color: rgb(221, 85, 85);"></i>
-                                    <span style="width: 90%; font-size: 12px;">Notification 2</span>
-                                </div>
-                                <hr>
-                                <div class="header__menu__notification__modal-item">
-                                    <i class="fas fa-exclamation" style="width: 10%; color: rgb(221, 85, 85);"></i>
-                                    <span style="width: 90%; font-size: 12px;">Notification 2</span>
-                                </div>
-                                <hr>
-                                <div class="header__menu__notification__modal-item">
-                                    <i class="fas fa-exclamation" style="width: 10%; color: rgb(221, 85, 85);"></i>
-                                    <span style="width: 90%; font-size: 12px;">Notification 2</span>
-                                </div>
-                                <hr>
+
                             </div>
                             <div class="header__menu__addGood">
                                 <a href="/good_create" class="add_btn">Добавить товар</a>
@@ -162,6 +133,7 @@
     {% endcompress %}
 
     <script>
+
         function open_info_spoiler_profileMenu() {
             document.getElementsByClassName("header__menu__profile__modal-content")[0].classList.toggle("show");
         }
@@ -284,6 +256,41 @@
             }
             $('#propertyBlock_input-id').val('');
         })
+    </script>
+    <script>
+        function getNotifications() {
+            console.log('getNotifications...')
+            fetch("/api/get_notifications", {
+                method: "POST",
+                body: '',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                var items = '';
+                for (var i in data.goods_notification) {
+                    items += `<a href="/good_card/${data.goods_notification[i].good_id}" class="header__menu__notification__modal-item">
+                                    <i class="fas fa-exclamation" style="width: 10%; color: rgb(221, 85, 85);"></i>
+                                    <span style="width: 90%; font-size: 12px;">${data.goods_notification[i].brand__name} 
+                                    ${data.goods_notification[i].model__name} на оценку! <br>
+                                    Филиал: ${data.goods_notification[i].branch__name}</span>
+                                </a>
+                                <hr>`;
+                }
+
+                $('.header__menu__notification__modal-content').html(items);
+                if (data.count_notiification != 0) {
+                    $('.header__menu__notification__count').text(data.count_notiification);
+                    $('.header__menu__notification__count').css('background-color', '#D65252');
+                }
+                else {
+                    $('.header__menu__notification__count').css('background-color', 'transparent');
+                    $('.header__menu__notification__count').text('');
+                }
+            });
+        }
+        getNotifications();
+        var intervalID = setInterval(getNotifications, 30000);
     </script>
     {% block scripts %}
 

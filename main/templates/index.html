@@ -161,18 +161,16 @@
 
             for (var i = 0; i < files.length; i++) {
                 data.append("file_" + i, files[i]);
-                console.log(files[i]);
             }
-            console.log(document.getElementsByName('seller_phone')[0].value)
-            // fetch("/good_create", {
-            //     method: "POST",
-            //     body: data,
-            //     headers: { 'X-CSRFToken': getCookie('csrftoken') }
-            // }).then(function (response) {
-            //     return response.json();
-            // }).then(function (data) {
+            fetch("/good_create", {
+                method: "POST",
+                body: data,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
 
-            // });
+            });
         }
         else {
             return false;

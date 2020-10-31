@@ -345,14 +345,17 @@ class CustomerChoice(View):
         if request.POST:
             customer_choice = request.POST.get('choice')
             good_id = request.POST.get('good_id')
+            print(customer_choice, good_id)
             try:
                 good = Goods.objects.get(good_id=good_id)
             except Goods.DoesNotExist:
                 return HttpResponse('Товар с ID {0} не найден'.format(good_id), status=400)
             if customer_choice and customer_choice == 'purchase':
                 good.status = GOOD_STATUS_PURCHASE
+                good.save()
             elif customer_choice and customer_choice == 'reject':
                 good.status = GOOD_STATUS_REJECT
+                good.save()
             return HttpResponse('success', status=200)
         return HttpResponse('Пустой запрос', status=400)
 
@@ -367,7 +370,7 @@ class Notifications(View):
     def post(self, request, *args, **kwargs):
         goods = Goods.objects.filter(status=GOOD_STATUS_AWAIT)
         context = {
-            'goods_notification': list(goods.values('brand', 'model', 'user', 'branch')),
+            'goods_notification': list(goods.values('brand__name', 'model__name', 'branch__name', 'good_id')),
             'count_notiification': goods.count()
         }
         return JsonResponse(context, safe=False)
