@@ -73,7 +73,9 @@
                                 Оценен: <span id="branch_info_priced"></span>
                             </div>
                             <div class="branches_wrapper-item__spoiler-text__balance">
-                                Баланс: <span id="branch_info_balance"></span> руб <i class="far fa-plus-square" style="color: #28A745;"></i> <br> 
+                                Баланс: <span id="branch_info_balance"></span> руб <span data-id="{{branch.pk}}"
+                                    data-name="{{branch.name}}" class="donate_to_balance"><i class="far fa-plus-square"
+                                        style="color: #28A745;"></i></span><br>
                                 Работников: <span id="branch_info_users"></span>
                             </div>
                         </div>
@@ -113,7 +115,8 @@
                                 {% for brand in brands %}
                                 <input type="checkbox" class="form-check-input" id="{{brand.brand__name}}"
                                     value="{{brand.brand__name}}" data-id="{{brand.brand__pk}}">
-                                <label class="form-check-label" for="{{brand.brand__name}}">{{brand.brand__name}}</label>
+                                <label class="form-check-label"
+                                    for="{{brand.brand__name}}">{{brand.brand__name}}</label>
                                 <br>
                                 {% endfor %}
                             </div>
@@ -313,6 +316,9 @@
             });
         }
 
+    })
+    $('.donate_to_balance').click(function () {
+        openModalProp($(this).attr('data-name'),$(this).attr('data-id'));
     })
 </script>
 {% endblock scripts %}

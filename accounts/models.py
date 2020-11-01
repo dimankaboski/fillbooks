@@ -22,6 +22,7 @@ class Branch(models.Model):
     name = models.CharField(verbose_name="Филиал", max_length=50)
     address = models.CharField(verbose_name="Адрес филиала", max_length=200, blank=True, default='')
     balance = models.DecimalField(verbose_name="Баланс филиала",max_digits=12, decimal_places=2)
+    # balance = models.CharField(verbose_name="Баланс филиала", max_length=50)
 
     class Meta:
         verbose_name = ("Филиал")

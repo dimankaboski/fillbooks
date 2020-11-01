@@ -9,6 +9,7 @@ import random
 import string
 import datetime
 from django.urls import reverse_lazy
+from decimal import *
 # from pytils import translit
 import os
 from django.conf import settings
@@ -456,7 +457,7 @@ class AddBranchBalance(View):
                 branch = Branch.objects.get(pk=request.POST.get('branch_id'))
             except Branch.DoesNotExist:
                 return HttpResponse('Филиал с ID {0} не найден'.format(request.POST.get('branch_id')), status=400)
-            branch.balance += amount
+            branch.balance += Decimal(request.POST.get('amount'))
             branch.save()
             return HttpResponse('Баланс успешно пополнен', status=200)
         return HttpResponse('Blank request', status=400)

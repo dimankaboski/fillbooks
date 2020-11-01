@@ -106,21 +106,19 @@
     </div>
     <div class="modal" id="property-modal">
         <div class="modal__close">
-            <div class="modal__title">Добавление характеристики</div>
+            <div class="modal__title">Пополнение баланса филиала</div>
+
             <i class="fas fa-times fa-2x" onclick="closeModalProp()"></i>
         </div>
+        <span id="donate_to_branch_name" style="padding-left: 5px;"></span>
         <div class="modal__data">
             <div class="modal__data__title">
-                Характеристика
+                Сумма
             </div>
-            <input type="text">
-            <div class="modal__data__title">
-                Значение
-            </div>
-            <input type="text">
+            <input type="text" id="input_donate_to_branch">
         </div>
         <div class="modal__save">
-            <button class="def_btn">Сохранить</button>
+            <button class="def_btn" id="send_donate_to_branch" value="0" data-id="">Сохранить</button>
         </div>
     </div>
 
@@ -201,10 +199,12 @@
             });
         })
 
-        function openModalProp() {
+        function openModalProp(branch, branch_id) {
             $('.all_content').addClass('overlay_blur');
             $('.overlay_dark').css('display', 'block');
             $('#property-modal').css('display', 'block');
+            $('#donate_to_branch_name').text(branch);
+            $('#send_donate_to_branch').attr('data-id', branch_id);
         }
         function closeModalProp() {
             $('.all_content').removeClass('overlay_blur');
@@ -308,6 +308,26 @@
         }
         getNotifications();
         var intervalID = setInterval(getNotifications, 30000);
+        $('#send_donate_to_branch').click(function () {
+
+            var data = new FormData();
+            data.append('amount', parseFloat($('#input_donate_to_branch').val()).toFixed(2));
+            data.append('branch_id', parseInt($(this).attr('data-id')));
+            fetch("/api/add_branch_balance", {
+                method: "POST",
+                body: data,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                console.log(response)
+                if (response.status == 200) {
+                    alert('Вы успешно пополнили баланс!')
+                    location.reload();
+                }
+            }).then(function (data) {
+
+            });
+        });
+        $("#input_donate_to_branch").mask("#####0", {reverse: true});
     </script>
     {% block scripts %}
 
