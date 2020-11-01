@@ -13,7 +13,7 @@
                         </div>
                         <div class="propertyblock__prop">
                             <div class="propertyblock__prop__key">
-                                Производитель
+                                Производитель <span id="notebook_brand_validate"></span>
                             </div>
                             <input type="text" required name="notebook_brand" id="notebook_brand"
                                 class="propertyblock__prop-value__input">
@@ -22,7 +22,7 @@
                         </div>
                         <div class="propertyblock__prop">
                             <div class="propertyblock__prop__key">
-                                Модель
+                                Модель <span id="notebook_model_validate"></span>
                             </div>
                             <input type="text" required name="notebook_model" id="notebook_model"
                                 class="propertyblock__prop-value__input">
@@ -39,7 +39,7 @@
                         </div>
                         <div class="propertyblock_rev__prop">
                             <div class="propertyblock_rev__prop__key">
-                                Имя <i class="fas fa-exclamation-circle" style="color: rgb(207, 34, 34);"></i>
+                                Имя <span id="seller_name_validate"></span>
                             </div>
 
                             <input type="text" required name="seller_name" id="seller_name"
@@ -48,7 +48,7 @@
                         </div>
                         <div class="propertyblock_rev__prop">
                             <div class="propertyblock_rev__prop__key">
-                                Номер телефона
+                                Номер телефона <span id="seller_phone_validate"></span>
                             </div>
                             <input type="text" required name="seller_phone" id="seller_phone"
                                 class="propertyblock__prop-value__input">
@@ -106,6 +106,22 @@
         is_valid = true;
         if (!document.getElementById('notebook_brand').validity.valid) {
             $(document.getElementById('notebook_brand')).css('border-bottom', '1px solid red')
+            $('#notebook_brand_validate').html('<i class="fas fa-exclamation-circle" style="color: rgb(207, 34, 34);"></i>')
+            is_valid = false;
+        }
+        if (!document.getElementById('notebook_model').validity.valid) {
+            $(document.getElementById('notebook_model')).css('border-bottom', '1px solid red')
+            $('#notebook_model_validate').html('<i class="fas fa-exclamation-circle" style="color: rgb(207, 34, 34);"></i>')
+            is_valid = false;
+        }
+        if (!document.getElementById('seller_name').validity.valid) {
+            $(document.getElementById('seller_name')).css('border-bottom', '1px solid red')
+            $('#seller_name_validate').html('<i class="fas fa-exclamation-circle" style="color: rgb(207, 34, 34);"></i>')
+            is_valid = false;
+        }
+        if (!document.getElementById('seller_phone').validity.valid) {
+            $(document.getElementById('seller_phone')).css('border-bottom', '1px solid red')
+            $('#seller_phone_validate').html('<i class="fas fa-exclamation-circle" style="color: rgb(207, 34, 34);"></i>')
             is_valid = false;
         }
         return is_valid
@@ -115,10 +131,10 @@
 
         $(element).before(`<div class="propertyblock__prop">
                             <input type="text" class="propertyblock__prop-key__input">
-                            <ul class="input__help-text">
+                            <ul class="input__help-text" style="top: 30px;">
                             </ul>
                             <input type="text" class="propertyblock__prop-value__input">
-                            <ul class="input__help-text">
+                            <ul class="input__help-text" style="top: 60px;">
                             </ul>
                         </div>`);
         $('.propertyblock__prop-key__input').keyup(function () {
@@ -205,14 +221,15 @@
             $(propertyBlocks).each(function () {
                 let propertiesList = {};
                 $(this).children('.propertyblock__prop').each(function () {
-                    propertiesList[this.childNodes[1].value] = this.childNodes[3].value
+                    
+                    propertiesList[this.childNodes[1].value] = this.childNodes[5].value
                 });
                 json['propertyBlocks'].push({
                     'name': this.childNodes[1].innerText,
                     'properties': propertiesList,
                 })
             })
-
+            console.log(json)
             var files = document.getElementsByName('view_photos')[0].files;
             data.append("propertyBlocks", JSON.stringify(json));
             data.append("notebook_brand", document.getElementsByName('notebook_brand')[0].value);

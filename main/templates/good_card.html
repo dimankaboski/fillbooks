@@ -172,18 +172,18 @@
                             <div class="propertyblock__prop__key">
                                 Сообщение
                             </div>
-                            <textarea name="" class="card_textarea" id="" cols="30" rows="10"
+                            <textarea name="" class="card_textarea" id="card_msg_input" cols="30" rows="10"
                                 placeholder="Введите сообщение..."></textarea>
                         </div>
                         <div class="card-main-info__input-block">
                             <div class="propertyblock__prop__key">
                                 Стоимость
                             </div>
-                            <input type="text" class="card-input">
+                            <input type="text" id="card_price_input" class="card-input">
                         </div>
                     </div>
                     <div class="propertyblock__btn">
-                        <button class="def_btn">Отправить</button>
+                        <button class="def_btn" id="admin_send_price">Отправить</button>
                     </div>
                 </div>
             </div>
@@ -205,7 +205,7 @@
             body: data,
             headers: { 'X-CSRFToken': getCookie('csrftoken') }
         }).then(function (response) {
-            
+
         }).then(function (data) {
             location.reload();
         });
@@ -221,7 +221,7 @@
             body: data,
             headers: { 'X-CSRFToken': getCookie('csrftoken') }
         }).then(function (response) {
-            
+
         }).then(function (data) {
             location.reload();
         });
@@ -234,6 +234,20 @@
             $(this).removeClass('active-photo');
         })
         $(this).parent().addClass('active-photo')
+    })
+    $('#admin_send_price').click(function () {
+        var data = new FormData();
+        data.append('price', $('#card_price_input').val());
+        data.append('message', $('#card_msg_input').val());
+        fetch("/api/admin_valuation", {
+            method: "POST",
+            body: data,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') }
+        }).then(function (response) {
+
+        }).then(function (data) {
+            location.reload();
+        });
     })
 </script>
 {% endblock scripts %}
