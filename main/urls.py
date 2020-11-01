@@ -8,6 +8,7 @@ from . import views
 
 urlpatterns = [
     path('goods', GoodsListView.as_view(), name='goods'),
+    path('goods/page<int:page>', GoodsListView.as_view(), name='goods_paginate'),
     path('good_create', GoodCreateView.as_view(), name='good_create'),
     path('good_card/<str:good_id>', GoodView.as_view(), name='good_card'),
     path('api/check_brand', CheckBrand.as_view(), name='check_brand'),
