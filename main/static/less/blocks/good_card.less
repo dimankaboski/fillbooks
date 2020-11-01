@@ -26,8 +26,22 @@
         padding-left: 20px;
     }
     &__original {
-
+        width: 100%;
+        height: 300px;
+        position: relative;
         padding: 10px;
+        img {
+            max-height: 100%;
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
     }
     &__other {
         overflow-x: auto;
@@ -38,12 +52,29 @@
         &-photo {
             padding: 5px;
             width: 120px;
+            height: 100px;
             border: 2px solid transparent;
             cursor: pointer;
+            position: relative;
+            img {
+                max-height: 100%;
+                max-width: 100%;
+                width: auto;
+                height: auto;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+            }
             &:hover {
                 border: 2px solid @light_blue;
                 border-radius: 5px;
                 transition: .4s;
+            }
+            & + & {
+                margin-left: 10px;
             }
         }
     }

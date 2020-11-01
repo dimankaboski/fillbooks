@@ -13,15 +13,21 @@
                         </div>
                         <div class="propertyblock__prop">
                             <div class="propertyblock__prop__key">
-                                Производитель
+                                Производитель <span id="notebook_brand_validate"></span>
                             </div>
-                            <input type="text" name="notebook_brand" class="propertyblock__prop-value__input">
+                            <input type="text" required name="notebook_brand" id="notebook_brand"
+                                class="propertyblock__prop-value__input">
+                            <ul class="input__help-text">
+                            </ul>
                         </div>
                         <div class="propertyblock__prop">
                             <div class="propertyblock__prop__key">
-                                Модель
+                                Модель <span id="notebook_model_validate"></span>
                             </div>
-                            <input type="text" name="notebook_model" class="propertyblock__prop-value__input">
+                            <input type="text" required name="notebook_model" id="notebook_model"
+                                class="propertyblock__prop-value__input">
+                            <ul class="input__help-text">
+                            </ul>
                         </div>
                     </div>
 
@@ -33,18 +39,21 @@
                         </div>
                         <div class="propertyblock_rev__prop">
                             <div class="propertyblock_rev__prop__key">
-                                Имя
+                                Имя <span id="seller_name_validate"></span>
                             </div>
-                            <input type="text" name="seller_name" class="propertyblock__prop-value__input">
+
+                            <input type="text" required name="seller_name" id="seller_name"
+                                class="propertyblock__prop-value__input">
+
                         </div>
                         <div class="propertyblock_rev__prop">
                             <div class="propertyblock_rev__prop__key">
-                                Номер телефона
+                                Номер телефона <span id="seller_phone_validate"></span>
                             </div>
-                            <input type="text" name="seller_phone" class="propertyblock__prop-value__input">
+                            <input type="text" required name="seller_phone" id="seller_phone"
+                                class="propertyblock__prop-value__input">
                         </div>
                     </div>
-
                 </div>
 
             </div>
@@ -92,12 +101,96 @@
 {% endblock content %}
 {% block scripts %}
 <script>
+    $('#seller_phone').mask('+00000000000');
+    function validateInputs() {
+        is_valid = true;
+        if (!document.getElementById('notebook_brand').validity.valid) {
+            $(document.getElementById('notebook_brand')).css('border-bottom', '1px solid red')
+            $('#notebook_brand_validate').html('<i class="fas fa-exclamation-circle" style="color: rgb(207, 34, 34);"></i>')
+            is_valid = false;
+        }
+        if (!document.getElementById('notebook_model').validity.valid) {
+            $(document.getElementById('notebook_model')).css('border-bottom', '1px solid red')
+            $('#notebook_model_validate').html('<i class="fas fa-exclamation-circle" style="color: rgb(207, 34, 34);"></i>')
+            is_valid = false;
+        }
+        if (!document.getElementById('seller_name').validity.valid) {
+            $(document.getElementById('seller_name')).css('border-bottom', '1px solid red')
+            $('#seller_name_validate').html('<i class="fas fa-exclamation-circle" style="color: rgb(207, 34, 34);"></i>')
+            is_valid = false;
+        }
+        if (!document.getElementById('seller_phone').validity.valid) {
+            $(document.getElementById('seller_phone')).css('border-bottom', '1px solid red')
+            $('#seller_phone_validate').html('<i class="fas fa-exclamation-circle" style="color: rgb(207, 34, 34);"></i>')
+            is_valid = false;
+        }
+        return is_valid
+    }
     function addPropertyInputs(element) {
         console.log(element)
+
         $(element).before(`<div class="propertyblock__prop">
                             <input type="text" class="propertyblock__prop-key__input">
+                            <ul class="input__help-text" style="top: 30px;">
+                            </ul>
                             <input type="text" class="propertyblock__prop-value__input">
+                            <ul class="input__help-text" style="top: 60px;">
+                            </ul>
                         </div>`);
+        $('.propertyblock__prop-key__input').keyup(function () {
+
+            var data = new FormData();
+            var inp = this;
+            data.append('query', this.value);
+            data.append('type_query', 'property_name');
+            fetch("/api/search_by_query", {
+                method: "POST",
+                body: data,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                var items = '';
+                for (var i in data.result) {
+                    items += `<li>${data.result[i].name}</li>`;
+                }
+
+                $(inp).next().html(items);
+                $('.input__help-text').find('li').click(function () {
+                    $(this).parent().prev().val(this.innerText);
+                    $(this).parent().find('li').each(function () {
+                        $(this).remove();
+                    })
+                })
+            });
+        })
+        $('.propertyblock__prop-value__input').keyup(function () {
+
+            var data = new FormData();
+            var inp = this;
+            data.append('query', this.value);
+            data.append('type_query', 'property_value');
+            fetch("/api/search_by_query", {
+                method: "POST",
+                body: data,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                var items = '';
+                for (var i in data.result) {
+                    items += `<li>${data.result[i].value}</li>`;
+                }
+
+                $(inp).next().html(items);
+                $('.input__help-text').find('li').click(function () {
+                    $(this).parent().prev().val(this.innerText);
+                    $(this).parent().find('li').each(function () {
+                        $(this).remove();
+                    })
+                })
+            });
+        })
     }
     function readURL(input, group) {
         $(input.files).each(function (i, el) {
@@ -118,45 +211,133 @@
 
     $('#post_new_notebook').click(function () {
         json = {}
-        var data = new FormData();
+        is_valid = validateInputs();
+        if (is_valid) {
+            var data = new FormData();
 
-        let propertyBlocks = document.getElementsByClassName('prop_block')
+            let propertyBlocks = document.getElementsByClassName('prop_block')
 
-        json['propertyBlocks'] = []
-        $(propertyBlocks).each(function () {
-            let propertiesList = {};
-            $(this).children('.propertyblock__prop').each(function () {
-                propertiesList[this.childNodes[1].value] = this.childNodes[3].value
-            });
-            json['propertyBlocks'].push({
-                'name': this.childNodes[1].innerText,
-                'properties': propertiesList,
+            json['propertyBlocks'] = []
+            $(propertyBlocks).each(function () {
+                let propertiesList = {};
+                $(this).children('.propertyblock__prop').each(function () {
+                    
+                    propertiesList[this.childNodes[1].value] = this.childNodes[5].value
+                });
+                json['propertyBlocks'].push({
+                    'name': this.childNodes[1].innerText,
+                    'properties': propertiesList,
+                })
             })
-        })
-        console.log(json)
-        var files = document.getElementsByName('view_photos')[0].files;
-        data.append("propertyBlocks", JSON.stringify(json));
-        data.append("notebook_brand", document.getElementsByName('notebook_brand')[0].value);
-        data.append("notebook_model", document.getElementsByName('notebook_model')[0].value);
-        data.append("seller_name", document.getElementsByName('seller_name')[0].value);
-        data.append("seller_phone", document.getElementsByName('seller_phone')[0].value);
-        data.append("notebook_description", document.getElementsByName('notebook_description')[0].value);
+            console.log(json)
+            var files = document.getElementsByName('view_photos')[0].files;
+            data.append("propertyBlocks", JSON.stringify(json));
+            data.append("notebook_brand", document.getElementsByName('notebook_brand')[0].value);
+            data.append("notebook_model", document.getElementsByName('notebook_model')[0].value);
+            data.append("seller_name", document.getElementsByName('seller_name')[0].value);
+            data.append("seller_phone", document.getElementsByName('seller_phone')[0].value);
+            data.append("notebook_description", document.getElementsByName('notebook_description')[0].value);
 
-        for(var i=0; i<files.length; i++){
-            data.append("file_"+i, files[i]);
-            console.log(files[i]);
+            for (var i = 0; i < files.length; i++) {
+                data.append("file_" + i, files[i]);
+            }
+            fetch("/good_create", {
+                method: "POST",
+                body: data,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+
+            });
+        }
+        else {
+            return false;
         }
 
-        fetch("/good_create", {
+
+    })
+
+    $('#notebook_brand').keyup(function () {
+        var data = new FormData();
+        var inp = this;
+        data.append('query', this.value);
+        data.append('type_query', 'brand_name');
+        fetch("/api/search_by_query", {
             method: "POST",
             body: data,
             headers: { 'X-CSRFToken': getCookie('csrftoken') }
         }).then(function (response) {
             return response.json();
         }).then(function (data) {
+            var items = '';
+            for (var i in data.result) {
+                items += `<li>${data.result[i].name}</li>`;
+            }
 
+            $(inp).next().html(items);
+            $('.input__help-text').find('li').click(function () {
+                $(this).parent().prev().val(this.innerText);
+                $(this).parent().find('li').each(function () {
+                    $(this).remove();
+                })
+            })
         });
-
     })
+    $('#notebook_model').keyup(function () {
+        var data = new FormData();
+        var inp = this;
+        data.append('query', this.value);
+        data.append('brand', $('#notebook_brand').val());
+        data.append('type_query', 'model_name');
+        fetch("/api/search_by_query", {
+            method: "POST",
+            body: data,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (data) {
+            var items = '';
+            for (var i in data.result) {
+                items += `<li>${data.result[i].name}</li>`;
+            }
+
+            $(inp).next().html(items);
+            $('.input__help-text').find('li').click(function () {
+                $(this).parent().prev().val(this.innerText);
+                $(this).parent().find('li').each(function () {
+                    $(this).remove();
+                })
+            })
+        });
+    })
+    $('#propertyBlock_input-id').keyup(function () {
+        var data = new FormData();
+        var inp = this;
+        data.append('query', this.value);
+        data.append('type_query', 'block_name');
+        fetch("/api/search_by_query", {
+            method: "POST",
+            body: data,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (data) {
+            var items = '';
+            for (var i in data.result) {
+                items += `<li>${data.result[i].name}</li>`;
+            }
+
+            $(inp).next().html(items);
+            $('.input__help-text').find('li').click(function () {
+                $(this).parent().prev().val(this.innerText);
+                $(this).parent().find('li').each(function () {
+                    $(this).remove();
+                })
+            })
+        });
+    })
+
+
 </script>
 {% endblock scripts %}

@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.contrib.auth import authenticate, login, logout
 from accounts.models import User
-from accounts.forms import RegisterUserForm, LoginUserForm
-from django.contrib.auth.views import LoginView, LogoutView 
+from accounts.forms import RegisterUserForm, LoginUserForm, CustomPasswordChangeForm, CustomPasswordResetForm, CustomSetPasswordForm
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeDoneView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView ,PasswordResetDoneView, PasswordResetCompleteView 
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 
@@ -11,6 +11,7 @@ from django.urls import reverse_lazy
 class Login(LoginView):
     authentication_form = LoginUserForm
     template_name = 'login.html'
+
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated and not request.user.is_staff:
@@ -34,3 +35,36 @@ class Logout(LogoutView ):
         if not request.user.is_authenticated:
             return HttpResponsePermanentRedirect(reverse_lazy('login'))
         return super().dispatch(request, *args, **kwargs)
+
+class PasswordChangeDone(PasswordChangeDoneView):
+    template_name = 'password_change_done.html'
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponsePermanentRedirect(reverse_lazy('login'))
+        return super().dispatch(request, *args, **kwargs)
+
+class PasswordChange(PasswordChangeView):
+    template_name = 'password_change.html'
+    form_class = CustomPasswordChangeForm
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponsePermanentRedirect(reverse_lazy('login'))
+        return super().dispatch(request, *args, **kwargs)
+
+class PasswordReset(PasswordResetView):
+    template_name = 'password_reset.html'
+    form_class = CustomPasswordResetForm
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponsePermanentRedirect(reverse_lazy('login'))
+        return super().dispatch(request, *args, **kwargs)
+
+class PasswordResetDone(PasswordResetDoneView):
+    template_name = 'password_reset.html'
+
+class PasswordResetConfirm(PasswordResetConfirmView):
+    template_name = 'password_reset_confirm.html'
+    form_class = CustomSetPasswordForm
+
+class PasswordResetComplete(PasswordResetCompleteView):
+    template_name = 'password_reset_complite.html'

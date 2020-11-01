@@ -1,28 +1,30 @@
-{% extends "global.html" %} {% load compress %} {% block content %}
+{% extends "global.html" %} {% load compress filtres %} {% block content %}
 <div class="container bg_white">
 
     <div class="main">
         <section class="main-block">
             <div class="titleh1_w_text">
-                <h1>Оценка товара #{{good.good_id}}</h1>
+                <h1>Оценка товара # <span id="test_id">{{good.good_id}}</span></h1>
             </div>
             <br>
+            {% get_images good.good_id as images %}
+
             <span class="h1_text">Филиал: {{good.branch.name}}, {{good.user.get_full_name}}</span>
             <div class="card-photos__wrapper">
                 <div class="card-photos__original">
-                    <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
+                    {% if good.get_one_image %}
+                    <img src=" {{good.get_one_image.get_filename_url}}" class="img_def" id="showimg" alt="">
+                    {% else %}
+                    <img src="{{ STATIC_URL }}images/no-image-box.jpeg" class="img_def" alt="">
+                    {% endif %}
                 </div>
                 <div class="card-photos__other">
                     <div class="card-photos__other__list">
-                        <div class="card-photos__other-photo active-photo">
-                            <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
-                        </div>
+                        {% for image in images %}
                         <div class="card-photos__other-photo">
-                            <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
+                            <img src="{{image.get_filename_url}}" class="img_def" alt="">
                         </div>
-                        <div class="card-photos__other-photo">
-                            <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt="">
-                        </div>
+                        {% endfor %}
 
                     </div>
 
@@ -122,9 +124,27 @@
         </section>
         <section class="main-block">
             <div class="card-main-info">
-                <div class="card-main-info__title">
-                    <h1>{{good.brand.name}} {{good.model.name}}</h1>
+                <div class="card-main-info__title-wrapper">
+                    <div class="card-main-info__title">
+                        <h1>{{good.brand.name}} {{good.model.name}}</h1>
+                    </div>
+                    <div class="card-main-info__status">
+                        {% if good.status == 'Ожидает оценки' %}
+                        <span style="color: rgb(57, 57, 204); font-size: 16px;">{{good.status}} <i
+                                style="font-size: 16px;" class="fas fa-bolt"></i></span>
+                        {% elif good.status == 'Отказ' %}
+                        <span style="color: #DC3545; font-size: 16px;">{{good.status}} <i style="font-size: 16px;"
+                                class="fas fa-ban"></i></span>
+                        {% elif good.status == 'Приобретен' %}
+                        <span style="color: #28A745; font-size: 16px;">{{good.status}} <i style="font-size: 16px;"
+                                class="fas fa-check"></i></span>
+                        {% elif good.status == 'Оценен' %}
+                        <span style="color: #FF9900; font-size: 16px;">{{good.status}} <i style="font-size: 16px;"
+                                class="fas fa-hourglass-half"></i></span>
+                        {% endif %}
+                    </div>
                 </div>
+
                 <div class="card-main-info__seller-name">
                     {{good.customer.name}}
                 </div>
@@ -138,21 +158,32 @@
                     </div>
                     <div class="card-main-info__msg-block">
                         <div class="card-main-info__input-block">
+                            <button id="btn_seller_bought" class="card-main-info__seller_bought"><i
+                                    style="font-size: 14px;" class="fas fa-check"></i> Приобретен</button>
+                            <button id="btn_seller_reject" class="card-main-info__seller_reject"><i
+                                    style="font-size: 14px;" class="fas fa-ban"></i> Отказ</button>
+                        </div>
+                        <div class="card-main-info__input-block">
+
+                        </div>
+                    </div>
+                    <div class="card-main-info__msg-block">
+                        <div class="card-main-info__input-block">
                             <div class="propertyblock__prop__key">
                                 Сообщение
                             </div>
-                            <textarea name="" class="card_textarea" id="" cols="30" rows="10"
+                            <textarea name="" class="card_textarea" id="card_msg_input" cols="30" rows="10"
                                 placeholder="Введите сообщение..."></textarea>
                         </div>
                         <div class="card-main-info__input-block">
                             <div class="propertyblock__prop__key">
                                 Стоимость
                             </div>
-                            <input type="text" class="card-input">
+                            <input type="text" id="card_price_input" class="card-input">
                         </div>
                     </div>
                     <div class="propertyblock__btn">
-                        <button class="def_btn">Отправить</button>
+                        <button class="def_btn" id="admin_send_price">Отправить</button>
                     </div>
                 </div>
             </div>
@@ -160,4 +191,63 @@
     </div>
 
 </div>
-{%csrf_token%} {% endblock content %}
+{%csrf_token%}
+{% endblock content %}
+{% block scripts %}
+<script>
+
+    $('#btn_seller_bought').click(function () {
+        var data = new FormData();
+        data.append("choice", "purchase");
+        data.append("good_id", "{{good.good_id}}");
+        fetch("/api/customer_choice", {
+            method: "POST",
+            body: data,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') }
+        }).then(function (response) {
+
+        }).then(function (data) {
+            location.reload();
+        });
+    });
+
+    $('#btn_seller_reject').click(function () {
+        var data = new FormData();
+        data.append("choice", "reject");
+        data.append("good_id", "{{good.good_id}}");
+
+        fetch("/api/customer_choice", {
+            method: "POST",
+            body: data,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') }
+        }).then(function (response) {
+
+        }).then(function (data) {
+            location.reload();
+        });
+    });
+
+    $('.card-photos__other__list').find('img').click(function () {
+        var new_src = $(this).attr('src')
+        $('#showimg').attr('src', new_src);
+        $('.card-photos__other__list').find('.card-photos__other-photo').each(function () {
+            $(this).removeClass('active-photo');
+        })
+        $(this).parent().addClass('active-photo')
+    })
+    $('#admin_send_price').click(function () {
+        var data = new FormData();
+        data.append('price', $('#card_price_input').val());
+        data.append('message', $('#card_msg_input').val());
+        fetch("/api/admin_valuation", {
+            method: "POST",
+            body: data,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') }
+        }).then(function (response) {
+
+        }).then(function (data) {
+            location.reload();
+        });
+    })
+</script>
+{% endblock scripts %}
