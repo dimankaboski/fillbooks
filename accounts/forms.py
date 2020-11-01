@@ -1,4 +1,4 @@
-from accounts.models import User
+from accounts.models import User, Branch
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 
@@ -97,3 +97,28 @@ class CustomSetPasswordForm(SetPasswordForm):
         self.fields['new_password2'].label = 'Новый пароль еще раз'
         self.fields['new_password2'].widget.attrs['class'] = 'login_input'
         self.fields['new_password2'].widget.attrs['placeholder'] = 'Введите новый пароль'
+
+class BranchAddForm(forms.ModelForm):
+    class Meta:
+        model = Branch
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(BranchAddForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['class'] = 'register-input'
+        self.fields['name'].widget.attrs['placeholder'] = 'Название филиала'
+        self.fields['address'].widget.attrs['class'] = 'register-input'
+        self.fields['address'].widget.attrs['placeholder'] = 'Адрес филиала'
+        self.fields['balance'].widget.attrs['class'] = 'register-input'
+        self.fields['balance'].widget.attrs['placeholder'] = 'Баланс филиала'
+
+
+class PositionAddForm(forms.ModelForm):
+    class Meta:
+        model = Branch
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(PositionAddForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['class'] = 'register-input'
+        self.fields['name'].widget.attrs['placeholder'] = 'Название филиала'

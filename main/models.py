@@ -130,7 +130,7 @@ class Goods(models.Model):
     user = models.ForeignKey(User, verbose_name="Добавивший пользователь", on_delete=models.CASCADE)
     customer = models.ForeignKey(Customers, verbose_name="Клиент", on_delete=models.CASCADE)
     branch = models.ForeignKey(Branch, verbose_name="Филиал", on_delete=models.CASCADE)
-    price = models.CharField(verbose_name="Цена", max_length=10, blank=True, default='')
+    price = models.DecimalField(verbose_name="Цена",max_digits=8, decimal_places=2, blank=True)
     status = models.CharField(verbose_name="Статус", max_length=20, choices=GOOD_STATUS_CHOICES, default=GOOD_STATUS_AWAIT)
     property_block = models.ManyToManyField(PropertyBlock, verbose_name="Блоки характеристик")
     description = models.TextField(verbose_name="Описание", blank=True, default='')

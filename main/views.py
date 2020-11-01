@@ -78,7 +78,7 @@ class GoodsListView(ListView):
             model = self.request.GET.get("model")
             status = self.request.GET.get("status")
             branch = self.request.GET.get("branch")
-            if brand:
+            if brand :
                 brand = GoodsBrand.objects.filter(name__in=brand.split('--'))
                 queryset = queryset.filter(brand__in=brand)
             if model:
@@ -335,11 +335,15 @@ class GoodPriced(View):
             good_id = request.POST.get('good_id')
             try:
                 good = Goods.objects.get(good_id=good_id)
+                branch = Branch.objects.get(name=self.request.user.branch.name)
             except Goods.DoesNotExist:
                 return HttpResponse('Товар с ID {0} не найден'.format(good_id), status=400)
+
             good.price = price
             good.status = GOOD_STATUS_PRICED
             good.save()
+            branch.balance = branch.balance - price
+            branch.save()
             return HttpResponse('success', status=200)
         return HttpResponse('Пустой запрос', status=400)
 
