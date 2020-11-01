@@ -59,7 +59,7 @@ class GoodsListView(ListView):
 
     template_name = 'goods.html'
     model = Goods
-    paginate_by = 10
+    paginate_by = 4
     page_kwarg = 'page'
 
     def dispatch(self, request, *args, **kwargs):
