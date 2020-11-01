@@ -441,3 +441,22 @@ class SearchByQuery(View):
     def search_by_property_value(self):
         property_values = PropertyValue.objects.filter(value__icontains=self.query).values('value')
         self.context.update({'result': list(property_values)[:7] if property_values else ''})
+
+
+class AddBranchBalance(View):
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user and request.user.is_authenticated and request.user.is_staff:
+            raise Http404('Сначала авторизуйтесь')
+        return super().dispatch(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        if request.POST and request.POST.get('amount') and request.POST.get('branch_id'):
+            try:
+                branch = Branch.objects.get(pk=request.POST.get('branch_id'))
+            except Branch.DoesNotExist:
+                return HttpResponse('Филиал с ID {0} не найден'.format(request.POST.get('branch_id')), status=400)
+            branch.balance += amount
+            branch.save()
+            return HttpResponse('Баланс успешно пополнен', status=200)
+        return HttpResponse('Blank request', status=400)
