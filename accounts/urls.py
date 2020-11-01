@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
-from accounts.views import Register, Login, Logout, PasswordChangeDone, PasswordChange, PasswordReset, PasswordResetDone, PasswordResetConfirm, PasswordResetComplete
+from accounts.views import Register, Login, Logout, PasswordChangeDone, PasswordChange, PasswordReset, PasswordResetDone, PasswordResetConfirm, PasswordResetComplete, BranchAdd, PositionAdd
 
 
 urlpatterns = [
@@ -15,4 +15,6 @@ urlpatterns = [
     path('password_reset/done/', PasswordResetDone.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', PasswordResetConfirm.as_view(), name='password_reset_confirm'),
     path('reset/done/', PasswordResetComplete.as_view(), name='password_reset_complete'),
+    path('branch_add', BranchAdd.as_view(), name='branch_add'),
+    path('position_add', PositionAdd.as_view(), name='position_add'),
 ]

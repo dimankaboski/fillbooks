@@ -81,7 +81,7 @@ class PasswordResetComplete(PasswordResetCompleteView):
 class BranchAdd(CreateView):
     form_class = BranchAddForm
     success_url = reverse_lazy('goods')
-    template_name = 'branch_add.html'
+    template_name = 'add_branch.html'
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated and not request.user.is_staff:
@@ -92,7 +92,7 @@ class BranchAdd(CreateView):
 class PositionAdd(CreateView):
     form_class = PositionAddForm
     success_url = reverse_lazy('goods')
-    template_name = 'position_add.html'
+    template_name = 'add_position.html'
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated and not request.user.is_staff:
