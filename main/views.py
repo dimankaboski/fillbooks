@@ -46,7 +46,7 @@ class GoodView(TemplateView):
             good = Goods.objects.get(good_id=good_id)
         except Goods.DoesNotExist:
             raise Http404('Товар с ID %s не найден' % good_id)
-        good_message = 'Уважаемый(ая) {0}, ваш товар {1} оценен в {2}'.format(good.customer.name, good_id, good.price)
+        good_message = 'Уважаемый(ая) {0}, ваш товар {1} оценен в '.format(good.customer.name, good_id)
         context = super(GoodView, self).get_context_data(**kwargs)
         context.update({
             'good': good,

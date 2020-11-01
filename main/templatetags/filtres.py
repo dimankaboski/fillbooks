@@ -89,9 +89,7 @@ def render_pagination(page_obj, url, urltwo=None, **kwargs):
 
     def display():
         last_page = 0
-        print(page_obj.number)
-        if page_obj.has_previous():
-            yield str_item(href_page=page_obj.previous_page_number(), label='←')
+
 
         for p in pages:
             if p != last_page + 1:
@@ -104,6 +102,5 @@ def render_pagination(page_obj, url, urltwo=None, **kwargs):
 
             last_page = p
 
-        if page_obj.has_next():
-            yield str_item(href_page=page_obj.next_page_number(), label='→')
+
     return mark_safe('<div class="pagination"><ul>%s</ul></div>' % ' '.join(display()))

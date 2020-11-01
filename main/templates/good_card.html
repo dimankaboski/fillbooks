@@ -173,13 +173,13 @@
                                 Сообщение
                             </div>
                             <textarea name="" class="card_textarea" id="card_msg_input" cols="30" rows="10"
-                                placeholder="Введите сообщение..."></textarea>
+                                placeholder="Введите сообщение...">{{message}}</textarea>
                         </div>
                         <div class="card-main-info__input-block">
                             <div class="propertyblock__prop__key">
                                 Стоимость
                             </div>
-                            <input type="text" id="card_price_input" class="card-input">
+                            <input type="text" id="card_price_input" maxlength="10" value="{{good.price}}" class="card-input">
                         </div>
                     </div>
                     <div class="propertyblock__btn">
@@ -239,7 +239,8 @@
         var data = new FormData();
         data.append('price', $('#card_price_input').val());
         data.append('message', $('#card_msg_input').val());
-        fetch("/api/admin_valuation", {
+        data.append('good_id', "{{ good.good_id }}");
+        fetch("/api/good_priced", {
             method: "POST",
             body: data,
             headers: { 'X-CSRFToken': getCookie('csrftoken') }
@@ -248,6 +249,9 @@
         }).then(function (data) {
             location.reload();
         });
+    })
+    $('#card_price_input').keyup(function(){
+        $('#card_msg_input').val("{{message}}" + $(this).val());
     })
 </script>
 {% endblock scripts %}
