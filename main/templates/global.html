@@ -40,10 +40,12 @@
                     <div class="header__menu">
                         <div class="header__menu-list">
                             <div class="header__menu__notification">
+                                {% if request.user.is_staff %}
                                 <img src="{{ STATIC_URL }}images/mail.svg" alt="">
                                 <div class="header__menu__notification__count">
 
                                 </div>
+                                {% endif %}
                             </div>
                             <div class="header__menu__notification__modal-content">
 
@@ -53,19 +55,29 @@
                             </div>
                             <div class="header__menu__profile">
                                 <div class="header__menu__profile__photo">
-                                    <img src="{{ STATIC_URL }}images/andrdiva.jpg" class="profile_avatar" alt="">
+                                    {% if request.user.is_staff %}
+                                    <img src="{{ STATIC_URL }}images/moderator.jpg" class="profile_avatar" alt="">
+                                    {% else %}
+                                    <img src="{{ STATIC_URL }}images/default_user.png" class="profile_avatar" alt="">
+                                    {% endif %}
                                 </div>
-                                <div class="header__menu__profile__name">Максим Жирцепс</div>
+                                <div class="header__menu__profile__name">{{request.user.get_full_name}} <i
+                                        class="fas fa-angle-down" style="vertical-align: bottom;"></i></div>
                                 <div class="header__menu__profile__modal">
-                                    <i class="fas fa-angle-down"></i>
+
                                     <div class="header__menu__profile__modal-content">
-                                        <span class="profile-menu__branch">Санкт-Петербург</span>
-                                        <span class="profile-menu__branch__balance">Баланс филиала: 1 234 000.00
+                                        <span class="profile-menu__branch">{{ request.user.branch.name }}</span>
+                                        <span class="profile-menu__branch__balance">Баланс филиала:
+                                            {{ request.user.branch.balance }}
                                             руб</span>
                                         <hr>
                                         <a href="/goods">Список товаров</a>
-                                        <a href="#">Товары на оценке</a>
                                         <a href="#">Отгрузка товара</a>
+                                        {% if request.user.is_staff %}
+                                        <a href="/accounts/register">Добавить работника</a>
+                                        <a href="/accounts/register">Добавить филиал</a>
+                                        <a href="/accounts/register">Добавить должность</a>
+                                        {% endif %}
                                         <hr>
                                         <a href="/accounts/logout">Выход</a>
                                     </div>

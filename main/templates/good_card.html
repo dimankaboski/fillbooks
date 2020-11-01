@@ -156,6 +156,7 @@
                         <textarea name="" class="good_description" id="" cols="30" rows="10"
                             placeholder="Введите описание..." readonly>{{good.description}}</textarea>
                     </div>
+                    {% if good.status == 'Оценен' %}
                     <div class="card-main-info__msg-block">
                         <div class="card-main-info__input-block">
                             <button id="btn_seller_bought" class="card-main-info__seller_bought"><i
@@ -167,6 +168,8 @@
 
                         </div>
                     </div>
+                    {% endif %}
+                    {% if request.user.is_staff %}
                     <div class="card-main-info__msg-block">
                         <div class="card-main-info__input-block">
                             <div class="propertyblock__prop__key">
@@ -185,6 +188,7 @@
                     <div class="propertyblock__btn">
                         <button class="def_btn" id="admin_send_price">Отправить</button>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </section>

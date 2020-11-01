@@ -55,6 +55,7 @@
             </div>
         </section>
         <section class="main-block ">
+            {% if request.user.is_staff %}
             <div class="titleh1">
                 <h1>Информация о филиалах</h1>
             </div>
@@ -80,12 +81,14 @@
                 </div>
                 {% endfor %}
             </div>
+            {% endif %}
             <div class="filtres">
                 <div class="filtres__title">
                     Фильтры
                 </div>
                 <div class="filtres__main">
                     <form name="filtres_form" id="filtres_form">
+                        {% if request.user.is_staff %}
                         <div class="filtres__main-item">
                             <div class="filtres__main-item__title">
                                 Филиал
@@ -99,6 +102,7 @@
                                 {% endfor %}
                             </div>
                         </div>
+                        {% endif %}
                         <div class="filtres__main-item">
                             <div class="filtres__main-item__title">
                                 Производитель
@@ -212,12 +216,17 @@
         var brand_params = getCheckboxesValue('brand').join('--');
         var model_params = getCheckboxesValue('model').join('--');
         var status_params = getCheckboxesValue('status').join('--');
+        `{% if not request.user.is_staff %}`
+        var branch_params = '{{request.user.branch.name}}';
+        `{% else %}`
         var branch_params = getCheckboxesValue('branch').join('--');
+        `{% endif %}`
         let url = `/goods?brand=${brand_params}&model=${model_params}&status=${status_params}&branch=${branch_params}`;
+
         window.location = url;
     })
 
-    $('#testclick').click(function (e) {
+    $('.branches_wrapper-item').click(function (e) {
         let curr_el = this;
         var data = new FormData();
         data.append("branch_id", parseInt($(this).attr('data-id')));

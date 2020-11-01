@@ -62,6 +62,7 @@ class GoodsListView(ListView):
     paginate_by = 4
     page_kwarg = 'page'
 
+
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponsePermanentRedirect(reverse_lazy('login'))
@@ -69,7 +70,10 @@ class GoodsListView(ListView):
 
     def get_queryset(self):
         if self.request.GET:
-            queryset = Goods.objects.all()
+            if self.request.user.is_staff:
+                queryset = Goods.objects.all()
+            else:
+                queryset = Goods.objects.filter(branch__name=self.request.user.branch.name)
             brand = self.request.GET.get("brand")
             model = self.request.GET.get("model")
             status = self.request.GET.get("status")
@@ -82,7 +86,7 @@ class GoodsListView(ListView):
                 queryset = queryset.filter(model__in=model)
             if status:
                 queryset = queryset.filter(status__in=status.split('--'))
-            if branch:
+            if branch and self.request.user.is_staff:
                 branch = Branch.objects.filter(name__in=branch.split('--'))
                 queryset = queryset.filter(branch__in=branch)
             return queryset
@@ -91,6 +95,10 @@ class GoodsListView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         """Get the context for this view."""
         queryset = object_list if object_list is not None else self.object_list
+        if self.request.user.is_staff:
+            queryset = Goods.objects.all()
+        else:
+            queryset = Goods.objects.filter(branch__name=self.request.user.branch.name)
         page_size = self.get_paginate_by(queryset)
         queryset = queryset.order_by('-pk')
         context_object_name = self.get_context_object_name(queryset)

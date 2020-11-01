@@ -95,7 +95,11 @@ textarea:focus, input:focus {
         flex-direction: column;
         padding: 10px 30px;
         font-size: 18px;
-        
+        position: relative;
+        .input__help-text {
+            top: 50px;
+            left: -10px;
+        }
         &-key__input {
             font-family: inherit;
             background-color: transparent;
@@ -117,6 +121,7 @@ textarea:focus, input:focus {
             padding-bottom: 5px;
             border-bottom: 1px solid @light_green;
         }
+
         &__key {
             color: @light_grey;
             
@@ -166,6 +171,29 @@ textarea:focus, input:focus {
 .def_btn {
     .def_btn(@light_blue, 50px, 210px, 18px);
 
+}
+.input__help-text {
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    background-color: #fefefe;
+    min-width: 350px;
+    z-index: 3;
+    padding-left: 0;
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.25);
+    border-radius: 5px;
+    padding-left: 0;
+    li {
+        font-weight: 400;
+        list-style: none;
+        padding: 5px 0;
+        padding-left: 30px;
+        border-bottom: 1px solid @light_blue;
+        cursor: pointer;
+        &:hover {
+            color: darken(@light_blue, 30%);
+        }
+    }
 }
 .propertyblock_rev {
     text-align: right;
@@ -309,12 +337,12 @@ textarea:focus, input:focus {
                 top: -5px;
                 right: -5px;
                 font-size: 12px;
-                font-weight: bold;
-                color: @black;
+                font-weight: 400;
+                color: white;
                 border-radius: 50%;
                 width: 16px;
                 height: 16px;
-                background-color: #D65252;
+                background-color: transparent;
             }
 
             &__modal-content {
@@ -332,7 +360,7 @@ textarea:focus, input:focus {
                 color: @black;
                 box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
                 border-radius: 0px 0px 10px 10px;
-                padding: 5px;
+                padding: 0px 5px;
                 z-index: 1;
                 hr {
                     border-top: 1px solid @light_blue;
@@ -342,7 +370,9 @@ textarea:focus, input:focus {
             &__modal-item {
                 display: flex;
                 justify-content: center;
-                
+                text-decoration: none;
+                color: @black;
+                padding: 5px 0px;
             }
         }
         &__addGood {
@@ -444,7 +474,10 @@ textarea:focus, input:focus {
         .titlePropertyBlock(@light_blue);
     }
     &__main {
-
+        &-btn {
+            .def_btn(@light_blue, 30px, 150px, 14px);
+            margin-left: 10px;
+        }
         form {
             display: flex;
             flex-direction: row;
@@ -740,5 +773,52 @@ textarea:focus, input:focus {
     }
     & + & {
         margin-top: 15px;
+    }
+}
+.pagination {
+    display: inline;
+    margin: auto;
+    
+    &__wrapper {
+        text-align: center;
+    }
+    ul {
+        display: inline-flex;
+        li {
+            list-style: none;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #898989;
+            border-left: 0;
+            &:first-child {
+                border-top-left-radius: 3px;
+                border-bottom-left-radius: 3px;
+                border-left: 1px solid #898989;
+            }
+            &:last-child {
+                border-top-right-radius: 3px;
+                border-bottom-right-radius: 3px;
+            }
+            &:hover {
+                background-color: @light_green;
+            }
+        }
+    }
+    .active {
+        background-color: @light_blue;
+        a {
+            color: @black;
+        }
+        
+        &:hover {
+            background-color: @light_blue;
+        }
+    }
+    a {
+        color: #898989;
+        padding: 10px;
+        text-decoration: none;
     }
 }
