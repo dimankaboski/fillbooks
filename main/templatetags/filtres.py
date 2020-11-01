@@ -3,7 +3,7 @@ from django import template
 from main.models import GoodsBrand, Branch, Goods
 from main.const import *
 from accounts.models import Branch
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 register = template.Library()
@@ -51,7 +51,7 @@ def render_pagination(page_obj, url, urltwo=None, **kwargs):
     # page = page_obj.number
 
     if pages_count <= 1:
-        return u''
+        return ''
 
     if pages_count <= 10:
         pages = page_obj.paginator.page_range
@@ -67,43 +67,43 @@ def render_pagination(page_obj, url, urltwo=None, **kwargs):
         )
 
     def str_item(href_page=None, label=None, attr=None):
-        item = [u'<li ']
+        item = ['<li ']
 
         if attr:
             item.append(attr)
 
         if href_page:
             if href_page == 1 and urltwo:
-                item.append(u'><a href="%s">' % reverse(urltwo, kwargs=dict(kwargs)))
+                item.append('><a href="%s">' % reverse(urltwo, kwargs=dict(kwargs)))
             else:
-                item.append(u'><a href="%s">' % reverse(url, kwargs=dict(kwargs, page=href_page)))
+                item.append('><a href="%s">' % reverse(url, kwargs=dict(kwargs, page=href_page)))
         else:
-            item.append(u'><a>')
+            item.append('><a>')
 
         if label:
             item.append(label)
 
-        item.append(u'</a></li>')
+        item.append('</a></li>')
 
-        return u''.join(item)
+        return ''.join(item)
 
     def display():
         last_page = 0
-
+        print(page_obj.number)
         if page_obj.has_previous():
-            yield str_item(href_page=page_obj.previous_page_number(), label=u'←')
+            yield str_item(href_page=page_obj.previous_page_number(), label='←')
 
         for p in pages:
             if p != last_page + 1:
-                yield str_item(label=u'...')
+                yield str_item(label='...')
 
             if p == page_obj.number:
-                yield str_item(attr=u'class="active"', label=p)
+                yield str_item(attr='class="active"', label=str(p))
             else:
-                yield str_item(href_page=p, label=p)
+                yield str_item(href_page=p, label=str(p))
 
             last_page = p
 
         if page_obj.has_next():
-            yield str_item(href_page=page_obj.next_page_number(), label=u'→')
-    return mark_safe(u'<div class="pagination"><ul>%s</ul></div>' % u' '.join(display()))
+            yield str_item(href_page=page_obj.next_page_number(), label='→')
+    return mark_safe('<div class="pagination"><ul>%s</ul></div>' % ' '.join(display()))
