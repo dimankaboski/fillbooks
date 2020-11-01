@@ -59,14 +59,10 @@ class PasswordChange(PasswordChangeView):
 class PasswordReset(PasswordResetView):
     template_name = 'password_reset.html'
     form_class = CustomPasswordResetForm
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return HttpResponsePermanentRedirect(reverse_lazy('login'))
-        return super().dispatch(request, *args, **kwargs)
 
 
 class PasswordResetDone(PasswordResetDoneView):
-    template_name = 'password_reset.html'
+    template_name = 'password_reset_done.html'
 
 
 class PasswordResetConfirm(PasswordResetConfirmView):
@@ -75,7 +71,7 @@ class PasswordResetConfirm(PasswordResetConfirmView):
 
 
 class PasswordResetComplete(PasswordResetCompleteView):
-    template_name = 'password_reset_complite.html'
+    template_name = 'password_reset_complete.html'
 
 
 class BranchAdd(CreateView):

@@ -1,4 +1,4 @@
-from accounts.models import User, Branch
+from accounts.models import User, Branch, Position
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 
@@ -60,7 +60,6 @@ class AdminUserChangeForm(UserChangeForm):
 class LoginUserForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(LoginUserForm, self).__init__(*args, **kwargs)
-        print('da')
         self.fields['username'].label = 'Логин'
         self.fields['username'].widget.attrs['class'] = 'login_input'
         self.fields['username'].widget.attrs['placeholder'] = 'Введите логин'
@@ -101,7 +100,7 @@ class CustomSetPasswordForm(SetPasswordForm):
 class BranchAddForm(forms.ModelForm):
     class Meta:
         model = Branch
-        fields = '__all__'
+        fields = ('name', 'address', 'balance')
 
     def __init__(self, *args, **kwargs):
         super(BranchAddForm, self).__init__(*args, **kwargs)
@@ -115,10 +114,10 @@ class BranchAddForm(forms.ModelForm):
 
 class PositionAddForm(forms.ModelForm):
     class Meta:
-        model = Branch
-        fields = '__all__'
+        model = Position
+        fields = ['name']
 
     def __init__(self, *args, **kwargs):
         super(PositionAddForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['class'] = 'register-input'
-        self.fields['name'].widget.attrs['placeholder'] = 'Название филиала'
+        self.fields['name'].widget.attrs['placeholder'] = 'Должность'

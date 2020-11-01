@@ -1,0 +1,44 @@
+{% extends "global.html" %} {% load compress %} {% block content %}
+
+<div class="container bg_white">
+    <div class="titleh1">
+        <h1>Добавление должности</h1>
+    </div>
+    <div class="main">
+        <section class="main-block">
+        <form method="POST" action="position_add">
+            {% csrf_token %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="propertyblock__prop">
+                        <div style="color: red" class="propertyblock__prop__key">
+                            {{error|escape}}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="propertyblock__prop">
+                    <div class="propertyblock__prop__key">
+                        {{field.label}}
+                    </div>
+                    {{field}}
+                </div>
+            {% endfor %}
+            <div class="propertyblock__btn">
+                <button type='submit' class="def_btn">Зарегистрировать</button>
+            </div>
+        </form>
+        </section>
+        <section class="main-block ">
+
+
+        </section>
+    </div>
+
+</div>
+{%csrf_token%}
+{% endblock content %}
+{% block scripts %}
+<script>
+
+</script>
+{% endblock scripts %}

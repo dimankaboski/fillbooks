@@ -74,10 +74,13 @@
                                         <a href="/goods">Список товаров</a>
                                         <a href="#">Отгрузка товара</a>
                                         {% if request.user.is_staff %}
+                                        <hr>
                                         <a href="/accounts/register">Добавить работника</a>
                                         <a href="/accounts/register">Добавить филиал</a>
                                         <a href="/accounts/register">Добавить должность</a>
                                         {% endif %}
+                                        <hr>
+                                        <a href="/accounts/password_change">Изменить пароль</a>
                                         <hr>
                                         <a href="/accounts/logout">Выход</a>
                                     </div>
