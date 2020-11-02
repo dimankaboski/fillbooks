@@ -20,6 +20,7 @@ HOME_DIR = str(Path.home())
 rel_base = lambda *args: os.path.join(BASE_DIR, *args)
 rel_home = lambda *args: os.path.join(HOME_DIR, *args)
 
+BD_DIR = "/home/sammy/fillbooks/db"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -28,7 +29,7 @@ rel_home = lambda *args: os.path.join(HOME_DIR, *args)
 SECRET_KEY = 'i___+56-k$)5o_tl+l$j++fgp2^e1&wi%7qv#_#ihg+$%5km+8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['83.220.171.51', 'dimankab.fvds.ru', 'localhost', '127.0.0.1' ]
 
@@ -84,11 +85,11 @@ WSGI_APPLICATION = 'fillbooks.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BD_DIR, 'db.sqlite3'),
     }
 }
 
-
+AUTH_USER_MODEL = 'accounts.User'
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -132,6 +133,7 @@ STATIC_ROOT = rel_home('media', 'static')
 MEDIA_URL = '/m/'
 STATIC_URL = '/m/static/'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -170,6 +172,7 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 COMPRESS_ENABLED = True
+
 COMPRESS_URL = MEDIA_URL
 COMPRESS_CSSTIDY_BINARY = '/home/sammy/fillbooks/media/CACHE/css'
 COMPRESS_CSSTIDY_ARGUMENTS = '--template=highest --sort_properties=false --sort_selectors=false --merge_selectors=1'
