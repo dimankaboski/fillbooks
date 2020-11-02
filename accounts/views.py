@@ -14,7 +14,7 @@ class Login(LoginView):
 
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated and not request.user.is_staff:
+        if request.user.is_authenticated:
             return HttpResponsePermanentRedirect(reverse_lazy('goods'))
         return super().dispatch(request, *args, **kwargs)
 
