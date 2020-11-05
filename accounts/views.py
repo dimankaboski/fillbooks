@@ -19,6 +19,7 @@ class Login(LoginView):
         return super().dispatch(request, *args, **kwargs)
 
 
+
 class Register(CreateView):
     form_class = RegisterUserForm
     success_url = reverse_lazy('goods')

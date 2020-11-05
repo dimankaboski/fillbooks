@@ -10,9 +10,10 @@ import string
 import datetime
 from django.urls import reverse_lazy
 from decimal import *
-# from pytils import translit
+from pytils import translit
 import os
 from django.conf import settings
+
 # Create your views here.
 
 
@@ -60,7 +61,7 @@ class GoodsListView(ListView):
 
     template_name = 'goods.html'
     model = Goods
-    paginate_by = 4
+    paginate_by = 10
     page_kwarg = 'page'
 
 
@@ -245,20 +246,29 @@ class GoodCreateView(View):
             block_list = []
             for property_block in json_string['propertyBlocks']:
                 prop_list = []
-                block_name, block_name_created = PropertyBlockName.objects.get_or_create(name=property_block['name'])
-                for properties_key in property_block['properties']:
-                    property_name, property_name_created = PropertyName.objects.get_or_create(name=properties_key)
-                    property_value, property_value_created = PropertyValue.objects.get_or_create(value=property_block['properties'][properties_key])
-                    properti, properti_created = Property.objects.get_or_create(name=property_name, value=property_value)
-                    prop_list.append(properti)
-                block = PropertyBlock.objects.create(name=block_name)
-                block.properties.add(*prop_list)
-                block.save()
-                block_list.append(block)
+                if property_block['name']:
+                    block_name, block_name_created = PropertyBlockName.objects.get_or_create(name=property_block['name'].capitalize())
+                    for properties_key in property_block['properties']:
+                        if properties_key and isinstance(properties_key, str):
+                            property_name, property_name_created = PropertyName.objects.get_or_create(name=properties_key.capitalize())
+                            if property_block['properties'][properties_key] and isinstance(property_block['properties'][properties_key], str):
+                                property_value, property_value_created = PropertyValue.objects.get_or_create(value=property_block['properties'][properties_key].capitalize())
+                                properti, properti_created = Property.objects.get_or_create(name=property_name, value=property_value)
+                                prop_list.append(properti)
+                    block = PropertyBlock.objects.create(name=block_name)
+                    if prop_list:
+                        block.properties.add(*prop_list)
+                    block.save()
+                    if block:
+                        block_list.append(block)
             good_id = generate_id()
-            brand, brand_created = GoodsBrand.objects.get_or_create(name=brand_name)
-            model, model_created = GoodsModel.objects.get_or_create(name=model_name, brand=brand)
-            customer, customer_created = Customers.objects.get_or_create(name=customer_name, phone_number=customer_phone)
+            if brand_name:
+                brand, brand_created = GoodsBrand.objects.get_or_create(name=brand_name)
+            if model_name:
+                model, model_created = GoodsModel.objects.get_or_create(name=model_name, brand=brand)
+            customer, customer_created = Customers.objects.get_or_create(phone_number=customer_phone)
+            customer.name = customer_name
+            customer.save()
             good = Goods.objects.create(
                     good_id=good_id,
                     brand=brand, model=model,
@@ -268,7 +278,8 @@ class GoodCreateView(View):
                 )
             if request.FILES:
                 for image in request.FILES.items():
-                    Images.objects.create(image=SaveImage(image[1], template_name=('{0}_{1}'.format(good.brand, good_id))).filename_root, good=good)      
+                    print('da')
+                    Images.objects.create(image=SaveImage(image[1], template_name=('{0}_{1}'.format(translit.slugify(good.brand), good_id))).filename_root, good=good)      
             good.property_block.add(*block_list)
             good.description = good_description
             good.save()    
@@ -294,6 +305,8 @@ class SaveImage:
             upload_path = os.path.join(settings.MEDIA_ROOT, os.path.join(images_folder, self.template_name))
         else:
             upload_path = os.path.join(settings.MEDIA_ROOT, 'trash')
+        print(settings.MEDIA_ROOT)
+        print(images_folder)
         if not os.path.exists(upload_path):
             os.makedirs(upload_path)
         return (self.upload.name, os.path.join(upload_path, self.upload.name), settings.MEDIA_URL + self.upload.name)

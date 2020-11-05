@@ -113,10 +113,10 @@
                             <div class="filtres__main-item__checks brand_filter_item">
                                 {% get_brands request as brands %}
                                 {% for brand in brands %}
-                                <input type="checkbox" class="form-check-input" id="{{brand.brand__name}}"
-                                    value="{{brand.brand__name}}" data-id="{{brand.brand__pk}}">
+                                <input type="checkbox" class="form-check-input" id="{{brand.name}}"
+                                    value="{{brand.name}}" data-id="{{brand.pk}}">
                                 <label class="form-check-label"
-                                    for="{{brand.brand__name}}">{{brand.brand__name}}</label>
+                                    for="{{brand.name}}">{{brand.name}}</label>
                                 <br>
                                 {% endfor %}
                             </div>

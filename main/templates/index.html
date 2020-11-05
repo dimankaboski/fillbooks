@@ -246,7 +246,11 @@
                 body: data,
                 headers: { 'X-CSRFToken': getCookie('csrftoken') }
             }).then(function (response) {
-                return response.json();
+                if (response.status == 200){
+                    location.pathname = '/goods'
+                }else{
+                    alert('Что-то пошло не так :(')
+                }
             }).then(function (data) {
 
             });
