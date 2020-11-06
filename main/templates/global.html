@@ -226,7 +226,12 @@
             if (rev == true) {
                 return `<div class="propertyblock_rev prop_block">
                     <div class="propertyblock_rev__title">
-                        ${name}
+                        <div class="propertyblock_rev__title__delete">
+                            <i class="far fa-minus-square"></i>
+                            </div>
+                            <div class="propertyblock_rev__title__name">
+                                ${name}
+                            </div>
                     </div>
                     <div class="propertyblock__prop-add" onclick="addPropertyInputs(this)">
                         <div class="propertyblock__prop-add__text">
@@ -242,7 +247,13 @@
                 return `
                     <div class="propertyblock prop_block">
                         <div class="propertyblock__title">
-                            ${name}
+                            <div class="propertyblock__title__delete">
+                                <i class="far fa-minus-square"></i>
+                            </div>
+                            <div class="propertyblock__title__name">
+                                ${name} 
+                            </div>
+                            
                         </div>
                         
                         <div class="propertyblock__prop-add" onclick="addPropertyInputs(this)">
@@ -271,6 +282,12 @@
                 $('#propertiesBlock_list_rev').append(propertyInput_string(propertyBlockName, true));
             }
             $('#propertyBlock_input-id').val('');
+            $('.propertyblock__title__delete').click(function(){
+                $(this).parent().parent().remove();
+            });
+            $('.propertyblock_rev__title__delete').click(function(){
+                $(this).parent().parent().remove();
+            });
         })
     </script>
     <script>
@@ -326,7 +343,8 @@
 
             });
         });
-        $("#input_donate_to_branch").mask("#####0", {reverse: true});
+        $("#input_donate_to_branch").mask("#####0", { reverse: true });
+        
     </script>
     {% block scripts %}
 
