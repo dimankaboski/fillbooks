@@ -82,13 +82,20 @@ textarea:focus, input:focus {
 }
 .propertyblock {
     &__title {
-        display: inline-block;
+        display: inline-flex;
+        justify-content: space-between;
         background-color: @boloto;
         border-radius: 0px 5px 5px 0px;
         padding: 10px 30px;
         min-width: 250px;
         font-size: 18px;
         font-weight: 500;
+        &__delete {
+            &:hover {
+                cursor: pointer;
+                color: rgb(180, 21, 21);
+            }
+        }
     }
     &__prop {
         display: flex;
@@ -198,12 +205,19 @@ textarea:focus, input:focus {
 .propertyblock_rev {
     text-align: right;
     &__title {
-        display: inline-block;
+        display: inline-flex;
+        justify-content: space-between;
         background-color: @light_blue;
         border-radius: 5px 0px 0px 5px;
         padding: 10px 30px;
         min-width: 250px;
         font-size: 18px;
+        &__delete {
+            &:hover {
+                cursor: pointer;
+                color: rgb(180, 21, 21);
+            }
+        }
     }
     &__prop {
         display: flex;
