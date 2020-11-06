@@ -113,10 +113,10 @@
                             <div class="filtres__main-item__checks brand_filter_item">
                                 {% get_brands request as brands %}
                                 {% for brand in brands %}
-                                <input type="checkbox" class="form-check-input" id="{{brand.name}}"
-                                    value="{{brand.name}}" data-id="{{brand.pk}}">
+                                <input type="checkbox" class="form-check-input" id="{{brand.brand__name}}"
+                                    value="{{brand.brand__name}}" data-id="{{brand.brand__pk}}">
                                 <label class="form-check-label"
-                                    for="{{brand.name}}">{{brand.name}}</label>
+                                    for="{{brand.brand__name}}">{{brand.brand__name}}</label>
                                 <br>
                                 {% endfor %}
                             </div>
@@ -179,15 +179,16 @@
                 return response.json();
             }).then(function (data) {
                 let items = '';
+                console.log(data)
                 for (var i in data.models) {
-                    if (params.get('model').split('--').includes(data.models[i].name)) {
-                        items += `<input type="checkbox" checked class="form-check-input" data-id="${data.models[i].pk}" name="model" id="${data.models[i].name}" value="${data.models[i].name}">
-                            <label class="form-check-label" for="${data.models[i].name}">${data.models[i].name}</label>
+                    if (params.get('model').split('--').includes(data.models[i].model__name)) {
+                        items += `<input type="checkbox" checked class="form-check-input" data-id="${data.models[i].model__pk}" name="model" id="${data.models[i].model__name}" value="${data.models[i].model__name}">
+                            <label class="form-check-label" for="${data.models[i].model__name}">${data.models[i].model__name}</label>
                             <br>`;
                     }
                     else {
-                        items += `<input type="checkbox" class="form-check-input" data-id="${data.models[i].pk}" name="model" id="${data.models[i].name}" value="${data.models[i].name}">
-                            <label class="form-check-label" for="${data.models[i].name}">${data.models[i].name}</label>
+                        items += `<input type="checkbox" class="form-check-input" data-id="${data.models[i].model__pk}" name="model" id="${data.models[i].model__name}" value="${data.models[i].model__name}">
+                            <label class="form-check-label" for="${data.models[i].model__name}">${data.models[i].model__name}</label>
                             <br>`;
                     }
 
@@ -272,8 +273,8 @@
             }).then(function (data) {
                 let items = '';
                 for (var i in data.models) {
-                    items += `<input type="checkbox" class="form-check-input" data-id="${data.models[i].pk}" id="${data.models[i].name}" value="${data.models[i].name}">
-                                <label class="form-check-label" for="${data.models[i].name}">${data.models[i].name}</label>
+                    items += `<input type="checkbox" class="form-check-input" data-id="${data.models[i].model__pk}" id="${data.models[i].model__name}" value="${data.models[i].model__name}">
+                                <label class="form-check-label" for="${data.models[i].model__name}">${data.models[i].model__name}</label>
                                 <br>`;
                 }
                 $('.model_filter_item').html(items);

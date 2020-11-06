@@ -11,9 +11,8 @@ register = template.Library()
 @register.simple_tag(takes_context=False)
 def get_brands(request):
     if request.user.is_staff:
-        return GoodsBrand.objects.all().values('name', 'pk')
-    goods = Goods.objects.filter(branch__name=request.user.branch.name).values('brand__name')
-    return GoodsBrand.objects.filter(name__in=goods).values('name', 'pk')
+        return Goods.objects.all().values('brand__name', 'brand__pk').distinct()
+    return Goods.objects.filter(branch__name=request.user.branch.name).values('brand__name', 'brand__pk').distinct()
     
 @register.simple_tag(takes_context=False)
 def get_status():
