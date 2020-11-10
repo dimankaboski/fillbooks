@@ -100,9 +100,9 @@ class GoodsShippListView(GoodsListView):
 
     def get_queryset(self):
         if self.request.user.is_staff:
-            queryset = Goods.objects.filter(status=GOOD_STATUS_SHIPPED)
+            queryset = Goods.objects.filter(status=GOOD_STATUS_PURCHASE)
         else:
-            queryset = Goods.objects.filter(branch__name=self.request.user.branch.name, status=GOOD_STATUS_SHIPPED)
+            queryset = Goods.objects.filter(branch__name=self.request.user.branch.name, status=GOOD_STATUS_PURCHASE)
         ordering = self.get_ordering()
         if ordering:
             if isinstance(ordering, str):
