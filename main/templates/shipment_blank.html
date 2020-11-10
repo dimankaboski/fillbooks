@@ -1,7 +1,35 @@
-{% extends "a4_template.html" %} {% load compress %} {% block content %}
+{% extends "a4_template.html" %} {% load compress %}
+{% block title %}
+<title>Отгрузка товаров</title>
+{% endblock %}
+{% block content %}
+<div class="shipment_blank-menu">
+    <button>Отменить отгрузку</button>
+    <button>Подтвердить</button>
+</div>
+<h2>Отгрузка товаров №34 от 07 июня 2020 года</h2>
+<hr>
+{% autoescape off %}
+{{blank.top}}
+{% endautoescape %}
+<table class="table_print">
+    <tr>
+        <th>№</th>
+        <th>Товар</th>
+        <th>Цена</th>
+    </tr>
+    {% for good in goods %}
+    <tr class="table_print__main">
+        <td style="text-align: center;">{{ forloop.counter }}</td>
+        <td style="text-align: left;">{{good.brand}} {{good.model}}</td>
+        <td style="text-align: right;">{{good.price}}</td>
+    </tr>
+    {% endfor %}
 
-a4 печать
-
+</table>
+{% autoescape off %}
+{{blank.bottom}}
+{% endautoescape %}
 {% endblock content %}
 {% block scripts %}
 

@@ -549,6 +549,7 @@ class ShippingEditView(UpdateView):
     form_class = ShippingBlankEdit
     queryset = ShippingBlank.objects.all()
     template_name = 'shipping_edit.html'
+    success_url = reverse_lazy('goods')
 
     def get_object(self, queryset=None):
 

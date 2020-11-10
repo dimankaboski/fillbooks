@@ -6,12 +6,33 @@
     </div>
     <div class="main">
         <section class="main-block">
-            <h2>Верхняя часть бланка</h2>
-            <textarea name="shipping_edit" id="shipping_edit_ta" cols="30" rows="40"></textarea>
+            <form method="POST" action="/goods/shipping/edit">
+                {% csrf_token %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="propertyblock__prop">
+                            <div style="color: red" class="propertyblock__prop__key">
+                                {{error|escape}}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="propertyblock__prop">
+                        <div class="propertyblock__prop__key">
+                            {{field.label}}
+                        </div>
+                        {{field}}
+                    </div>
+                {% endfor %}
+                <div class="propertyblock__btn">
+                    <button type='submit' class="def_btn">Сохранить</button>
+                </div>
+            </form>
+            <!-- <h4>Верхняя часть бланка</h4>
+            <textarea name="shipping_edit" id="shipping_edit_ta" cols="60" rows="20"></textarea> -->
         </section>
         <section class="main-block">
-            <h2>Нижняя часть бланка</h2>
-            <textarea name="shipping_edit" id="shipping_edit_ta" cols="30" rows="40"></textarea>
+            <!-- <h4>Нижняя часть бланка</h4>
+            <textarea name="shipping_edit" id="shipping_edit_ta" cols="60" rows="20"></textarea> -->
         </section>
     </div>
 
@@ -19,7 +40,8 @@
 {%csrf_token%}
 {% endblock content %}
 {% block scripts %}
+<script src="https://cdn.tiny.cloud/1/jxvpqb45thr42gdscs3zaa0nbzecr56w81yowue8dc4eg8d6/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
-
+    tinymce.init({ selector: 'textarea' });
 </script>
 {% endblock scripts %}
