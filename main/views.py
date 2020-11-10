@@ -95,8 +95,20 @@ class GoodsListView(ListView):
         return queryset
     
 
+class GoodsShippListView(GoodsListView):
+    template_name = 'goods_shipping'
 
-
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            queryset = Goods.objects.filter(status=GOOD_STATUS_SHIPPED)
+        else:
+            queryset = Goods.objects.filter(branch__name=self.request.user.branch.name, status=GOOD_STATUS_SHIPPED)
+        ordering = self.get_ordering()
+        if ordering:
+            if isinstance(ordering, str):
+                ordering = (ordering,)
+            queryset = queryset.order_by(*ordering)
+        return queryset
 
 class CheckBrand(View):
     type_filter = 'brandID'

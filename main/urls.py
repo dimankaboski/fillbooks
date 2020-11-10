@@ -2,13 +2,15 @@ from django.conf.urls import url
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
-from main.views import GoodsListView, CheckBrand, CheckStatus, CheckBranch, BranchInfo, GoodView, GoodCreateView, GoodPriced, CustomerChoice, Notifications, SearchByQuery, AddBranchBalance
+from main.views import GoodsListView, GoodsShippListView, CheckBrand, CheckStatus, CheckBranch, BranchInfo, GoodView, GoodCreateView, GoodPriced, CustomerChoice, Notifications, SearchByQuery, AddBranchBalance
 from . import views
 
 
 urlpatterns = [
     path('goods', GoodsListView.as_view(), name='goods'),
     path('goods/page<int:page>', GoodsListView.as_view(), name='goods_paginate'),
+    path('goods/shipping', GoodsShippListView.as_view(), name='goods_shipping'),
+    path('goods/shipping/page<int:page>', GoodsShippListView.as_view(), name='goods_shipping_paginate'),
     path('good_create', GoodCreateView.as_view(), name='good_create'),
     path('good_card/<str:good_id>', GoodView.as_view(), name='good_card'),
     path('api/check_brand', CheckBrand.as_view(), name='check_brand'),
