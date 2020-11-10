@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.views.generic import ListView, View, TemplateView
-from main.models import Goods, GoodsBrand, GoodsModel, PropertyBlock, Property, PropertyValue, PropertyBlockName, PropertyName, Customers, Images
+from django.views.generic import ListView, View, TemplateView, UpdateView
+from main.models import Goods, GoodsBrand, GoodsModel, PropertyBlock, Property, PropertyValue, PropertyBlockName, PropertyName, Customers, Images, ShippingBlank
 from accounts.models import Branch, User
 from django.http import HttpResponse, JsonResponse, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from main.const import *
@@ -96,19 +96,37 @@ class GoodsListView(ListView):
     
 
 class GoodsShippListView(GoodsListView):
+
     template_name = 'goods_shipping'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user or self.request.user.is_staff or request.user.branch.name:
+            raise Http404('Страница не найдена')
+        return super().dispatch(request, *args, **kwargs)
+
     def get_queryset(self):
-        if self.request.user.is_staff:
-            queryset = Goods.objects.filter(status=GOOD_STATUS_PURCHASE)
-        else:
-            queryset = Goods.objects.filter(branch__name=self.request.user.branch.name, status=GOOD_STATUS_PURCHASE)
+        queryset = Goods.objects.filter(branch__name=self.request.user.branch.name, status=GOOD_STATUS_PURCHASE)        
         ordering = self.get_ordering()
         if ordering:
             if isinstance(ordering, str):
                 ordering = (ordering,)
             queryset = queryset.order_by(*ordering)
         return queryset
+
+
+class ShippingBlank(GoodsShippListView):
+    template_name = 'shipment_blank'
+
+    def get_shipment_blank(self):
+        return ShippingBlank.objects.all().first
+
+    def get_context_data(self, **kwargs):
+        super().get_context_data(**context)
+        blank = self.get_shipment_blank()
+        context.update({
+            'blank': blank
+        })
+        return context
 
 class CheckBrand(View):
     type_filter = 'brandID'
@@ -525,3 +543,6 @@ class AddBranchBalance(View):
             branch.save()
             return HttpResponse('Баланс успешно пополнен', status=200)
         return HttpResponse('Blank request', status=400)
+
+
+# class ShippingEdit(UpdateView):

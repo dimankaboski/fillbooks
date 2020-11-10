@@ -149,6 +149,7 @@ class Goods(models.Model):
         except:
             return None
 
+
 class Images(models.Model):
     image = models.ImageField()
     good = models.ForeignKey(Goods, on_delete=models.CASCADE, related_name='images')
@@ -157,3 +158,8 @@ class Images(models.Model):
         url = self.image.name.split('media/')
         filename_url = settings.MEDIA_URL + url[1]
         return filename_url
+
+
+class ShippingBlank(models.Model):
+    top = models.TextField(verbose_name='Верх документа')
+    bottom = models.TextField(verbose_name='Низ документа')

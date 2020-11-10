@@ -22,6 +22,8 @@ class Branch(models.Model):
     name = models.CharField(verbose_name="Филиал", max_length=50)
     address = models.CharField(verbose_name="Адрес филиала", max_length=200, blank=True, default='')
     balance = models.DecimalField(verbose_name="Баланс филиала",max_digits=12, decimal_places=2)
+    last_shipping_number = models.IntegerField(verbose_name='Номер последней отгрузки', max_length=6, default=0)
+    last_shipping_date = models.DateTimeField(verbose_name="Дата последней отгрузки", auto_now=False, auto_now_add=False, blank=True, null=True)
     # balance = models.CharField(verbose_name="Баланс филиала", max_length=50)
 
     class Meta:
