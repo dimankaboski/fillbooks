@@ -67,9 +67,9 @@ class GoodsListView(ListView):
 
     def get_queryset(self):
         if self.request.user.is_staff:
-            queryset = Goods.objects.all()
+            queryset = Goods.objects.all().exclude(status=GOOD_STATUS_SHIPPED)
         else:
-            queryset = Goods.objects.filter(branch__name=self.request.user.branch.name)
+            queryset = Goods.objects.filter(branch__name=self.request.user.branch.name).exclude(status=GOOD_STATUS_SHIPPED)
         ordering = self.get_ordering()
         if ordering:
             if isinstance(ordering, str):
@@ -351,19 +351,15 @@ class GoodPriced(View):
     def post(self, request, *args, **kwargs):
         if request.POST:
             message = request.POST.get('message')
-            price = request.POST.get('price')
             good_id = request.POST.get('good_id')
+            price = request.POST.get('price')
             try:
                 good = Goods.objects.get(good_id=good_id)
-                branch = Branch.objects.get(name=self.request.user.branch.name)
             except Goods.DoesNotExist:
                 return HttpResponse('Товар с ID {0} не найден'.format(good_id), status=400)
-
             good.price = price
             good.status = GOOD_STATUS_PRICED
             good.save()
-            branch.balance = branch.balance - price
-            branch.save()
             return HttpResponse('success', status=200)
         return HttpResponse('Пустой запрос', status=400)
 
@@ -381,11 +377,16 @@ class CustomerChoice(View):
             good_id = request.POST.get('good_id')
             try:
                 good = Goods.objects.get(good_id=good_id)
+                branch = Branch.objects.get(name=self.request.user.branch.name)
             except Goods.DoesNotExist:
                 return HttpResponse('Товар с ID {0} не найден'.format(good_id), status=400)
             if customer_choice and customer_choice == 'purchase':
                 good.status = GOOD_STATUS_PURCHASE
                 good.save()
+                if branch and good:
+                    if (branch.balance - good.price) >= 0:
+                        branch.balance = Decimal(branch.balance) - Decimal(good.price)
+                        branch.save()
             elif customer_choice and customer_choice == 'reject':
                 good.status = GOOD_STATUS_REJECT
                 good.save()
@@ -401,7 +402,7 @@ class Notifications(View):
         return super().dispatch(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
-        goods = Goods.objects.filter(status=GOOD_STATUS_AWAIT)
+        goods = Goods.objects.filter(status=GOOD_STATUS_AWAIT).order_by('-pk')
         context = {
             'goods_notification': list(goods.values('brand__name', 'model__name', 'branch__name', 'good_id')),
             'count_notiification': goods.count()
