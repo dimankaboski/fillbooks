@@ -561,3 +561,22 @@ class ShippingEditView(UpdateView):
         raise Http404('Нет записи в бд для редактирования')
 
     
+class ShippingGoodsComplete(View):
+
+    def post(self, request, *args, **kwargs):
+        if request.POST:
+            shipped_goods = request.POST.get('goods')
+            if shipped_goods:
+                goods = Goods.objects.filter(pk__in=shipped_goods)
+                for good in goods:
+                    good.status = GOOD_STATUS_SHIPPED
+                    good.save()
+                try:
+                    branch = Branch.objects.get(pk=request.user.branch.pk)
+                except Branch.DoesNotExist:
+                    return HttpResponse('у юзера нет филиала', status=400)
+                branch.last_shipping_number += 1
+                branch.last_shipping_date = datetime.datetime.now()
+                branch.save()
+                return HttpResponse('Отгрузка завершена', status=200)
+        return HttpResponse('Bad request', status=400)
