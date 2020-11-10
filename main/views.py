@@ -97,12 +97,12 @@ class GoodsListView(ListView):
 
 class GoodsShippListView(GoodsListView):
 
-    template_name = 'goods_shipping'
+    template_name = 'goods_shipping.html'
 
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user or self.request.user.is_staff or request.user.branch.name:
-            raise Http404('Страница не найдена')
-        return super().dispatch(request, *args, **kwargs)
+    # def dispatch(self, request, *args, **kwargs):
+    #     if not self.request.user or self.request.user.is_staff or request.user.branch.name:
+    #         raise Http404('Страница не найдена')
+    #     return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         queryset = Goods.objects.filter(branch__name=self.request.user.branch.name, status=GOOD_STATUS_PURCHASE)        
@@ -114,14 +114,14 @@ class GoodsShippListView(GoodsListView):
         return queryset
 
 
-class ShippingBlank(GoodsShippListView):
-    template_name = 'shipment_blank'
+class ShippingBlankView(GoodsShippListView):
+    template_name = 'shipment_blank.html'
 
     def get_shipment_blank(self):
         return ShippingBlank.objects.all().first
 
     def get_context_data(self, **kwargs):
-        super().get_context_data(**context)
+        context = super().get_context_data(**kwargs)
         blank = self.get_shipment_blank()
         context.update({
             'blank': blank

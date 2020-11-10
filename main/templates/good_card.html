@@ -199,7 +199,7 @@
 {% endblock content %}
 {% block scripts %}
 <script>
-
+    $('#card_price_input').mask("#######", {reverse: true});
     $('#btn_seller_bought').click(function () {
         var data = new FormData();
         data.append("choice", "purchase");

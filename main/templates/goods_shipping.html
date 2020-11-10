@@ -1,0 +1,94 @@
+{% extends "global.html" %} {% load compress filtres %} {% block content %}
+
+<div class="container bg_white">
+    <div class="titleh1">
+        <h1>Список отгружаемых товаров</h1>
+    </div>
+    <div class="main">
+        <section class="main-block">
+
+            <div class="goods-wrapper">
+                {% for good in goods %}
+                <div class="good-item">
+                    <a href="/good_card/{{good.good_id}}" class="good-item-image">
+                        <!-- <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt=""> -->
+                        {% if good.get_one_image %}
+                        <img src=" {{good.get_one_image.get_filename_url}}" class="img_def" alt="">
+                        {% else %}
+                        <img src="{{ STATIC_URL }}images/no-image-box.jpeg" class="img_def" alt="">
+                        {% endif %}
+                    </a>
+
+                    <div class="good-item-info">
+                        <a href="/good_card/{{good.good_id}}" class="good-item-info__model">
+                            {{good.brand}} {{good.model}}
+                        </a>
+                        <div class="good-item-info__branch">
+                            {{good.branch}}
+                        </div>
+                    </div>
+                    <div class="good-item-info-add">
+                        <div class="good-item-info-add__status">
+                            {% if good.status == 'Ожидает оценки' %}
+                            <span style="color: rgb(57, 57, 204); font-size: 12px;">{{good.status}} <i
+                                    style="font-size: 14px;" class="fas fa-bolt"></i></span>
+                            {% elif good.status == 'Отказ' %}
+                            <span style="color: #DC3545; font-size: 12px;">{{good.status}} <i style="font-size: 14px;"
+                                    class="fas fa-ban"></i></span>
+                            {% elif good.status == 'Приобретен' %}
+                            <span style="color: #28A745; font-size: 12px;">{{good.status}} <i style="font-size: 14px;"
+                                    class="fas fa-check"></i></span>
+                            {% elif good.status == 'Оценен' %}
+                            <span style="color: #FF9900; font-size: 12px;">{{good.status}} <i style="font-size: 14px;"
+                                    class="fas fa-hourglass-half"></i></span>
+                            {% endif %}
+                        </div>
+                        <div class="good-item-info-add__same">
+                            #{{good.good_id}}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="pagination__wrapper">
+                {% render_pagination page_obj "goods_paginate" "goods" %}
+            </div>
+        </section>
+        <section class="main-block">
+            <div class="titleh1">
+                <h1>Информация</h1>
+            </div>
+            <div class="shipment-info">
+                <div class="shipment-info-item">
+                    <span class="shipment-info-item__name">Филиал:</span>
+                    <span class="shipment-info-item__value">Москва</span>
+                </div>
+                <div class="shipment-info-item">
+                    <span class="shipment-info-item__name">Работник:</span>
+                    <span class="shipment-info-item__value">Филипп Линзин</span>
+                </div>
+                <div class="shipment-info-item">
+                    <span class="shipment-info-item__name">Номер текущей отгрузки:</span>
+                    <span class="shipment-info-item__value">23</span>
+                </div>
+                <div class="shipment-info-item">
+                    <span class="shipment-info-item__name">Дата последней отгрузки:</span>
+                    <span class="shipment-info-item__value">11.10.2020</span>
+                </div>
+                <a href="#">
+                    <button class="shipment-btn">Отгрузить товар</button>
+                </a>
+                
+            </div>
+            
+        </section>
+    </div>
+
+</div>
+{%csrf_token%}
+{% endblock content %}
+{% block scripts %}
+<script>
+    
+</script>
+{% endblock scripts %}

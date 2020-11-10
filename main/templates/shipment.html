@@ -1,0 +1,325 @@
+{% extends "global.html" %} {% load compress filtres %} {% block content %}
+
+<div class="container bg_white">
+    <div class="titleh1">
+        <h1>Список товаров</h1>
+    </div>
+    <div class="main">
+        <section class="main-block">
+
+            <div class="goods-wrapper">
+                {% for good in goods %}
+                <div class="good-item">
+                    <a href="/good_card/{{good.good_id}}" class="good-item-image">
+                        <!-- <img src="{{ STATIC_URL }}images/Acer-Nitro-7-2-of-19.jpg" class="img_def" alt=""> -->
+                        {% if good.get_one_image %}
+                        <img src=" {{good.get_one_image.get_filename_url}}" class="img_def" alt="">
+                        {% else %}
+                        <img src="{{ STATIC_URL }}images/no-image-box.jpeg" class="img_def" alt="">
+                        {% endif %}
+                    </a>
+
+                    <div class="good-item-info">
+                        <a href="/good_card/{{good.good_id}}" class="good-item-info__model">
+                            {{good.brand}} {{good.model}}
+                        </a>
+                        <div class="good-item-info__branch">
+                            {{good.branch}}
+                        </div>
+                    </div>
+                    <div class="good-item-info-add">
+                        <div class="good-item-info-add__status">
+                            {% if good.status == 'Ожидает оценки' %}
+                            <span style="color: rgb(57, 57, 204); font-size: 12px;">{{good.status}} <i
+                                    style="font-size: 14px;" class="fas fa-bolt"></i></span>
+                            {% elif good.status == 'Отказ' %}
+                            <span style="color: #DC3545; font-size: 12px;">{{good.status}} <i style="font-size: 14px;"
+                                    class="fas fa-ban"></i></span>
+                            {% elif good.status == 'Приобретен' %}
+                            <span style="color: #28A745; font-size: 12px;">{{good.status}} <i style="font-size: 14px;"
+                                    class="fas fa-check"></i></span>
+                            {% elif good.status == 'Оценен' %}
+                            <span style="color: #FF9900; font-size: 12px;">{{good.status}} <i style="font-size: 14px;"
+                                    class="fas fa-hourglass-half"></i></span>
+                            {% endif %}
+                        </div>
+                        <div class="good-item-info-add__same">
+                            #{{good.good_id}}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="pagination__wrapper">
+                {% render_pagination page_obj "goods_paginate" "goods" %}
+            </div>
+        </section>
+        <section class="main-block ">
+            {% if request.user.is_staff %}
+            <div class="titleh1">
+                <h1>Информация о филиалах</h1>
+            </div>
+            <div class="branches_wrapper">
+                {% get_branchs as branchs %}
+                {% for branch in branchs %}
+                <div class="branches_wrapper-item" id="testclick" data-id="{{branch.pk}}">
+                    <details>
+                        <summary>{{branch.name}}</summary>
+                        <div class="branches_wrapper-item__spoiler-text">
+                            <div class="branches_wrapper-item__spoiler-text__status">
+                                Ожидает оценки: <span id="branch_info_waiting"></span><br>
+                                Отказ: <span id="branch_info_reject"></span> <br>
+                                Приобретен: <span id="branch_info_bought"></span><br>
+                                Оценен: <span id="branch_info_priced"></span>
+                            </div>
+                            <div class="branches_wrapper-item__spoiler-text__balance">
+                                Баланс: <span id="branch_info_balance"></span> руб <span data-id="{{branch.pk}}"
+                                    data-name="{{branch.name}}" class="donate_to_balance"><i class="far fa-plus-square"
+                                        style="color: #28A745;"></i></span><br>
+                                Работников: <span id="branch_info_users"></span>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="filtres">
+                <div class="filtres__title">
+                    Фильтры
+                </div>
+                <div class="filtres__main">
+                    <form name="filtres_form" id="filtres_form">
+                        {% if request.user.is_staff %}
+                        <div class="filtres__main-item">
+                            <div class="filtres__main-item__title">
+                                Филиал
+                            </div>
+                            <div class="filtres__main-item__checks branch_filter_item">
+                                {% for branch in branchs %}
+                                <input type="checkbox" class="form-check-input" id="{{branch.name}}"
+                                    value="{{branch.name}}" data-id="{{branch.pk}}">
+                                <label class="form-check-label" for="{{branch.name}}">{{branch.name}}</label>
+                                <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="filtres__main-item">
+                            <div class="filtres__main-item__title">
+                                Производитель
+                            </div>
+
+                            <div class="filtres__main-item__checks brand_filter_item">
+                                {% get_brands request as brands %}
+                                {% for brand in brands %}
+                                <input type="checkbox" class="form-check-input" id="{{brand.brand__name}}"
+                                    value="{{brand.brand__name}}" data-id="{{brand.brand__pk}}">
+                                <label class="form-check-label"
+                                    for="{{brand.brand__name}}">{{brand.brand__name}}</label>
+                                <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="filtres__main-item">
+                            <div class="filtres__main-item__title">
+                                Модель
+                            </div>
+                            <div class="filtres__main-item__checks model_filter_item">
+                                <span style="color: #afafaf;">Выберите производителя</span>
+                            </div>
+                        </div>
+                        <div class="filtres__main-item">
+                            <div class="filtres__main-item__title">
+                                Статус
+                            </div>
+                            <div class="filtres__main-item__checks status_filter_item">
+                                {% get_status as statuses %}
+                                {% for status in statuses %}
+                                <input type="checkbox" class="form-check-input" id="{{status}}" value="{{status}}">
+                                <label class="form-check-label" for="{{status}}">{{status}}</label>
+                                <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </form>
+                    <button id="filtres_submit" class="filtres__main-btn">Применить</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</div>
+{%csrf_token%}
+{% endblock content %}
+{% block scripts %}
+<script>
+    function setCheckboxesState(group, params) {
+        var checked_brand_pk = [];
+        $('.' + group + '_filter_item input[type="checkbox"]').each(function () {
+            let params_list = params.get(group).split('--');
+            if (params_list.includes($(this).val())) {
+                $(this).attr('checked', 'checked');
+                if (group == 'brand') {
+                    checked_brand_pk.push(parseInt($(this).attr('data-id')));
+                }
+            }
+        })
+        if (group == 'brand') {
+            let params = (new URL(document.location)).searchParams;
+            var myData = {}
+            myData.brandID = checked_brand_pk;
+            var data = new FormData();
+            data.append("json", JSON.stringify(myData));
+            fetch("/api/check_brand", {
+                method: "POST",
+                body: data,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                let items = '';
+                console.log(data)
+                for (var i in data.models) {
+                    if (params.get('model').split('--').includes(data.models[i].model__name)) {
+                        items += `<input type="checkbox" checked class="form-check-input" data-id="${data.models[i].model__pk}" name="model" id="${data.models[i].model__name}" value="${data.models[i].model__name}">
+                            <label class="form-check-label" for="${data.models[i].model__name}">${data.models[i].model__name}</label>
+                            <br>`;
+                    }
+                    else {
+                        items += `<input type="checkbox" class="form-check-input" data-id="${data.models[i].model__pk}" name="model" id="${data.models[i].model__name}" value="${data.models[i].model__name}">
+                            <label class="form-check-label" for="${data.models[i].model__name}">${data.models[i].model__name}</label>
+                            <br>`;
+                    }
+
+                }
+                $('.model_filter_item').html(items);
+            });
+        }
+    }
+    function updateFiltresState() {
+        let params = (new URL(document.location)).searchParams;
+        if (params.has('brand') || params.has('model') || params.has('status') || params.has('branch')) {
+            setCheckboxesState('brand', params)
+            setCheckboxesState('status', params)
+            setCheckboxesState('branch', params)
+        }
+    }
+
+    updateFiltresState()
+
+    function getCheckboxesValue(group) {
+        let list = [];
+        $('.' + group + '_filter_item input[type="checkbox"]:checked').each(function () {
+            list.push($(this).val());
+        })
+        return list;
+    }
+
+    $('#filtres_submit').click(function () {
+        var brand_params = getCheckboxesValue('brand').join('--');
+        var model_params = getCheckboxesValue('model').join('--');
+        var status_params = getCheckboxesValue('status').join('--');
+        `{% if not request.user.is_staff %}`
+        var branch_params = '{{request.user.branch.name}}';
+        `{% else %}`
+        var branch_params = getCheckboxesValue('branch').join('--');
+        `{% endif %}`
+        let url = `/goods?brand=${brand_params}&model=${model_params}&status=${status_params}&branch=${branch_params}`;
+
+        window.location = url;
+    })
+
+    $('.branches_wrapper-item').click(function (e) {
+        let curr_el = this;
+        var data = new FormData();
+        data.append("branch_id", parseInt($(this).attr('data-id')));
+
+        fetch("/api/branch_info", {
+            method: "POST",
+            body: data,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (data) {
+
+            $(curr_el).find('#branch_info_waiting').text(data.goods_await);
+            $(curr_el).find('#branch_info_reject').text(data.goods_reject);
+            $(curr_el).find('#branch_info_bought').text(data.goods_purchase);
+            $(curr_el).find('#branch_info_priced').text(data.goods_priced);
+            $(curr_el).find('#branch_info_balance').text(data.balance);
+            $(curr_el).find('#branch_info_users').text(data.users);
+
+        });
+    })
+
+    $('#filtres_form input').click(function () {
+        var myData = {};
+        var $parent_item = $(this).parent()
+        if ($parent_item.hasClass('brand_filter_item')) {
+            myData.brandID = [];
+            $parent_item.children('input[type="checkbox"]:checked').each(function () {
+                myData.brandID.push(this.getAttribute('data-id'))
+            })
+            var data = new FormData();
+            data.append("json", JSON.stringify(myData));
+
+            fetch("/api/check_brand", {
+                method: "POST",
+                body: data,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                let items = '';
+                for (var i in data.models) {
+                    items += `<input type="checkbox" class="form-check-input" data-id="${data.models[i].model__pk}" id="${data.models[i].model__name}" value="${data.models[i].model__name}">
+                                <label class="form-check-label" for="${data.models[i].model__name}">${data.models[i].model__name}</label>
+                                <br>`;
+                }
+                $('.model_filter_item').html(items);
+            });
+        }
+        if ($parent_item.hasClass('branch_filter_item')) {
+            myData.branch = [];
+            $parent_item.children('input[type="checkbox"]:checked').each(function () {
+                myData.branch.push(this.getAttribute('data-id'))
+            })
+            var data = new FormData();
+            data.append("json", JSON.stringify(myData));
+
+            fetch("/api/check_branch", {
+                method: "POST",
+                body: data,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+
+            });
+        }
+        if ($parent_item.hasClass('status_filter_item')) {
+            myData.status = [];
+            $parent_item.children('input[type="checkbox"]:checked').each(function () {
+                myData.status.push($(this).val())
+            })
+            var data = new FormData();
+            data.append("json", JSON.stringify(myData));
+
+            fetch("/api/check_status", {
+                method: "POST",
+                body: data,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                let unique = [...new Set(data.branchs.map(li => li.branch))]
+            });
+        }
+
+    })
+    $('.donate_to_balance').click(function () {
+        openModalProp($(this).attr('data-name'),$(this).attr('data-id'));
+    })
+</script>
+{% endblock scripts %}

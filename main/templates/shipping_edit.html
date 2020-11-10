@@ -1,0 +1,25 @@
+{% extends "global.html" %} {% load compress %} {% block content %}
+
+<div class="container bg_white">
+    <div class="titleh1">
+        <h1>Редактирование бланка отгрузки товаров</h1>
+    </div>
+    <div class="main">
+        <section class="main-block">
+            <h2>Верхняя часть бланка</h2>
+            <textarea name="shipping_edit" id="shipping_edit_ta" cols="30" rows="40"></textarea>
+        </section>
+        <section class="main-block">
+            <h2>Нижняя часть бланка</h2>
+            <textarea name="shipping_edit" id="shipping_edit_ta" cols="30" rows="40"></textarea>
+        </section>
+    </div>
+
+</div>
+{%csrf_token%}
+{% endblock content %}
+{% block scripts %}
+<script>
+
+</script>
+{% endblock scripts %}
