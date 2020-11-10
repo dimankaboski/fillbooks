@@ -13,7 +13,7 @@ from decimal import *
 from pytils import translit
 import os
 from django.conf import settings
-
+from main.forms import ShippingBlankEdit
 
 
 
@@ -118,7 +118,7 @@ class ShippingBlankView(GoodsShippListView):
     template_name = 'shipment_blank.html'
 
     def get_shipment_blank(self):
-        return ShippingBlank.objects.all().first
+        return ShippingBlank.objects.all().first()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -545,4 +545,18 @@ class AddBranchBalance(View):
         return HttpResponse('Blank request', status=400)
 
 
-# class ShippingEdit(UpdateView):
+class ShippingEditView(UpdateView):
+    form_class = ShippingBlankEdit
+    queryset = ShippingBlank.objects.all()
+    template_name = 'shipping_edit.html'
+
+    def get_object(self, queryset=None):
+
+        if not queryset:
+            queryset = self.get_queryset()
+        if queryset:
+            obj = queryset.first()
+            return obj
+        raise Http404('Нет записи в бд для редактирования')
+
+    

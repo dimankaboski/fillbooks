@@ -163,3 +163,7 @@ class Images(models.Model):
 class ShippingBlank(models.Model):
     top = models.TextField(verbose_name='Верх документа')
     bottom = models.TextField(verbose_name='Низ документа')
+    
+    class Meta:
+        verbose_name = ("Бланк отгрузки")
+        verbose_name_plural = ("Список бланков отгрузки")
