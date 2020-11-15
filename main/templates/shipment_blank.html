@@ -4,8 +4,8 @@
 {% endblock %}
 {% block content %}
 <div class="shipment_blank-menu">
-    <button>Отменить отгрузку</button>
-    <button>Подтвердить</button>
+    <button id="shipping_cancel">Отменить отгрузку</button>
+    <button id="shipping_confirm">Подтвердить</button>
 </div>
 <h2>Отгрузка товаров №34 от 07 июня 2020 года</h2>
 <hr>
@@ -32,5 +32,28 @@
 {% endautoescape %}
 {% endblock content %}
 {% block scripts %}
+<script>
+    $('#shipping_confirm').click(function () {
+        var data = new FormData();
+        var goods = [];
+        '{% for good in goods %}'
+        goods.push(parseInt('{{good.pk}}'));
+        '{% endfor %}'
+        console.log(goods)
+        data.append('goods', goods);
+        fetch("/goods/shipping/complete", {
+            method: "POST",
+            body: data,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') }
+        }).then(function (response) {
 
+        }).then(function (data) {
+            print();
+            window.location.href = '/goods'
+        });
+    });
+    $('#shipping_cancel').click(function () {
+        window.location.href = '/goods'
+    });
+</script>
 {% endblock scripts %}

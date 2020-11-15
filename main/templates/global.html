@@ -76,6 +76,7 @@
                                         <a href="/goods/shipping/edit">Отгрузка товара</a>
                                         {% else %}
                                         <a href="/goods/shipping/blank">Отгрузка товара</a>
+                                        <a href="/goods?brand=&model=&status=Приобретен&branch={{request.user.branch}}">Купленные ноутбуки</a>
                                         {% endif %}
                                         {% if request.user.is_staff %}
                                         <hr>

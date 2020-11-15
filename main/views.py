@@ -565,7 +565,7 @@ class ShippingGoodsComplete(View):
 
     def post(self, request, *args, **kwargs):
         if request.POST:
-            shipped_goods = request.POST.get('goods')
+            shipped_goods = request.POST.get('goods').split(',')
             if shipped_goods:
                 goods = Goods.objects.filter(pk__in=shipped_goods)
                 for good in goods:

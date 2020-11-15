@@ -212,9 +212,11 @@
                                 value="{% if good.price %} {{ good.price }} {% else %}{% endif %}" class="card-input">
                         </div>
                     </div>
+                    {% if good.status == 'Ожидает оценки' or good.status == 'Оценен' %}
                     <div class="propertyblock__btn">
                         <button class="def_btn" id="admin_send_price">Отправить</button>
                     </div>
+                    {% endif %}
                     {% endif %}
                 </div>
             </div>

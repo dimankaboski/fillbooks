@@ -89,7 +89,10 @@
                         placeholder="Введите описание..."></textarea>
                 </div>
                 <div class="description_notebook__btn">
-                    <button class="def_btn" id="post_new_notebook">Отправить</button>
+                    <button id="test"></button>
+                    <button class="def_btn" id="post_new_notebook">
+                        <span class="btn-icon"></span> 
+                        Отправить</button>
                 </div>
             </div>
         </section>
@@ -101,6 +104,9 @@
 {% endblock content %}
 {% block scripts %}
 <script>
+    $('#test').click(function(){
+        $('.btn-icon').html('<i class=" fas fa-spinner fa-spin"></i> ')
+    })
     $('#seller_phone').mask('+00000000000');
     function validateInputs() {
         is_valid = true;
@@ -241,12 +247,14 @@
             for (var i = 0; i < files.length; i++) {
                 data.append("file_" + i, files[i]);
             }
+            $('.btn-icon').html('<i class=" fas fa-spinner fa-spin"></i> ')
             fetch("/good_create", {
                 method: "POST",
                 body: data,
                 headers: { 'X-CSRFToken': getCookie('csrftoken') }
             }).then(function (response) {
                 if (response.status == 200){
+                    $('.btn-icon').html('<i class=" fas fa-check"></i> ')
                     location.pathname = '/goods'
                 }else{
                     alert('Что-то пошло не так :(')
